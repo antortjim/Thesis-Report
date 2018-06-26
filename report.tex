@@ -6,6 +6,7 @@
 \usepackage{wallpaper}
 \usepackage{palatino}
 \usepackage{changepage}
+\usepackage{mhchem} % for isotope nomeclature support
 % Setup captions
 %\captionstyle[\centering]{\centering}
 %\changecaptionwidth
@@ -75,11 +76,12 @@
 %\usepackage[margin=-50pt]{caption}
 %\usepackage[colorinlistoftodos]{todonotes}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{cleveref} % for enumerate/itemize item referencing
+
 %\setlength{\parindent}{4em}
 %\setlength{\parskip}{1em}
 %\usepackage{mathpazo} % Use the Palatino font
 \usepackage{parskip}% http://ctan.org/pkg/parskip
-\usepackage{hyperref}
 \usepackage{xspace}
 \usepackage{wrapfig}
 \usepackage[export]{adjustbox}
@@ -144,6 +146,13 @@
 
 \usepackage{acro}
 \acsetup{first-style=short}
+
+\DeclareAcronym{MS}{
+  short = MS ,
+  long  = Mass Spectrometry,
+  class = abbrev
+}
+
 \DeclareAcronym{MS1}{
   short = MS1 ,
   long  = first tandem MS analyzer ,
@@ -156,7 +165,62 @@
   class = abbrev
 }
 
+\DeclareAcronym{MS/MS}{
+  short = MS/MS ,
+  long  = Tandem mass spectrometry,
+  class = abbrev
+}
 
+
+\DeclareAcronym{m/z}{
+  short = m/z ,
+  long  = mass charge ratio,
+  class = abbrev
+}
+
+\DeclareAcronym{MALDI}{
+  short = MALDI ,
+  long  = Matrix-Assisted Laser-Desorption Ionization,
+  class = abbrev
+}
+
+\DeclareAcronym{ESI}{
+  short = ESI ,
+  long  = Electrospray Ionization,
+  class = abbrev
+}
+
+
+\DeclareAcronym{TOF}{
+  short = TOF ,
+  long  = Time of Flight,
+  class = abbrev
+}
+
+\DeclareAcronym{IT}{
+  short = IT ,
+  long  = Ion Trap,
+  class = abbrev
+}
+
+\DeclareAcronym{Q}{
+  short = Q,
+  long  = Quadrupole,
+  class = abbrev
+}
+
+\DeclareAcronym{FT-ICR}{
+  short = FT-ICR ,
+  long  = Fourier Transform Ion Cyclotron Resonance,
+  class = abbrev
+}
+
+
+\DeclareAcronym{HPLC}{
+  short = HPLC ,
+  long  = High pressure liquid chromatography,
+  class = abbrev
+}
 
 
 
@@ -194,6 +258,7 @@
 %%  End title page
 
 %%%%%%%%%%%%% Indholdsfortegnelse %%%%%%%%%%%%%
+\setcounter{tocdepth}{1}
 \tableofcontents % Indholdsfortegnelse
 %\listoffigures   % Liste over figurer \begin{figure} ... \end{figure}
 %\listoftables    % Liste over tabeller \begin{table} ... \end{table}
@@ -209,6 +274,7 @@
 \section*{Preface}
 
 \chapter{Introduction}
+\label{chap:introduction}
 
 \section{Aminoacids and proteins}
 
@@ -232,65 +298,131 @@ While there are 20 basic units that constitute the majority of naturally observa
 
 
 Proteins carry out most of the cell\textquotesingle s molecular functions, they work as molecular agents that can perform an extremely wide range of tasks. The advent of biotechnology has sought to take advantage of this power, either by using proteins as present in natural conditions (wild type) or engineered by humans. This potential economic activity is carried out by several biotech companies, including Novozymes.
- Novozymes A/S is a company whose line of business consists of the development of enzymatic products performing chemical transformations in different industrial processes. The application of these products, instead of conventional chemical-based solutions, has the advantage that they require less chemical substances, potentially simplifying industrial processes, reducing their costs and their environmental impact. Notorious examples of such applications include waste-water treatment, household care and the baking industry.
 
-In order to place Novozymes ahead of its competitors, the company has utmost interest in developing protein research and several departments in the organization approach the study of proteins and their translation to the market through among other things the application of mass spectrometry.
+Novozymes A/S is a company whose line of business consists of the development of enzymatic products performing chemical transformations in different industrial processes. The application of these products, instead of conventional chemical-based solutions, has the advantage that they require less chemical substances, potentially simplifying industrial processes, reducing their costs and their environmental impact. Notorious examples of such applications include waste-water treatment, household care and the baking industry.
+
+In order to place Novozymes ahead of its competitors, the company has utmost interest in developing protein research and several departments in the organization approach the study of proteins and their translation to the market through among other things the application of Mass Spectrometry (\ac{MS}) and Proteomics.
+
+\section{Objectives of the Thesis}
+\label{sec:objectives}
+
+In line with the goal of making Novozymes more competitive, this project aimed at the following objectives:
+
+\begin{enumerate}
+
+\item Develop an open-source, Linux based and straightforward to deploy pipeline for the analysis of mass spectrometry data, starting at the output RAW files and ending in the interpretation of the results.
+
+\item Evaluate this pipeline with a benchmark dataset to assess if the pipeline is able to reflect the biological phenomena captured in the data.
+
+\item Implement a label-free quantification Bayesian-based method using Pymc3.
+
+\end{enumerate}
 
 
 
-\section{Mass spectrometry and shotgun proteomics}
+\chapter{Mass spectrometry and shotgun proteomics}
+\label{chap:mass_spec}
 
 Life systems consist of complex systems, meaning their behaviour cannot be easily explained by analyzing the individual elements alone. Moreover, they present multiple layers of complexity, given by the nature of the elements that make it up. The layer provided by proteins is one of them, and its study is called proteomics. It is a complex layer because thousands of different proteins can be present in a single cell at any time, and their exact composition and quantities constantly change, responding to the stimuli of the surrounding environment. The study of the protein-specific complexity is called proteomics. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts.
 
-It may be useful to divide the existing approaches into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. CITE 1.6.1 COMPUTATIONAL METHODS. Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly mass spectrometry (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry. The interested reader is directed to CITE 1.6.1 COMPUTATIONAL METHODS to learn why. The top-down paradigm will be ignored in the rest of the manuscript. A summary of the bottom-up approach MS analytical pipeline follows.
+It may be useful to divide the existing approaches into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. CITE 1.6.1 COMPUTATIONAL METHODS. Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly mass spectrometry (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry. The interested reader is directed to CITE 1.6.1 COMPUTATIONAL METHODS to learn why. The top-down paradigm will be ignored in the rest of the manuscript.
+
+MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for plenty of sample components. A detailed explanation of the sample processing required prior to MS is given in section \label{sec:sample processing}, while an overview on mass spectrometers is given in section \label{sec:the mass spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \label{sec:peptide and protein inference}. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \label{sec:quantification} CITE.
+
+A summary of the bottom-up approach MS analytical pipeline follows.
 
 
-MS is performed by means of a mass spectrometer, a piece of equipment that can acquire plentiful mass measurements for enough sample components, generating a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem CITE.
+\section{Sample processing}
+\label{sec:sample_processing}
 
+An \ac{MS} experiment starts with the generation of protein mixture samples. They are first separated in order to sort the proteins via physicochemical criteria. This is most frequently carried out via SDS-PAGE based on mass or isoelectric point. Once the electrophoresis is completed, protein bands can be excised from the gel. Each band will contain a subset, or even only one of the proteins originally available, thus making the downstream analysis simpler REFERENCE COMPUTATIONAL METHODS CHAPTER 2
+
+The reduced complexity protein mix is extracted in a denaturalized state and subjected to enzymatic digestion with specific enzymes, that can cut the chain of aminoacids following a predictable pattern. The enzyme most frequently used for this is Trypsin, which cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: COMPUTATIONAL METHODS 3.2
+
+\begin{enumerate}
+
+\item Missed cleavages \label{item:missed_cleavages}
+
+\item Unsuspected cleavages during the maturation/life cycle of the protein.
+
+\item Unexpected cleavages occurring either in the wet-lab procedure of the proteolytic treatment.
+
+\item Naturally occurring, intentionally or unintentionally induced chemical modifications.
+
+\end{enumerate}
+
+\Cref{item:missed_cleavages} can happen due to steric inaccesability or the presence of specific aminoacids that can weaken the enzyme\textquotesingle s function. This is the case of Trypsin whenever the residue on the other side of the peptidic bond is Proline. This variability, though limited, needs to be taken care of in downstream analysis, as it could introduce biases in peptide observability. The other 
+
+The result of this process is a mix of peptides following a length distribution given by the cleavage sites frequency and each protein\textquotesingle s aminoacidic composition. For Trypsin, the average peptide length is 10 residues, as roughly 1/10 residues are either R or K.
+As explained in \ref{subsec:the_detector}, this length distribution is fitted to the resolution of the MS analyzer, thus optimizing the throughput of the method. An overview over mass spectrometers follows.
 
 \section{The mass spectrometer}
+\label{sec:thee_mass_spectrometer}
 
 The mass spectrometer consists of three main parts: an ion source, a mass analyzer, and a detector SEE FIGURE.
 
 \subsection{The ion source}
+\label{subsec:the_ion_source}
 
-All mass spectrometers exploit the physical properties of mass and electric charge exhibited by the analyzed components. Thus, ionization of these is required prior to any measurement. This is achieved in the ionization source CITE 5.1 COMPUTATIONAL METHODS. The most frequent ionization methods in proteomics are Matrix-Assisted Laser Desorption-Ionization (MALDI) and Electro Spray Ionization (ESI) CITE. As a result of ionization, the components acquire positive charge, usually by the addition of 1, 2, or 3 protons, that correspondingly give +1, +2 or +3 charge. The acquired charge yields a mass/charge (m/z) ratio, a property that can be applied in the following component separation and mass measurement of the separated components steps in the analyzer.
+All mass spectrometers exploit the physical properties of mass and electric charge exhibited by the analyzed components. Ionization of the analytes is absolutely essential prior to any measurement, as analytes left uncharged will be unobservable to the equipment.
+This step is performed in the ion source CITE 5.1 COMPUTATIONAL METHODS. The most frequent ionization methods in proteomics are Matrix-Assisted Laser Desorption-Ionization (MALDI) and Electro Spray Ionization (ESI) CITE. Most peptides ionized by MALDI will acquire a single charge, whereas ESI can provide multiple charges (+2, +3, etc) too. Thus, the charge exhibited by an ion is not obvious when produced via ESI. Moreover, ESI can be run online with the right robotic equipment, while MALDI demands waiting time for vacuum generation. Finally, due to the chemical nature of the matrix components, MALDI ionizes more easily peptides containing aminoacids featuring aromatic rings (PYW), thus introducing a bias. Bias in ESI is less predictable. This is known as the competitive ionization problem. REF ALL THIS
+
+The acquired charge yields a mass/charge (\ac{m/z}) ratio, a property that can be applied in the downstream component separation and measurement steps.
 
 \subsection{The mass analyzer}
+\label{subsec:the_mass_analyzer}
 
-The plethora of separation methods is reflected upon the range of different analyzers available, mainly quadrupole (Q), time of flight (TOF), Ion trap (IT) and Fourier Transform (FT). These apply different principles to perform the same task: handling of the individual molecular components of the ionized sample for posterior sequential measurements of the components one by one.
+The plethora of ion separation methods is reflected upon the range of different analyzers available, mainly time of flight (\ac{TOF}), Ion trap (\ac{IT}) and quadrupole (\ac{Q}). These apply different principles to perform the same task: separation (analysis) of the ion mix by the \ac{m/z} ratio.
+
+Moreover, two other analyzers exist which combine mass analysis with intensity measurement. These are Fourier Transform Ion Cyclotron Resonance (\ac{FT-ICR}) and Orbitrap. They both register cylotron resonance frequencies that are Fourier transformed into the spectrum space. Remarkably, \ac{FT-ICR} exhibits great resolving power, at the cost of high maintenance costs and difficult operability. 
 
 \subsection{The detector}
+\label{subsec:the_detector}
 
-the intensity of a given m/z ratio within an observable window. This analysis returns the MS spectrum. It is up to the MS technician to decide the best protocol, according to the particularities of the equipment, and the dataset.
+Detectors measure the intensity of an incoming ion signal. The ion\textquotesingle s \ac{m/z} ratio is known thanks to the previous mass analysis step. Performed for enough \ac{m/z} ratios, the detector can produce a \ac{MS} spectrum, which shows the intensity of an ion signal over an \ac{m/z} range. Some topics in signal detection in \ac{MS} need to be discussed.
 
+On the one hand, the precision of the signal measurement is given by its mass resolution It is conventionally defined as the closest distinguishable separation between two peaks of equal height and width \cite{Marshall2013}. The resolution decreases as the \ac{m/z} ratio increases because small increments in the \ac{m/z} ratio become negligible at high \ac{m/z} ratios. This is one of the reasons why proteins are better fit for analysis when digested into peptides, as \ac{m/z} are reduced, thus increasing the mass resolution.
 
+On the other hand, due to the natural occurrence of isotopes, particularly \ce{^{13}_{}C}, the same peptide will induce the measurement of several signals with very close \ac{m/z} values. They constitute the isotopic envelope of the ion SEE FIGURE, and represent the signal created by peptides containing an increasing number of \ce{^{13}_{}C} atoms. Every time a \ce{^{12}_{}C} is replaced by \ce{^{13}_{}C}, the mass increases by 1 Da. Even though the natural abundance is 1.1 \%, the sheer number of carbon atoms in a peptide makes it likely that at least one or even more carbon atoms are \ce{^{13}_{}C}, eventually driving the pure \ce{^{12}_{}C} signal to comparatively small intensity values, and down to intensities below the background noise. Such event can pe problematic if it entails that the 1 \ce{^{13}_{}C} peak is confused for the completely \ce{^{12}_{}C} peak.
 
+The resolution achieved by modern equipment allows for the distinction of each individual signal in most isotopic envelopes. Remarkably, the separation across peaks in the envelope can be used to infer the charge of the peptide, as increases of 1 Da at charge 1 will induce a separation of 1 \ac{m/z}, while at charge 2 it will be $1/2 = 0.5$ \ac{m/z}, at 3 $1/3 = 0.33$ \ac{m/z}, and so on.
 
-\subsection{Sample preprocessing}
+It is up to the \ac{MS} technician to decide on the best pieces of equipment according to the particularities of the dataset.
 
-An MS experiment starts with the generation of protein mixtures samples. They are first separated in order to sort the proteins via physicochemical criteria. This is most frequently carried out via SDS-PAGE based on mass or isoelectric point.  Once the electrophoresis is completed, protein bands can be excised from the gel. Each band will contain a subset, or even only one of the proteins originally available, thus making the downstream analysis simpler REFERENCE COMPUTATIONAL METHODS CHAPTER 2
+\section{Mass spectrometry workflows}
+\label{sec:mass_spectrometry_workflows}
 
-The reduced complexity protein mix is extracted in a denaturalized state and subjected to enzymatic digestion with specific enzymes, that can cut the chain of aminoacids following a predictable pattern, key for the downstream analysis. The enzyme most frequently sued for this is Trypsin, which cuts peptidic bonds whenever a positively charged residue, either Lysine or Arginine, lies on the carboxyl side of the peptidic bond. Even though enzymes are very specific, they can miss some of their targets, due to steric inaccesability or the presence of specific aminoacids that can weaken their function. This is the case of Trypsin whenever the residue on the other side of the peptidic bond is Proline. This variability, though limited, needs to be taken care of in downstream analysis.
-
-The result of this process is a mix of peptides following a length distribution given by the cleavage sites frequency and each protein\textquotesingle s aminoacidic composition. As explained above, this length distribution is fitted to the resolution of the MS analyzer, thus optimizing the throughput of the method. The downstream workflow now diverges based on the simplicity of the original protein sample. When it consisted of a single protein, Peptide Mass Fingerprinting (PMF) is used, otherwise tandem MS (MS/MS) shall be performed. 
+The \ac{MS} workflow now diverges based on the simplicity of the original protein sample. When it consisted of a single protein, Peptide Mass Fingerprinting (PMF) is used, otherwise tandem MS (MS/MS) shall be performed. 
 
 \subsection{Peptide Mass Fingerprint (PMF)}
+\label{subsec:pmf}
 
-If the original sample was known to contain a single protein, PMF, or \textit{protein-centric}proteomics, is conducted. In PMF, the mixture of peptides can be already transfered to the spectrometer, where a a spectrum containing a peak for every m/z ratio present in the ionized peptide mix will be recorded. Thus, spectra generated this way can be considered a pattern, or fingerprint, of the peptides making up the original protein. Therefore, the spectra are intended to contain enough information to identify a protein.
+If the original sample was known to contain a single protein, PMF, or \textit{protein-centric} proteomics, is conducted. In PMF, the mixture of peptides can be already transferred to the spectrometer, where a a spectrum containing a peak for every m/z ratio present in the ionized peptide mix will be recorded. Thus, spectra generated this way can be considered a pattern, or fingerprint, of the peptides making up the original protein. Therefore, the spectra are yield information that can be used to identify the original protein.
 
 
-\subsection{Tandem MS (MS/MS)}
+\subsection{High pressure liquid chromatography-Tandem MS}
+\label{subsec:ms2}
 
-When presented with the problem of analyzing a mixture of proteins, the capacities of mass spectrometers are easily overcome by a too complex mixture, resulting in the analysis of only a minor part of the total protein complement of the sample. This can be overcome by dividing the initial sample into fractions, and using a series, or tandem, of spectrometers in the analysis. The spectrometers are used to analyze each obtained fraction separately, using different schemes. Fractionation is usually achieved by different methods of separation CITE 1.7, most commonly via HPLC methods. 
+\subsubsection{HPLC}
 
-HPLC methods work by loading the peptide mix in a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times. Therefore, the input to the machine will consist of a few peptides at a time.
-The two most common methods in proteomics are reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on charge)  CITE 4.2 computational methods.
+If presented with the problem of analyzing a mixture of proteins, the capacities of mass spectrometers are easily overwhelmed by a too complex mixture, resulting in the analysis of only a minor part of the total protein  of the sample. This can be surmounted by splitting the initial sample into fractions, and using a series, or tandem, of spectrometers in the analysis. The spectrometers are used to analyze each obtained fraction separately, using different schemes. Fractionation is usually achieved by different methods of separation CITE 1.7, most commonly via High pressure liquid chromatography (\ac{HPLC}) methods. 
 
-The tandem MS analysis starts when a peptide accesses the analyzer. It is ionized in the ion source and accesses the first mass spectrometer. While different ways of handling the peptides are available, we will focus on the product ion scan. In this protocol, the first analyzer is used to select ionized peptides within a narrow m/z window. The peptides passing this first scan are then subjected to fragmentation, most often via collision-induced dissociation (CID). Briefly, the peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits of ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. The most frequently occurring fragment types by far for CID are the b and y ions and partly a ions. pag 134 computational methods. The produced fragmetns then enter the second analyzer, where a m/z spectrum of the fragments is recorded. Thus, unlike in PMF, where the spectrum recorded reflects the m/z ratios acquired by the protein peptides cleaved by the enzyme, tandem MS spectra on product ion scan mode record the m/z ratio of the fragments produced by an ionized peptide with a given m/z ratio. The m/z ratio of this precursor ion is changed during the run, thus, multiple spectra are obtained where PMF would create only one.
+\ac{HPLC} methods work by loading the peptide mix in a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times. Therefore, the input to the machine will consist of a simplified mix of peptides at a time. Notably, the same peptide could elute in several contiguous fractions.
+
+The two most common fractionation methods in proteomics are reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point)  CITE 4.2 computational methods.
+
+The tandem MS \ac{MS/MS}) analysis starts when the peptide mix accesses the analyzer. It is ionized in the ion source and enters the first mass spectrometer. While different ways of handling the peptides are available, we will focus on the product ion scan method. In this protocol, the first analyzer is used to select ionized peptides within a narrow m/z window.
+
+
+\subsubsection{Fragmentation}
+
+Peptides passing this first scan are then subjected to fragmentation, most often via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. This way, peptides are further processed into smaller fragments resulting from the breakage of either the peptidic bond, the \ce{C_$\alpha$}-\ce{CO} or the \ce{C_$\alpha$}-\ce{NH} bonds
+
+In CID, peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits of ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. The most frequently occurring fragment types are the b and y ions. pag 134 computational methods. The produced fragmetns then enter the second analyzer, where a m/z spectrum of the fragments is recorded. Thus, unlike in PMF, where the spectrum recorded reflects the m/z ratios acquired by the protein peptides cleaved by the enzyme, tandem MS spectra on product ion scan mode record the m/z ratio of the fragments produced by an ionized peptide with a given m/z ratio. The m/z ratio of this precursor ion is changed during the run, thus, multiple spectra are obtained where PMF would create only one.
 
 
 \section{Spectra processing: search engines}
+\label{sec:search_engines}
 
 A search engine can be used to map the recorded pattern of m/z ratios to a protein entry in a database. This task is performed by \textit{in silico} cleavage of each sequence entry in the database based on the specefic cleavage pattern of the enzyme used, coupled with the simulation of the expected spectrum based on the expected peptides.
 
@@ -311,6 +443,7 @@ Both are taken care of by the search engine. Multiple search engines exist that 
 X!Tandem was one of the first open source search engines in mass spectrometry. It produces a score based on the dot product between the theoretical and the experimental tandem mass spectra CITE Overview of Tandem Mass Spectrometry (MS/MS) Database Search Algorithms. The scores assigned to wrong matches are assumed to follow a hypergeometric distribution, allowing the program to extrapolate $E(s)$ (expected number of wrong matches at a given score) for any score.
 
 \section{Results validation}
+\label{sec:validation}
 
 The scoring system implemented by the search engines can be used to filter and validate the results. A basic common filter is the false discovery rate (FDR), usually set to 1\%, indicating that 1 out of a hundred filtered matches are expected to be false positives. The most commonly used method to compute the FDR is the target-decoy search. The search engine tries to match the same spectra against a decoy database, usually generated by reversing the sequences present in the original database (target). All matches to the decoy will be regarded as wrong. Thanks to the fact that the basic properties of the decoy (size, composition, etc) are identical to the target, whenever a mistake is made, it is as likely to happen in both databases CITE COMPOMICS TUTORIAL 1.5, thus the number of matches in the decoy provides an accurate estimate of the number of random matches, or false positives, against the target database ($n_{fp}$). Together with the number of PSMs passing a threshold score ($n_{tp} + n_{tp}$), the FDR can be computed using the formula below.
 
