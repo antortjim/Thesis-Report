@@ -416,9 +416,13 @@ The tandem MS \ac{MS/MS}) analysis starts when the peptide mix accesses the anal
 
 \subsubsection{Fragmentation}
 
-Peptides passing this first scan are then subjected to fragmentation, most often via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. This way, peptides are further processed into smaller fragments resulting from the breakage of either the peptidic bond, the \ce{C_$\alpha$}-\ce{CO} or the \ce{C_$\alpha$}-\ce{NH} bonds
+Peptides passing this first scan are then subjected to fragmentation, most often via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. This way, peptides are further processed into smaller fragments resulting from the breakage of either the peptidic \ce{CO}-\ce{NH}, the \ce{C_$\alpha$}-\ce{CO} or the \ce{C_$\alpha$}-\ce{NH} bonds. A clear nomenclature REF was introduced to name these fragments: INSERT FIGURE
 
-In CID, peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits of ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. The most frequently occurring fragment types are the b and y ions. pag 134 computational methods. The produced fragmetns then enter the second analyzer, where a m/z spectrum of the fragments is recorded. Thus, unlike in PMF, where the spectrum recorded reflects the m/z ratios acquired by the protein peptides cleaved by the enzyme, tandem MS spectra on product ion scan mode record the m/z ratio of the fragments produced by an ionized peptide with a given m/z ratio. The m/z ratio of this precursor ion is changed during the run, thus, multiple spectra are obtained where PMF would create only one.
+CID is an ergodic fragmentation technique where peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits between ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. Since the kinetic energy is randomly distributed across the peptide, the weakest bonds will break first. This results in the production of mostly b and y ions, as well as the loss of any chemical modifications CITE pag 134 computational methods.
+
+EID is produced by the hits against the molecule, which tend to occur on the areas of the peptide more positively charged. Thus, the fragmentation process is not ergodic and returns TYPE ions. More importantly, chemical modifications are not lost in the process.
+
+The produced fragmetns then enter the second analyzer, where a m/z spectrum of the fragments is recorded. Thus, unlike in PMF, where the spectrum recorded reflects the m/z ratios acquired by the protein peptides cleaved by the enzyme, tandem MS spectra on product ion scan mode record the m/z ratio of the fragments produced by an ionized peptide with a given m/z ratio. The m/z ratio of this precursor ion is changed during the run, thus, multiple spectra are obtained where PMF would create only one.
 
 
 \section{Spectra processing: search engines}
