@@ -222,6 +222,12 @@
   class = abbrev
 }
 
+\DeclareAcronym{NZ}{
+  short = NZ ,
+  long  = Novozymes A/S,
+  class = abbrev
+}
+
 
 
 %%  Begin document
@@ -280,13 +286,13 @@
 
 Proteins represent the last link in the central dogma of biology, where information encoded in DNA, is transcribed to RNA for posterior translation into proteins at the ribosome.
 
-Proteins are made up of 20 basic units, called aminoacids. All aminoacids share a common chemical structure, where a carbon atom ($C_\alpha$) is covalently bonded to a hydrogen atom, a carboxyl group, an amino group, and last but not least, a radical, also called side chain of the aminoacid (see figure \ref{fig:aminoacids}. The side chain differs between aminaocids and generates them from each other. A slight deviation from this pattern exists in proline, where the radical is bound to the nitrogen atom, making it an iminoacid. Even though the side chains are all different, they can be classified into four different groups: aliphatic, polar, positively charged and negatively charged (see figure \ref{fig:aminaocids}).
+Proteins are made up of 20 basic units, called aminoacids. All aminoacids share a common chemical structure, where a carbon atom ($C_\alpha$) is covalently bonded to a hydrogen atom, a carboxyl group, an amino group, and last but not least, a radical, also called side chain of the aminoacid. The side chain differs between aminaocids and generates them from each other. A slight deviation from this pattern exists in proline, where the radical is bound to the nitrogen atom, making it an iminoacid. Even though the side chains are all different, they can be classified into four different groups: aliphatic, polar, positively charged and negatively charged (see figure \ref{fig:aminoacids}).
 
 \begin{figure}
   \centering
   \includegraphics[width=0.5\textwidth]{aminoacids.png}
   \caption{}
-  \label{fig:aminaocids}
+  \label{fig:aminoacids}
 \end{figure}
 
 Two aminoacids are joined together through the formation of a peptidic (covalent) bond between them. Such a linkage is formed by removal of the elements of water (dehydration) from the $\alpha$-carboxyl group of one amino acid and the $\alpha$-amino group of another. CITE LEHNINGER PAG 82. The remaining $\alpha$-amino and $\alpha$-carboxyl groups are available for linkage to other aminoacids, and in this way peptidic chains or peptides can be created.
@@ -297,27 +303,33 @@ While there are 20 basic units that constitute the majority of naturally observa
 \section{The protein-focused biotechnology industry}
 
 
-Proteins carry out most of the cell\textquotesingle s molecular functions, they work as molecular agents that can perform an extremely wide range of tasks. The advent of biotechnology has sought to take advantage of this power, either by using proteins as present in natural conditions (wild type) or engineered by humans. This potential economic activity is carried out by several biotech companies, including Novozymes.
+Proteins carry out most of the cell\textquotesingle s molecular functions, they work as molecular agents that can perform an extremely wide range of tasks. The advent of biotechnology has sought to take advantage of this power, either by using proteins as present in natural conditions (wild type) or engineered by humans. This potential economic activity is carried out by several biotech companies, including Novozymes A/S (NZ).
 
-Novozymes A/S is a company whose line of business consists of the development of enzymatic products performing chemical transformations in different industrial processes. The application of these products, instead of conventional chemical-based solutions, has the advantage that they require less chemical substances, potentially simplifying industrial processes, reducing their costs and their environmental impact. Notorious examples of such applications include waste-water treatment, household care and the baking industry.
+\ac{NZ} is a company whose line of business consists of the development of enzymatic products performing chemical transformations in different industrial processes. The application of these products, instead of conventional chemical-based solutions, has the advantage that they require less chemical substances, potentially simplifying industrial processes, reducing their costs and their environmental impact. Notorious examples of such applications include waste-water treatment, household care and the baking industry.
 
-In order to place Novozymes ahead of its competitors, the company has utmost interest in developing protein research and several departments in the organization approach the study of proteins and their translation to the market through among other things the application of Mass Spectrometry (\ac{MS}) and Proteomics.
+
+The advancement of the way \ac{NZ} does protein research is thus key to place the organization ahead of its competitors. The refinement of the currently used tools and the development of new ones could be of great significance for the company. 
+
+Protein research can be approached from different angles. This thesis exploited the combination of mass spectrometry \ac{MS} and proteomics workflows (see \ref{chap:mass_spec}) to the qualitative and quantitative characterization of protein samples.
+
+
 
 \section{Objectives of the Thesis}
 \label{sec:objectives}
 
-In line with the goal of making Novozymes more competitive, this project aimed at the following objectives:
+In line with the goal of making \ac{NZ} more competitive, this project aimed at the following objectives:
 
 \begin{enumerate}
 
-\item Develop an open-source, Linux based and straightforward to deploy pipeline for the analysis of mass spectrometry data, starting at the output RAW files and ending in the interpretation of the results.
+\item Develop an open-source, Linux based and easily deployable pipeline for the analysis of \ac{MS} data, starting at the raw high-throughput data files and ending in the  biological interpretation of the results.
 
 \item Evaluate this pipeline with a benchmark dataset to assess if the pipeline is able to reflect the biological phenomena captured in the data.
 
-\item Implement a label-free quantification Bayesian-based method using Pymc3.
+\item Establish a label-free quantification probabilistic model that provides relative abundance estimates and a measurement of their uncertainty based on the available data.
 
 \end{enumerate}
 
+An overview over the \ac{MS} and downstream computational analysis of its data is presented in \ref{chap:mass_spec}. The pipeline development and its benchmark are explained in chapters 3 and 4, while the modelling problem is introduced in chapter 5. Finally, a conclusion of the work is given in chapter 6.
 
 
 \chapter{Mass spectrometry and shotgun proteomics}
@@ -337,7 +349,7 @@ A summary of the bottom-up approach MS analytical pipeline follows.
 
 An \ac{MS} experiment starts with the generation of protein mixture samples. They are first separated in order to sort the proteins via physicochemical criteria. This is most frequently carried out via SDS-PAGE based on mass or isoelectric point. Once the electrophoresis is completed, protein bands can be excised from the gel. Each band will contain a subset, or even only one of the proteins originally available, thus making the downstream analysis simpler REFERENCE COMPUTATIONAL METHODS CHAPTER 2
 
-The reduced complexity protein mix is extracted in a denaturalized state and subjected to enzymatic digestion with specific enzymes, that can cut the chain of aminoacids following a predictable pattern. The enzyme most frequently used for this is Trypsin, which cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: COMPUTATIONAL METHODS 3.2
+The reduced complexity protein mix is extracted in a denaturalized state so as to remove biases due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific enzymes, that can cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used for this task, which cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: COMPUTATIONAL METHODS 3.2
 
 \begin{enumerate}
 
@@ -379,77 +391,102 @@ Moreover, two other analyzers exist which combine mass analysis with intensity m
 \subsection{The detector}
 \label{subsec:the_detector}
 
-Detectors measure the intensity of an incoming ion signal. The ion\textquotesingle s \ac{m/z} ratio is known thanks to the previous mass analysis step. Performed for enough \ac{m/z} ratios, the detector can produce a \ac{MS} spectrum, which shows the intensity of an ion signal over an \ac{m/z} range. Some topics in signal detection in \ac{MS} need to be discussed.
+Detectors measure the intensity of an incoming ion signal. The ion\textquotesingle s \ac{m/z} ratio is known thanks to the previous mass analysis step. Performed for enough \ac{m/z} ratios, the detector can produce a \ac{MS} spectrum, which shows the intensity of ion current over an \ac{m/z} range. Some topics in signal detection in \ac{MS} need to be discussed.
 
 On the one hand, the precision of the signal measurement is given by its mass resolution It is conventionally defined as the closest distinguishable separation between two peaks of equal height and width \cite{Marshall2013}. The resolution decreases as the \ac{m/z} ratio increases because small increments in the \ac{m/z} ratio become negligible at high \ac{m/z} ratios. This is one of the reasons why proteins are better fit for analysis when digested into peptides, as \ac{m/z} are reduced, thus increasing the mass resolution.
 
-On the other hand, due to the natural occurrence of isotopes, particularly \ce{^{13}_{}C}, the same peptide will induce the measurement of several signals with very close \ac{m/z} values. They constitute the isotopic envelope of the ion SEE FIGURE, and represent the signal created by peptides containing an increasing number of \ce{^{13}_{}C} atoms. Every time a \ce{^{12}_{}C} is replaced by \ce{^{13}_{}C}, the mass increases by 1 Da. Even though the natural abundance is 1.1 \%, the sheer number of carbon atoms in a peptide makes it likely that at least one or even more carbon atoms are \ce{^{13}_{}C}, eventually driving the pure \ce{^{12}_{}C} signal to comparatively small intensity values, and down to intensities below the background noise. Such event can pe problematic if it entails that the 1 \ce{^{13}_{}C} peak is confused for the completely \ce{^{12}_{}C} peak.
+On the other hand, due to the natural occurrence of isotopes, particularly \ce{^{13}_{}C}, the same peptide will induce the measurement of several signals with very close \ac{m/z} values. They constitute the isotopic envelope of the ion SEE FIGURE, and represent the signal created by peptides containing an increasing number of \ce{^{13}_{}C} atoms. Every time a \ce{^{12}_{}C} is replaced by \ce{^{13}_{}C}, the mass increases by 1 Da. Even though the natural abundance of \ce{^{13}_{}C} is 1.1 \%, the sheer number of carbon atoms in a peptide makes it likely that at least one or even more carbon atoms will be \ce{^{13}_{}C}, eventually driving the pure \ce{^{12}_{}C} signal to comparatively small intensity values, and down to intensities below the background noise. Such event can be problematic if it entails that the 1 \ce{^{13}_{}C} peak is confused for the completely \ce{^{12}_{}C} peak.
 
 The resolution achieved by modern equipment allows for the distinction of each individual signal in most isotopic envelopes. Remarkably, the separation across peaks in the envelope can be used to infer the charge of the peptide, as increases of 1 Da at charge 1 will induce a separation of 1 \ac{m/z}, while at charge 2 it will be $1/2 = 0.5$ \ac{m/z}, at 3 $1/3 = 0.33$ \ac{m/z}, and so on.
 
-It is up to the \ac{MS} technician to decide on the best pieces of equipment according to the particularities of the dataset.
+It is up to the \ac{MS} technician to decide on the best pieces of equipment according to their availability and particularities of the dataset.
 
 \section{Mass spectrometry workflows}
 \label{sec:mass_spectrometry_workflows}
 
-The \ac{MS} workflow now diverges based on the simplicity of the original protein sample. When it consisted of a single protein, Peptide Mass Fingerprinting (PMF) is used, otherwise tandem MS (MS/MS) shall be performed. 
+The \ac{MS} workflow diverges based on the simplicity of the original protein sample. When it consisted of a single protein, Peptide Mass Fingerprinting (PMF) is used, otherwise tandem MS (MS/MS) shall be performed. 
 
 \subsection{Peptide Mass Fingerprint (PMF)}
 \label{subsec:pmf}
 
-If the original sample was known to contain a single protein, PMF, or \textit{protein-centric} proteomics, is conducted. In PMF, the mixture of peptides can be already transferred to the spectrometer, where a a spectrum containing a peak for every m/z ratio present in the ionized peptide mix will be recorded. Thus, spectra generated this way can be considered a pattern, or fingerprint, of the peptides making up the original protein. Therefore, the spectra are yield information that can be used to identify the original protein.
+If the original sample was known to contain a single protein, PMF, or \textit{protein-centric} proteomics, is conducted. In PMF, the mixture of peptides can be already transferred to the spectrometer, where a spectrum containing a peak for every m/z ratio present in the ionized peptide mix will be recorded. The resulting spectra can be considered a pattern, or fingerprint, of the peptides making up the original protein, thus enabling the identification of the original protein.
 
 
 \subsection{High pressure liquid chromatography-Tandem MS}
 \label{subsec:ms2}
 
-\subsubsection{HPLC}
+\subsubsection{High pressure liquid chromatography (HPLC)}
 
-If presented with the problem of analyzing a mixture of proteins, the capacities of mass spectrometers are easily overwhelmed by a too complex mixture, resulting in the analysis of only a minor part of the total protein  of the sample. This can be surmounted by splitting the initial sample into fractions, and using a series, or tandem, of spectrometers in the analysis. The spectrometers are used to analyze each obtained fraction separately, using different schemes. Fractionation is usually achieved by different methods of separation CITE 1.7, most commonly via High pressure liquid chromatography (\ac{HPLC}) methods. 
+If presented with the problem of analyzing a mixture of proteins, the capacities of mass spectrometers are easily overwhelmed by a too complex mixture, resulting in the analysis of only a minor part of the total protein  of the sample. This can be surmounted by splitting the initial sample into fractions, and using a series, or tandem, of spectrometers in the analysis. The spectrometers are used to analyze each obtained fraction separately, using different schemes.
+
+Fractionation is achieved by different methods of separation CITE 1.7, most commonly via \ac{HPLC} methods, like reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point)  CITE 4.2 computational methods.
 
 \ac{HPLC} methods work by loading the peptide mix in a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times. Therefore, the input to the machine will consist of a simplified mix of peptides at a time. Notably, the same peptide could elute in several contiguous fractions.
 
-The two most common fractionation methods in proteomics are reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point)  CITE 4.2 computational methods.
 
-The tandem MS \ac{MS/MS}) analysis starts when the peptide mix accesses the analyzer. It is ionized in the ion source and enters the first mass spectrometer. While different ways of handling the peptides are available, we will focus on the product ion scan method. In this protocol, the first analyzer is used to select ionized peptides within a narrow m/z window.
+\subsubsection{First MS analysis}
+
+The tandem MS \ac{MS/MS}) analysis starts at the first \ac{MS} scan (\ac{MS1}), when the peptide mix accesses the analyzer. It is ionized in the ion source and enters the first mass spectrometer. While different ways of handling the peptides are available, we will focus on the product ion scan method. In this protocol, the first analyzer is used to select ionized peptides within a narrow m/z window.
 
 
 \subsubsection{Fragmentation}
+\label{subsubsec:fragmentation}
 
-Peptides passing this first scan are then subjected to fragmentation, most often via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. This way, peptides are further processed into smaller fragments resulting from the breakage of either the peptidic \ce{CO}-\ce{NH}, the \ce{C_$\alpha$}-\ce{CO} or the \ce{C_$\alpha$}-\ce{NH} bonds. A clear nomenclature REF was introduced to name these fragments: INSERT FIGURE
+As the protein sample complexity increases, the \ac{MS1} information on the peptide fractions will not be enough to correctly map each to the original protein, thus rendering a correct interpretation of the resulting spectra impossible. Therefore, more information needs to be extracted from them.
 
-CID is an ergodic fragmentation technique where peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits between ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. Since the kinetic energy is randomly distributed across the peptide, the weakest bonds will break first. This results in the production of mostly b and y ions, as well as the loss of any chemical modifications CITE pag 134 computational methods.
+Learning the peptide sequences would provide an additional feature that would make the peptide to protein mapping possible. This can be achieved by peptide fragmentation, which triggers the breakage of bonds along the peptidic chain, turning the peptides into smaller fragments. A given bond will be more likely to break the less stable it is. This makes (I) the \ce{C_$\alpha$}-\ce{CO}, (II) the peptidic \ce{CO}-\ce{NH}, and (III) the \ce{C_$\alpha$}-\ce{NH} bonds the more likely to break (see figure \ref{fig:abcxyz}). A nomenclature REF was introduced to name these fragments:
+
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{abcxyz}
+\caption{The common fragments and their relation to the peptide sequence can be organized into 2 groups of 3 series each. The abc fragments keep the N-terminal residue, while xyz keep the C-terminal one. The a/x, b/y and c/z series are produced by the breakage of bonds I, II and III respectively. Specific fragmentation techniques make fragments belonging to one series more likely than others. Other fragments are possible but much less likely. Taken from CITE COMPOMICS TUTORIAL}
+\label{fig:abcxyz}
+\end{figure}
+
+Provided enough mass resolution, the mass difference between contiguous fragments of the same series i.e a1 and a2, can be related to the mass of the extra residue in the longer fragment. If this comparison process is repeated for enough fragment pairs of the same peptide, a sequence can be read, finally providing sufficient information to perform an accurate peptide to protein mapping.
+
+Fragmentation in proteomics is performed via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. CID is an ergodic fragmentation technique where peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits between ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. Since the kinetic energy is randomly distributed across the peptide, the weakest bonds will break first. This results in the production of mostly b and y fragments, as well as the loss of any chemical modifications CITE pag 134 computational methods.
 
 EID is produced by the hits against the molecule, which tend to occur on the areas of the peptide more positively charged. Thus, the fragmentation process is not ergodic and returns TYPE ions. More importantly, chemical modifications are not lost in the process.
 
-The produced fragmetns then enter the second analyzer, where a m/z spectrum of the fragments is recorded. Thus, unlike in PMF, where the spectrum recorded reflects the m/z ratios acquired by the protein peptides cleaved by the enzyme, tandem MS spectra on product ion scan mode record the m/z ratio of the fragments produced by an ionized peptide with a given m/z ratio. The m/z ratio of this precursor ion is changed during the run, thus, multiple spectra are obtained where PMF would create only one.
+\subsubsection{Second MS analysis}
+
+The produced fragments enter the second analyzer \ac{MS2}, where a m/z spectrum of the fragments is recorded. Thus, unlike in PMF, where the spectrum recorded reflects the m/z ratios acquired by the protein peptides cleaved by the enzyme, tandem MS spectra on product ion scan mode record the m/z ratio of the fragments produced by an ionized peptide with a given m/z ratio. The m/z ratio of this precursor ion is changed during the run, thus, multiple spectra are obtained where PMF would create only one. The \ac{MS2} spectra will encode the sequence of each peptide as mentioned in \ref{subsubsec:fragmentation}, and with the right tools, it can be deconvoluted and interpreted as explained in \ref{sec:search_engines}.
 
 
 \section{Spectra processing: search engines}
 \label{sec:search_engines}
 
-A search engine can be used to map the recorded pattern of m/z ratios to a protein entry in a database. This task is performed by \textit{in silico} cleavage of each sequence entry in the database based on the specefic cleavage pattern of the enzyme used, coupled with the simulation of the expected spectrum based on the expected peptides.
+\ac{MS} search engines are capable of performing the peptide to spectrum matching (PSM). They do it by building statistical models that find the peptides within a protein database that best explain the observed spectra. \textit{De novo} search engines exist that don't require a reference proteome, but better results are obtained when using one..DEVELOP THAT.
 
-Given the stochastic nature of the cleavage and spectra recording process, the resulting spectra exhibit variability manifested in missing peaks or spurious ones. Furthermore, the peptide to spectrum matching (PSM) process against a sufficiently big database can, at random, return wrong matches. This translates to the obtention of multiple matches , of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked. The issue is addressed by search engines through the usage of scoring systems that measure the goodness of the match. Assuming the correct protein is present in the database, a good system should give the protein the best score. This way, proteins can be identified.
+Matching is possible by predicting the cleavage pattern of each protein sequence in the database \textit{in silico} based on the cleavage pattern of the enzyme used, coupled with the simulation of the expected spectrum based on the predicted peptides.
+
+Given the stochastic nature of the cleavage and spectra recording process, the resulting spectra exhibit variability manifested in missing peaks or spurious ones. Furthermore, the PSM process against a sufficiently big database can, at random, return wrong matches. This translates to the generation of multiple matches, of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems measuring the goodness of the match. Assuming the correct protein is present in the database, a good scoring system should give the matched peptide which comes from the right protein the best score. Under this circumstances, enough evidence for the presence of individual proteins can be collected.
 
 Two steps in protein identification can be distinguished:
 
 \begin{enumerate}
 
 \item Peptide inference: infer the peptides present in the sample.
-\item Protein inferece: based on the infered peptides, infer what proteins generated them.
+\item Protein inferece: based on the inferred peptides, infer what proteins generated them. This is not trivial as the peptide coming from the best PSM could map to more than one protein.
 \end{enumerate}
 
-Both are taken care of by the search engine. Multiple search engines exist that implement different matching and scoring algorithms.
+Both are taken care of by the search engine. Multiple search engines exist that implement different matching and scoring algorithms. The most modern ones include MS-GF+, MS-Amanda, Comet, X!Tandem or Andromeda. Notably, the results of each individual search engine can be combined to gather their strenghts, at the expense of an increased computational cost and time REF THIS!!
 
-\subsection{X!Tandem}
-
-X!Tandem was one of the first open source search engines in mass spectrometry. It produces a score based on the dot product between the theoretical and the experimental tandem mass spectra CITE Overview of Tandem Mass Spectrometry (MS/MS) Database Search Algorithms. The scores assigned to wrong matches are assumed to follow a hypergeometric distribution, allowing the program to extrapolate $E(s)$ (expected number of wrong matches at a given score) for any score.
+%\subsection{X!Tandem}
+%
+%X!Tandem was one of the first open source search engines in mass spectrometry. It produces a score based on the dot product between the theoretical and the experimental tandem mass spectra CITE Overview of Tandem Mass Spectrometry (MS/MS) Database Search Algorithms. The scores assigned to wrong matches are assumed to follow a hypergeometric distribution, allowing the program to extrapolate $E(s)$ (expected number of wrong matches at a given score) for any score.
 
 \section{Results validation}
 \label{sec:validation}
 
-The scoring system implemented by the search engines can be used to filter and validate the results. A basic common filter is the false discovery rate (FDR), usually set to 1\%, indicating that 1 out of a hundred filtered matches are expected to be false positives. The most commonly used method to compute the FDR is the target-decoy search. The search engine tries to match the same spectra against a decoy database, usually generated by reversing the sequences present in the original database (target). All matches to the decoy will be regarded as wrong. Thanks to the fact that the basic properties of the decoy (size, composition, etc) are identical to the target, whenever a mistake is made, it is as likely to happen in both databases CITE COMPOMICS TUTORIAL 1.5, thus the number of matches in the decoy provides an accurate estimate of the number of random matches, or false positives, against the target database ($n_{fp}$). Together with the number of PSMs passing a threshold score ($n_{tp} + n_{tp}$), the FDR can be computed using the formula below.
+The scoring system implemented by search engines provides the best matches, but they are bound to contain false identifications. Nevertheless, these scores can be used to apply a filter that aims at minimizing the amount of errors.
+
+A common filter is the false discovery rate (FDR), usually set to 1\%, indicating tha the application of this filter one out of a hundred filtered matches are expected to be false positives.
+
+The most commonly used method to compute the FDR of a list of matches is the target-decoy search. Using this method, the search engine replicates the matching process, using the same spectra, but instead against a decoy database. This decoy database is generated by reversing or in general applying a randomization technique upon the sequences present in the original database (target). This guarantess that while the sequences in the decoy database won't overlap with those in the target, their basic properties of the decoy (size, composition, etc) will remain identical to the target.
+
+All matches to the decoy are by definition wrong. Since database properties 
+are kept the same, the amount of matches to the decoy exhibiting less than a given score $s$ can be used to estimate the number of false identifications in the  target results. it is as likely to happen in both databases CITE COMPOMICS TUTORIAL 1.5, thus the number of matches in the decoy provides an accurate estimate of the number of random matches, or false positives, against the target database ($n_{fp}$). Together with the number of PSMs passing a threshold score ($n_{tp} + n_{tp}$), the FDR can be computed using the formula below.
 
 $$FDR = \frac{n_{fp}}{n_{tp} + n_{tp}}$$
 
