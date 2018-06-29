@@ -228,6 +228,42 @@
   class = abbrev
 }
 
+\DeclareAcronym{FDR}{
+  short = FDR ,
+  long  = False Discovery Rate,
+  class = abbrev
+}
+
+\DeclareAcronym{RT}{
+  short = RT ,
+  long  = Retention time,
+  class = abbrev
+}
+
+
+\DeclareAcronym{MBR}{
+  short = MBR ,
+  long  = Match Between Runs,
+  class = abbrev
+}
+
+\DeclareAcronym{XIC}{
+  short = XIC ,
+  long  = Extracted Ion Current,
+  class = abbrev
+}
+
+\DeclareAcronym{SC}{
+  short = SC ,
+  long  = Spectral Counting,
+  class = abbrev
+}
+
+\DeclareAcronym{TPP}{
+  short = TPP ,
+  long  = Trans Proteomic Pipeline,
+  class = abbrev
+}
 
 
 %%  Begin document
@@ -269,6 +305,7 @@
 %\listoffigures   % Liste over figurer \begin{figure} ... \end{figure}
 %\listoftables    % Liste over tabeller \begin{table} ... \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 
 \thispagestyle{empty}
 \printacronyms[include-classes=abbrev,name=Abbreviations]
@@ -310,7 +347,7 @@ Proteins carry out most of the cell\textquotesingle s molecular functions, they 
 
 The advancement of the way \ac{NZ} does protein research is thus key to place the organization ahead of its competitors. The refinement of the currently used tools and the development of new ones could be of great significance for the company. 
 
-Protein research can be approached from different angles. This thesis exploited the combination of mass spectrometry \ac{MS} and proteomics workflows (see \ref{chap:mass_spec}) to the qualitative and quantitative characterization of protein samples.
+Protein research can be approached from different angles. This thesis exploited the combination of mass spectrometry (\ac{MS}) and proteomics workflows (see chapter \ref{chap:mass_spec}) for the qualitative and quantitative characterization of protein samples.
 
 
 
@@ -329,10 +366,12 @@ In line with the goal of making \ac{NZ} more competitive, this project aimed at 
 
 \end{enumerate}
 
-An overview over the \ac{MS} and downstream computational analysis of its data is presented in \ref{chap:mass_spec}. The pipeline development and its benchmark are explained in chapters 3 and 4, while the modelling problem is introduced in chapter 5. Finally, a conclusion of the work is given in chapter 6.
+\section{Structure of the Thesis}
+
+An overview over the \ac{MS} and following computational data analysis steps is presented in \ref{chap:mass_spec}. The pipeline development and its benchmark are explained in chapters \ref{chap:pipeline} and \ref{chap:benchmark}, while the modelling problem is introduced in chapter \ref{chap:model}. Finally, a conclusion of the work is given in chapter \ref{chap:conclusion}.
 
 
-\chapter{Mass spectrometry and shotgun proteomics}
+\chapter{Mass spectrometry and shotgun proteomics overview}
 \label{chap:mass_spec}
 
 Life systems consist of complex systems, meaning their behaviour cannot be easily explained by analyzing the individual elements alone. Moreover, they present multiple layers of complexity, given by the nature of the elements that make it up. The layer provided by proteins is one of them, and its study is called proteomics. It is a complex layer because thousands of different proteins can be present in a single cell at any time, and their exact composition and quantities constantly change, responding to the stimuli of the surrounding environment. The study of the protein-specific complexity is called proteomics. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts.
@@ -341,7 +380,15 @@ It may be useful to divide the existing approaches into two types of paradigms: 
 
 MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for plenty of sample components. A detailed explanation of the sample processing required prior to MS is given in section \label{sec:sample processing}, while an overview on mass spectrometers is given in section \label{sec:the mass spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \label{sec:peptide and protein inference}. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \label{sec:quantification} CITE.
 
-A summary of the bottom-up approach MS analytical pipeline follows.
+A summary of the bottom-up approach MS analytical pipeline is provided in the rest of the chapter. It can be divided into two main steps:
+
+\begin{enumerate}
+
+\item \ac{MS} analysis and data generation. Sections \ref{sec:sample_processing} to \ref{sec:mass_spectrometry_workflows}.
+
+\item Computational analysis of data. Sections \ref{sec:search_engines} to \ref{sec:quantification}.
+
+\end{enumerate}
 
 
 \section{Sample processing}
@@ -369,9 +416,16 @@ The result of this process is a mix of peptides following a length distribution 
 As explained in \ref{subsec:the_detector}, this length distribution is fitted to the resolution of the MS analyzer, thus optimizing the throughput of the method. An overview over mass spectrometers follows.
 
 \section{The mass spectrometer}
-\label{sec:thee_mass_spectrometer}
+\label{sec:the_mass_spectrometer}
 
-The mass spectrometer consists of three main parts: an ion source, a mass analyzer, and a detector SEE FIGURE.
+The mass spectrometer consists of three main parts: an ion source, a mass analyzer, and a detector (see figure \ref{fig:mass_spectrometer}).
+
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{mass_spectrometer}
+\caption{Schematic view of a mass spectrometer. Taken from}
+%CITE THIS https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation
+\label{fig:mass_spectrometer}
+\end{figure}
 
 \subsection{The ion source}
 \label{subsec:the_ion_source}
@@ -395,7 +449,7 @@ Detectors measure the intensity of an incoming ion signal. The ion\textquotesing
 
 On the one hand, the precision of the signal measurement is given by its mass resolution It is conventionally defined as the closest distinguishable separation between two peaks of equal height and width \cite{Marshall2013}. The resolution decreases as the \ac{m/z} ratio increases because small increments in the \ac{m/z} ratio become negligible at high \ac{m/z} ratios. This is one of the reasons why proteins are better fit for analysis when digested into peptides, as \ac{m/z} are reduced, thus increasing the mass resolution.
 
-On the other hand, due to the natural occurrence of isotopes, particularly \ce{^{13}_{}C}, the same peptide will induce the measurement of several signals with very close \ac{m/z} values. They constitute the isotopic envelope of the ion SEE FIGURE, and represent the signal created by peptides containing an increasing number of \ce{^{13}_{}C} atoms. Every time a \ce{^{12}_{}C} is replaced by \ce{^{13}_{}C}, the mass increases by 1 Da. Even though the natural abundance of \ce{^{13}_{}C} is 1.1 \%, the sheer number of carbon atoms in a peptide makes it likely that at least one or even more carbon atoms will be \ce{^{13}_{}C}, eventually driving the pure \ce{^{12}_{}C} signal to comparatively small intensity values, and down to intensities below the background noise. Such event can be problematic if it entails that the 1 \ce{^{13}_{}C} peak is confused for the completely \ce{^{12}_{}C} peak.
+On the other hand, due to the natural occurrence of isotopes, particularly \ce{^{13}_{}C}, the same peptide will induce the measurement of several signals with very close \ac{m/z} values. They constitute the isotopic envelope of the ion SEE FIGURE, and represent the signal created by peptides containing an increasing number of \ce{^{13}_{}C} atoms. Every time a \ce{^{12}_{}C} is replaced by \ce{^{13}_{}C}, the mass increases by 1 Da. Even though the natural abundance of \ce{^{13}_{}C} is 1.1 \%, the sheer number of carbon atoms in a peptide makes it likely that at least one or even more carbon atoms will be \ce{^{13}_{}C}, eventually driving the pure \ce{^{12}_{}C} signal to comparatively small intensity values, and down to intensities below the background noise. Such event can be problematic if it entails that the \ce{^{13}_{}C} peak is confused for the \ce{^{12}_{}C} peak.
 
 The resolution achieved by modern equipment allows for the distinction of each individual signal in most isotopic envelopes. Remarkably, the separation across peaks in the envelope can be used to infer the charge of the peptide, as increases of 1 Da at charge 1 will induce a separation of 1 \ac{m/z}, while at charge 2 it will be $1/2 = 0.5$ \ac{m/z}, at 3 $1/3 = 0.33$ \ac{m/z}, and so on.
 
@@ -421,7 +475,7 @@ If presented with the problem of analyzing a mixture of proteins, the capacities
 
 Fractionation is achieved by different methods of separation CITE 1.7, most commonly via \ac{HPLC} methods, like reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point)  CITE 4.2 computational methods.
 
-\ac{HPLC} methods work by loading the peptide mix in a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times. Therefore, the input to the machine will consist of a simplified mix of peptides at a time. Notably, the same peptide could elute in several contiguous fractions.
+\ac{HPLC} methods work by loading the peptide mix in a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times (\ac{RT}) i.e the amount of time passed before the peptide is observed in the mass spectrometer. Therefore, the input to the machine will consist of a simplified mix of peptides at a time. Notably, the same peptide could elute in several contiguous fractions.
 
 
 \subsubsection{First MS analysis}
@@ -460,268 +514,347 @@ The produced fragments enter the second analyzer \ac{MS2}, where a m/z spectrum 
 
 Matching is possible by predicting the cleavage pattern of each protein sequence in the database \textit{in silico} based on the cleavage pattern of the enzyme used, coupled with the simulation of the expected spectrum based on the predicted peptides.
 
-Given the stochastic nature of the cleavage and spectra recording process, the resulting spectra exhibit variability manifested in missing peaks or spurious ones. Furthermore, the PSM process against a sufficiently big database can, at random, return wrong matches. This translates to the generation of multiple matches, of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems measuring the goodness of the match. Assuming the correct protein is present in the database, a good scoring system should give the matched peptide which comes from the right protein the best score. Under this circumstances, enough evidence for the presence of individual proteins can be collected.
+Given the stochastic nature of the protein cleavage and spectra recording processes, the resulting spectra exhibit variability manifested in missing peaks or spurious ones. Furthermore, random (wrong) matches can be returned by the PSM process when running against a sufficiently big database. This translates to the generation of multiple matches, of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems measuring the goodness of the match. Assuming the correct protein is present in the database, a good scoring system should give the best score to the right peptide. Under this circumstances, if repeated for several peptides, enough evidence for the presence of individual proteins can be collected.
 
-Two steps in protein identification can be distinguished:
+Multiple search engines exist that implement different matching and scoring algorithms. The most modern ones include MS-GF+, MS-Amanda, Comet, X!Tandem or Andromeda CITE THE ENGINES. Notably, the results of each individual search engine can be combined to gather their strengths, at the expense of an increased computational cost and time REF THIS!!
 
-\begin{enumerate}
 
-\item Peptide inference: infer the peptides present in the sample.
-\item Protein inferece: based on the inferred peptides, infer what proteins generated them. This is not trivial as the peptide coming from the best PSM could map to more than one protein.
-\end{enumerate}
 
-Both are taken care of by the search engine. Multiple search engines exist that implement different matching and scoring algorithms. The most modern ones include MS-GF+, MS-Amanda, Comet, X!Tandem or Andromeda. Notably, the results of each individual search engine can be combined to gather their strenghts, at the expense of an increased computational cost and time REF THIS!!
-
-%\subsection{X!Tandem}
-%
-%X!Tandem was one of the first open source search engines in mass spectrometry. It produces a score based on the dot product between the theoretical and the experimental tandem mass spectra CITE Overview of Tandem Mass Spectrometry (MS/MS) Database Search Algorithms. The scores assigned to wrong matches are assumed to follow a hypergeometric distribution, allowing the program to extrapolate $E(s)$ (expected number of wrong matches at a given score) for any score.
-
-\section{Results validation}
+\section{Validation and quality control}
 \label{sec:validation}
 
 The scoring system implemented by search engines provides the best matches, but they are bound to contain false identifications. Nevertheless, these scores can be used to apply a filter that aims at minimizing the amount of errors.
 
 A common filter is the false discovery rate (FDR), usually set to 1\%, indicating tha the application of this filter one out of a hundred filtered matches are expected to be false positives.
 
-The most commonly used method to compute the FDR of a list of matches is the target-decoy search. Using this method, the search engine replicates the matching process, using the same spectra, but instead against a decoy database. This decoy database is generated by reversing or in general applying a randomization technique upon the sequences present in the original database (target). This guarantess that while the sequences in the decoy database won't overlap with those in the target, their basic properties of the decoy (size, composition, etc) will remain identical to the target.
+The most commonly used method to compute the FDR of a list of matches is the target-decoy search. Using this method, the search engine replicates the matching process, using the same spectra, but instead against a decoy database. This decoy database is generated by reversing or more generally applying a randomization technique upon the sequences present in the original database (target). This guarantess that while the sequences in the decoy database won't overlap with those in the target, their basic properties of the decoy (size, composition, etc) will remain identical to the target.
 
 All matches to the decoy are by definition wrong. Since database properties 
-are kept the same, the amount of matches to the decoy exhibiting less than a given score $s$ can be used to estimate the number of false identifications in the  target results. it is as likely to happen in both databases CITE COMPOMICS TUTORIAL 1.5, thus the number of matches in the decoy provides an accurate estimate of the number of random matches, or false positives, against the target database ($n_{fp}$). Together with the number of PSMs passing a threshold score ($n_{tp} + n_{tp}$), the FDR can be computed using the formula below.
+are kept the same, the amount of matches to the decoy exhibiting less than a given score $s$ can be regarded as an estimate of the number of false identifications ($\hat{n}_{fp}$) in the equivalent list of target results. This is because the existence of shared properties entails that random matches are equally likely to happen in both databases CITE COMPOMICS TUTORIAL 1.5. Together with the number of PSMs passing a threshold score ($n_{tp} + n_{tp}$), the FDR can be computed using the formula below.
 
-$$FDR = \frac{n_{fp}}{n_{tp} + n_{tp}}$$
+\begin{equation}\label{eq:fdr}
+FDR = \frac{\hat{n}_{fp}}{n_{fp} + n_{tp}}
+\end{equation}
 
-The minimal FDR at which a given PSM is considered a positive match constitutes the PSM\textquotesingle s q-value
+Equation \ref{eq:fdr} can be used to select the number of positives (the denominator of the fraction) that make the FDR equal to a predefined value, frequently 0.01 or 1 \%.
 
-$$ q(PSM_i) = \min FDR \forall PSM_i \in Positives$$
+%The minimal FDR at which a given PSM is considered a valid match constitutes the PSM\textquotesingle s q-value
+%
+%\begin{equation}\label{eq:qvalue}
+%q(PSM_i) = \min FDR \forall PSM_i \in Positive
+%\end{equation}
 
-Finally, a posterior error probability (PEP) can be defined as the probability of the match being random ($P(s_i | T_i = 0)$). This can only be done if a statistical model describing the distribution of scores for correct and wrong matches is fit to the dataset.
+\section{Peptide and protein inference}
+\label{sec:inference}
 
+Two steps in protein identification can be distinguished:
+
+\begin{enumerate}
+
+\item \textbf{Peptide inference}: infer the peptides present in the sample.
+\item \textbf{Protein inferece \textit{proper}}: based on the inferred peptides, infer what proteins generated them. This is not trivial as peptides are degenerate and could map to more than one protein.
+\end{enumerate}
+
+Peptide inference is performed during the PSM process. The ensemble of proteins most likely to have generated the list of peptides stemming from the filtered PSMs can be inferred using different algorithms. The degenerate nature of peptides is dealt with the Occam\textquotesingle s razor principle, which states that the most likely solution is the simplest one. Thus, protein inference algorithms aim at explaining the maximum amount of peptides using the least amount of proteins.
 
 \section{Protein quantification}
+\label{sec:quantification}
+
+The combination of all the aforementioned computational analyses yields a list of protein identities that reports the protein composition i.e qualitative information of the original sample. However, in most proteomics applications, quantitative data can be of great interest, as many biological phenomena are manifested mainly through changes in the protein abundances, rather than protein presence alone. For instance, cancer cells in response to a drug could modulate the abundance of several proteins without removing them from the cytosol or introducing new ones.
+
+Protein quantification pipelines can be classified based on whether isobaric labelling was used (label-based) or not (label-free). These are explained in subsection \ref{subsec:labelling}. If the label-free approach is employed, more distinctions can be made based on:
+
+\begin{itemize}
+\item The proxy used for quantification: spectral counting (\ac{SC}) or extracted ion currents (\ac{XIC}). These are explained in \ref{subsec:scvsxic}
+
+
+\item The way the data are brought to the protein level from the peptide level: summarization-based vs. peptide-based.
+\end{itemize}
+
+\subsection{Label-based and label-free approaches}
+\label{subsec:labelling}
+
+Two paradigms exist in protein quantification: label-based and label-free. In label-based quantification, originally identical peptides from a number of different samples are made distinguishable by their masses via the incorporation of a label. All label-based methods simultaneously analyze several samples in each experiment, removing the difficulties associated with between-run variability CITE PAGE 237 COMPUTATIONAL METHODS The finite number of "plexes" available for a given label sets the limit to how many samples can be differentially quantified CITE MAXLFQ. Different techniques, like Stable Isotope Labeling by Amino acids in Cell culture (SILAC) CITE or Isotope-Coded Affinity Tags (ICAT) CITE, differ in the nature of the label and the way it is introduced. Remarkably, peptide labeling costs can be quite high. This, together with the limited amount of samples that can be compared makes a case for label-free quantification.
+
+In the label-free quantification approach, peptides from different samples are not labelled differently and are thus distinguished by their presence in different, independent \ac{MS} runs. In order to account for inter-run variability in peptide identifications and \ac{RT}, a match-between-runs (MBR) processing can be carried out for pair-wise transfer of peptide identities from runs where identification was successful to those were it wasn't due to the randomness in the identification process. The transfer can be made based on shared precursor mass and corrected retention times CITE MOFF.
+
+\subsection{SC and XIC based quantification}
+\label{subsec:scvsxic}
+
+
+Quantification can be spectral counting or \ac{XIC} based.
+Spectrum counting based quantification is the simplest quantification method in proteomics. It relies on the rationale that highly abundant peptides will have a higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. As a result, peptides from abundant proteins are more likely to be
+identified and in more spectra. Two approaches were hence followed: count the number of peptides identified for a given protein – like in the emPAI index method – or count the number of spectra ascribed to a protein as in the NSAF method CITE COMPOMICS 4.1. These methods have the advantage that they are very simple to implement and don't require any further data processing.
+
+\ac{XIC} based methods rely on intensity measurements at any level of the \ac{MS} workflow as proxies for protein abundance CITE. A wide range of algorithms are available to process these data and output estimates of protein abundance. All of them require an intensive preprocessing step, usually including (I) taking the $log_2$ intensity to make the data distributions symmetrical and thus make it fit for diverse parametric tests, and (II) quantile normalization to address between-runs variability in the intensity measurements. They can be classified in the bases of which MS level is used as proxy for the protein abundances and on whether or not a summarization step is performed to aggregate peptide-level data into protein-level data, or not. 
+
+
+Although the abundance of proteins and the probability of their peptides being selected for \ac{MS/MS} sequencing are correlated to some extent, \ac{XIC}-based methods should clearly be superior to spectral counting given sufficient resolution and optimal algorithms. These advantages are most prominent for low-intensity protein/peptide species, for which a continuous intensity readout is more information-rich than discrete counts of spectra. CITE MAXLFQ For this reason, only the \ac{XIC} approach will be regarded in the rest of the manuscript.  
+
+
+\subsection{\ac{XIC}-peptide-based models for label-free quantification}
+\label{subsec:peptide_model}
+
+The data collected in the mass spectrometer refers to peptides originating from a latent protein composition, given by the original sample. However, the data interpretation requires the transfer of these peptide-level data into the protein level. This can be done by either (I) performing an aggregation of the peptide-level data, where a summary value of the peptide-level data is taken as representative for the protein-level data, or (II) performing the protein quantification directly at the peptide-level by means of linear regression models.
+
+As stated in  CITE SUMMARY MSQROB: \textit{Peptides originating from the same protein can indeed be considered technical replicates and theoretically should lead to similar abundance estimates. However, the summarization of the peptide intensities into protein expression values is cumbersome, and most summarization-based methods do not correct for differences in peptide characteristics or for the between-sample differences in the number of peptides that are identified per protein. This might introduce bias and differences in uncertainty between the aggregated protein expression values, which are typically ignored in downstream data analysis steps}.
+
+It is for this reason that peptide-based models offer the statistical framework required to learn as much from the data as possible. This translates into improved results when compared to the other aforementioned methods CITE MSQROB SUMMARY.
+
+%CITE MAXQUANT
+%
+% The MaxLFQ algorithm, provided within the MaxQuant suite, is an \ac{MS1}, summarization method performing two optimisation steps to  
+
+
+\chapter{Assembly of an open-source Linux-based label-free quantification proteomics pipeline}
+\label{chap:pipeline}
+
+\section{Introduction}
+
+Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented modelling frameworks and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) or openMS  CITE ALL are nevertheless available for the community. MaxQuant, a free but closed-source proteomics analysis suite CITE MAXQUANT, has been extremely successfully adopted by the scientific community due to its ease of use and a comprehensive pipeline.
+
+However, still only few of these tools have a fully Linux-supported, well-documented, command-line version available, which would make customised, automatic streamline analyses much easier to perform. As a GUI would not be required to run the pipeline, it would also be scalable to big datasets. Finally, having free licenses would imply that anyone, provided the technical knowledge, can perform the computational analysis independently, thus speeding the data to knowledge turnover in \ac{NZ} or any organization making use of it.
+
+In this chapter, a pipeline making use of the set of tools published by the Compomics  and StatOmics groups CITE THEM, which fulfill all the foregoing requirements, will be presented.
+
+\section{Materials and Methods}
+
+\subsection{Data generation}
+
+\subsection{Data loading}
+
+\subsection{Database search}
+
+\subsection{Quality control and validation}
+
+\subsection{Data refinement}
+
+\subsection{Quantification}
+
+
+\section{Results and Discussion}
 
 
 
 
-CONTINUE maybe add reason for the project.
+\section{Conclusion}
 
-\chapter{Materials and Methods}
 
-\chapter{Results and Discussion}
+\chapter{Pipeline benchmarking on a real biological setting}
+\label{chap:benchmark}
 
-\chapter{Conclusion}
+\chapter{Bayesian approach to protein quantification}
+\label{chap:model}
 
 %As such, they are the target of multiple regulatory pathways ensuring their quantities are kept within homeostatic ranges.
 
-
-
-
-
-
-
-\section{Overview of proteomics analysis software}
-
-\subsection{MaxQuant}
-
-One of the most used program for the quantification of label free proteins is the MaxQuant suite \cite{Cox2008}. It can be downloaded for free and is developed by the Max Planck institute in Germany. It consists of a user friendly GUI that provides the most needed steps in a proteomics pipeline.
-
-MaxQuant has been successfully adopted by the scientific community due to its ease of use and a comprehensive pipeline. A Google group and a tutorial are available  \footnote{\href{http://www.coxdocs.org/doku.php?id=maxquant:viewer:tutorial}{http://www.coxdocs.org/doku.php?id=maxquant:viewer:tutorial}} \footnote{\href{https://www.youtube.com/watch?v=\_AJHFHi5CxM}{https://www.youtube.com/watch?v=\_AJHFHi5CxM}}.
-
-The main processing steps incorporated in MaxQuant consist of:
-
-\begin{itemize}
-
-\item Read MS spectra files in the .RAW format, the closed format produced by ThermoScientific MS analyzers.
-
-\item Contains the Andromeda search engine \cite{Cox2011} for matching of \ac{MS2} spectra to a proteome database.
-
-\item Andromeda supports configuring aminoacid modifications and decoy search for FDR (false discovery rate) estimation.
-
-\item Increase peptide identifications by performing match between runs (MBR), which aims at transferring peptide to spectrum matches (PSMs) across replicate runs, based on precursor mass and retention times.
-
-\item Filters Andromeda results to provide a list of inferred peptides and proteins with a cutoff FDR value.
-
-\item Supports label-based and label-free quantification.
-
-\item Its output can be passed to the Perseus software for data visualization. %CITE
-
-\end{itemize}
-
-However, MaxQuant also suffers from some problems:
-
-\begin{enumerate}
-
-\item MaxQuant only runs on Microsoft Windows, impeding its integration in automated pipelines on cluster environments \cite{Argentini2016}. The processing steps cannot easily be fine tuned or exchanged with other pipelines. For example, only the Andromeda search engine is supported. This is a serious drawback, as the integration of results from several search engines, like MSGF+ \cite{Kim2014} or MS-Amanda \cite{Dorfer2014}  has been shown to further improve results \cite{Shteynberg2013}.
-
-\item It does not provide a command line interface (CLI), thus all analyses must be performed through the GUI. This hinders reproducibility and scalability.
-
-\item While it is supported in Linux through Mono, the user experience is best in Windows. As Linux is by far the most used OS in Bioinformatics, this implies that an additional OS is required to get the best experience with MaxQuant.
-
-\item Lacks a well written official documentation, as most information is made available only through talks published on Youtube or third party tutorials.
-
-\end{enumerate}
-
-\subsection{Compomics group}
-
-The Compomics group at Ghent University \footnote{\href{https://compomics.com/}{https://compomics.com/}} provides high quality  analysis software for the identification and integration of results through the SearchGUI, PeptideShaker and moFF (modest Feature Finder) programs \cite{Barsnes2018} \cite{Vaudel2015} \cite{Argentini2016}.
-
-\begin{itemize}
-
-\item SearchGUI provides a common interface to a range of search engines so that multiple engines can be used in a straightforward manner.
-
-\item PeptideShaker reads the SearchGUI output and performs quality control, gene set enrichment analysis (GSEA), and implements multiple validation filters to provide the best results.
-
-\item moFF reads from PeptideShaker output and implements a match between runs (MBR) model analogous to that in MaxQuant, to increase the number of spectra that are matched to a peptide. Furthermore, it summarises the \ac{MS1} peaks into refined features, making downstream analyses more sensitive.
-
-\end{itemize}
-
-SearchGUI and PeptideShaker are very well integrated and documented \footnote{\href{https://compomics.com/bioinformatics-for-proteomics/}{https://compomics.com/bioinformatics-for-proteomics/}}. Both provide not just beautiful GUIs, but also a comprehensive and extremely well documented CLI \footnote{\href{https://github.com/compomics/searchgui/wiki/SearchCLI}{https://github.com/compomics/searchgui/wiki/SearchCLI}} \footnote{\href{https://github.com/compomics/peptide-shaker/wiki/PeptideShakerCLI}{https://github.com/compomics/peptide-shaker/wiki/PeptideShakerCLI}}. They easily enable the development of analytical pipelines finely fitted to each use case.
-
-moFF is less documented and integrated in the workflow. Furthermore, it does not offer a GUI yet. The group is currently working to better integrate moFF and PeptideShaker \footnote{\href{https://groups.google.com/forum/\#!topic/peptide-shaker/Lqe7lYKLcHI}{https://groups.google.com/forum/\#!topic/peptide-shaker/Lqe7lYKLcHI}}.
-
-The main issue in the Compomics suite of tools is the lack of a robust label-free quantification step, as they currently recommend the export of results to a third party tool. Only the spectral count based methods emPAi (Exponentially Modified Protein Abundance Index) and NSAF (Normalized Spectral Abundance Factor), which are not robust \cite{Griffin2010}, are supported.
-
-
-\subsection{Other suites}
-
-Other software suites like ProteomeDiscoverer, Progenesis QI, GeneData Expressionist, etc, are available. They are not open, requiring a license to function. Furthermore, they are GUI oriented and make use of different data formats thus, making exchange across pipelines extremely difficult. The OpenMS \cite{Sturm2008} and Trans Proteomic Pipeline (TPP) \cite{Deutsch2011} suites are open, but they also suffer from data exchangeability and lack comprehensive documentations.
-
-\section{Label-free quantification}
-
-\subsection{MaxLFQ}
-
-The label-free quantification engine implemented in MaxQuant is MaxLFQ \cite{Cox2014}. It performs 2 minimisation steps to infer protein quantities from extracted ion currents (XIC), as stored in the spectra files.
-
-\subsubsection{Fractionated XIC aggreagation}
-
-First, due to the prefrationation of samples during the upstream mass spectrometry (MS) analysis, XIC signals for each peptide are distributed along multiple fractions. MaxLFQ summarises the XIC from several fractions for each peptide and sample into a single peptide intensity by minimising the sum of the square of the logarithm of the intensity 
- between samples via Levenberg–Marquardt optimization (see figure \ref{figure:xic_normalization} for a graphical explanation). 
-
-The intensity of peptide $P$ in sample $A$ is defined as a weighted average of $P$ \textquotesingle s XIC signals across fractions $\{1..k\}$, where the weights are the normalization factors that the minimisation algorithm seeks to find.
-%  this commented blank line prevents start of a new paragraph
-\begin{equation}\label{eq:peptide_intensity}
-I_{P,A}(\text{N}) = \sum\limits_{j=1}^{k}{\text{N}_{P,A,j} \times \text{XIC}_{P,A,j}}
-\end{equation}
-
-
-The minimisation assumes that the best normalization factors minimize the sum of squared logarithm pairwise-ratios $H$.
-%  this commented blank line prevents start of a new paragraph
-\begin{equation}\label{eq:sum_norm_intensity}
-H_P(N) = \sum\limits_{a,b} \abs{\frac{I_{P,a}(N)}{I_{P,b}(N)}}^2
-\end{equation}
-%  this commented blank line prevents start of a new paragraph
-\begin{equation}
-H(N) = \sum\limits_{p} H_p(N) 
-\end{equation}
-
-
-where $a,b$ iterates over all possible pair-wise combinations of samples where P was detected.
-
-The peptide intensities can be computed from the estimated normalization factors and the observed XIC signals.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.8\textwidth]{xic_normalization}
-\caption{Taken from \cite{Cox2014}}
-\label{figure:xic_normalization}
-\end{figure}
-
-
-\subsubsection{Protein intensity inference}
-
-Second, once the peptide intensities have been summarised, the intensity of the proteins that the peptides originated from are inferred. This is achieved in three steps (see figure \ref{figure:protein_quant_inference} for a graphical explanation).
-
-\begin{enumerate}
-\item Peptide intensity ratios are computed for all possible pairwise combinations by dividing the normalized intensities obtained in the previous step.
-
-\item For every inferred protein A, its protein ratio $r_{A, a,b}$ for the pair of samples a,b is set to the median intensity of its children peptide ratio in samples a,b. The median is selected as a summarising statistic to protect from outliers. A minimal number of non-zero intensity peptides are required for the median to be valid, usually 2. Otherwise, the protein ratio for the pair of samples is set to 0.
-
-\item The correct protein intensities are assumed to minimise the sum of the squared difference of the logarithm of the protein ratios and logarithm of the protein intensities $I$.
-
-\end{enumerate}
-
-\begin{equation}\label{eq:least_squares}
-\sum_{a,b} (\log{(r_{A, a,b})} - \log{(I_{A,a})} + \log{(I_{A,b})})^2
-\end{equation}
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.8\textwidth]{protein_quant_inference}
-\caption{Taken from \cite{Cox2014}}
-\label{figure:protein_quant_inference}
-\end{figure}
-
-For the three most intense tryptic peptides, the signal per mole of protein was shown to be constant within a coefficient of variation of $\pm 10 \%$ \cite{Mikalsen2007}. Thus, protein intensities are linearly proportional to protein quantities and protein quantity ratios can be computed from protein intensity ratios. These values are reported in the MaxQuant output in the \texttt{proteinGroups.txt} file under columns named \textit{LFQ Intensity}.
-		
-\subsubsection{Drawbacks of the model}
-
-The LFQ model provides a powerful method to infer protein quantities from a label-free experiment. However, it makes use of point estimates in different steps of the process, namely (1) during peptide intensity aggregation, where the Levenberg-Marquardt minimum is selected (2) during protein ratio estimation, where the peptide median is selected and (3) during protein intensity estimation, where the least squares minimum is selected. These point estimation bottlenecks, specially (2), discard increasing amounts of data that could otherwise be used for more accurate results. Moreover, not just quantities, but also the uncertainty behind them, could also be provided. The only way of MaxQuant to provide uncertainty measurements is the number of peptides supporting the quantification measurement.
-
-
-\subsection{Bayesian model}
-
-Bayesian statistics provides probability measurements for observed data assuming underlying mathematical models. A model for protein quantification based on the \ac{MS1} intensities or XICs could be developed to assess both quantities and uncertainties behind the estimated quantities.
-
-While \ac{MS1} intensity measurements are dependent upon the underlying protein quantities, other factors influence the final measurement, thus adding noise and distorting the results. Besides the actual quantity, two more factors can be distinguished:
-
-\begin{itemize}
-
-\item \textbf{Sequence derived factors}: some peptides are easier to cleave for the cleaving enzyme (Trypsin, etc) than others. Moreover, the sequence of the peptide could influence the final measurement detected in the analyzer, by having different elution dynamics in the column or the analyzer.
-
-\item \textbf{Random noise}: the stochastic processes intrinsic to \ac{MS1} measurements could also have an impact.
-
-\end{itemize}
-
-The model would take as input:
-
-\begin{enumerate}
-
-\item \textbf{Features extracted from the precursor sequence}, including the surrounding aminoacids in the original protein. They can be used to model the sequenced derived factors.
-
-\item \textbf{Observed \ac{MS1} precursor intensities/XICs}.
-
-\end{enumerate}
-
-and return as output a protein quantification value for each protein, together with a measurement of the uncertainty behind it.
-
-
-
-
-\subsection{Data}
-
-The MaxLFQ paper dataset is available \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. The authors submitted the RAW files (>50 GB) and the search files containing the final results. They can be used to benchmark any new quantification tool or method, for example, it has been used to benchmark third party quantification tools like StPeter from the TPP \cite{Hoopmann2018}.
-
-The dataset contains the results of the quantification of proteins in 2 different proteomes (\textit{E. coli} and \textit{Homo sapiens}) from 6 samples organized in 2 conditions with 3 replicates each. In the first condition (H), both proteomes were mixed in a 1:1 ratio, while in the second condition (L), the \textit{E. coli} proteome had 3 times more contribution to the mix (3:1). Thus, the fold change of protein quantities across conditions should be 1 for human proteins and 3 for bacterial proteins.
-
-A list of the protein groups identified that could be mapped unambiguously to each species was made available \footnote{\href{http://www.mcponline.org/content/13/9/2513/suppl/DC1}{http://www.mcponline.org/content/13/9/2513/suppl/DC1}}. Thus, a dataset of thousands of proteins of known ratios between conditions, producing tens of thousands of peptides with known sequence, \ac{MS1} intensity/XIC and parent protein can be built from the publication, and used to train new quantification methods (figure \ref{fig:screenshot_peptide_data}).
-
-% latex table generated in R 3.4.3 by xtable 1.8-2 package
-% Fri Jun 01 17:11:23 2018
-\begin{table}[ht]
-\centering
-\begin{tabular}{rlrr}
-  \hline
- & Taxonomy & Peptides & Proteins \\ 
-  \hline
-1 & Escherichia coli (strain K12) & 14483 & 1556 \\ 
-  2 & Homo sapiens & 32647 & 3444 \\ 
-   \hline
-   & Total & 47130 & 5000
-\end{tabular}
-\caption{Summary table of the dataset}
-\label{table:summary_peptide_data}
-\end{table}
-
-\begin{figure}[!h]
-\includegraphics[width=1\textwidth]{dataset}
-\caption{Extract of the available dataset. Total of 47130 entries, one per peptide, for a global of 5000 proteins.}
-\label{fig:screenshot_peptide_data}
-\end{figure}
-
-This compiled dataset can be downloaded here \href{https://mega.nz/\#!AgcTgJYa!w9DoAKYRc6u-SaRy\_UIMz3aileUHXoaWgrxf-UycqiQ}{https://mega.nz/\#!AgcTgJYa!w9DoAKYRc6u-SaRy\_UIMz3aileUHXoaWgrxf-UycqiQ}
-
-\section{Extension of pipelines}
-
-The Compomics suite of programmes provides the best documented and accesible set of tools for proteomics analysis, but still lacks proper quantification tools. The implementation of a MS1 intensity-based downstream quantification tool compatible with the output of the Compomics tools would yield a free Linux compatible, CLI supported, complete proteomics pipeline featuring a robust quantification method.
+\chapter{Conclusion of the Thesis}
+\label{chap:conclusion}
+
+%\section{Overview of proteomics analysis software}
+%
+%\subsection{MaxQuant}
+%
+%One of the most used program for the quantification of label free proteins is the MaxQuant suite \cite{Cox2008}. It can be downloaded for free and is developed by the Max Planck institute in Germany. It consists of a user friendly GUI that provides the most needed steps in a proteomics pipeline.
+%
+%MaxQuant has been successfully adopted by the scientific community due to its ease of use and a comprehensive pipeline. A Google group and a tutorial are available  \footnote{\href{http://www.coxdocs.org/doku.php?id=maxquant:viewer:tutorial}{http://www.coxdocs.org/doku.php?id=maxquant:viewer:tutorial}} \footnote{\href{https://www.youtube.com/watch?v=\_AJHFHi5CxM}{https://www.youtube.com/watch?v=\_AJHFHi5CxM}}.
+%
+%The main processing steps incorporated in MaxQuant consist of:
+%
+%\begin{itemize}
+%
+%\item Read MS spectra files in the .RAW format, the closed format produced by ThermoScientific MS analyzers.
+%
+%\item Contains the Andromeda search engine \cite{Cox2011} for matching of \ac{MS2} spectra to a proteome database.
+%
+%\item Andromeda supports configuring aminoacid modifications and decoy search for FDR (false discovery rate) estimation.
+%
+%\item Increase peptide identifications by performing match between runs (MBR), which aims at transferring peptide to spectrum matches (PSMs) across replicate runs, based on precursor mass and retention times.
+%
+%\item Filters Andromeda results to provide a list of inferred peptides and proteins with a cutoff FDR value.
+%
+%\item Supports label-based and label-free quantification.
+%
+%\item Its output can be passed to the Perseus software for data visualization. %CITE
+%
+%\end{itemize}
+%
+%However, MaxQuant also suffers from some problems:
+%
+%\begin{enumerate}
+%
+%\item MaxQuant only runs on Microsoft Windows, impeding its integration in automated pipelines on cluster environments \cite{Argentini2016}. The processing steps cannot easily be fine tuned or exchanged with other pipelines. For example, only the Andromeda search engine is supported. This is a serious drawback, as the integration of results from several search engines, like MSGF+ \cite{Kim2014} or MS-Amanda \cite{Dorfer2014}  has been shown to further improve results \cite{Shteynberg2013}.
+%
+%\item It does not provide a command line interface (CLI), thus all analyses must be performed through the GUI. This hinders reproducibility and scalability.
+%
+%\item While it is supported in Linux through Mono, the user experience is best in Windows. As Linux is by far the most used OS in Bioinformatics, this implies that an additional OS is required to get the best experience with MaxQuant.
+%
+%\item Lacks a well written official documentation, as most information is made available only through talks published on Youtube or third party tutorials.
+%
+%\end{enumerate}
+%
+%\subsection{Compomics group}
+%
+%The Compomics group at Ghent University \footnote{\href{https://compomics.com/}{https://compomics.com/}} provides high quality  analysis software for the identification and integration of results through the SearchGUI, PeptideShaker and moFF (modest Feature Finder) programs \cite{Barsnes2018} \cite{Vaudel2015} \cite{Argentini2016}.
+%
+%\begin{itemize}
+%
+%\item SearchGUI provides a common interface to a range of search engines so that multiple engines can be used in a straightforward manner.
+%
+%\item PeptideShaker reads the SearchGUI output and performs quality control, gene set enrichment analysis (GSEA), and implements multiple validation filters to provide the best results.
+%
+%\item moFF reads from PeptideShaker output and implements a match between runs (MBR) model analogous to that in MaxQuant, to increase the number of spectra that are matched to a peptide. Furthermore, it summarises the \ac{MS1} peaks into refined features, making downstream analyses more sensitive.
+%
+%\end{itemize}
+%
+%SearchGUI and PeptideShaker are very well integrated and documented \footnote{\href{https://compomics.com/bioinformatics-for-proteomics/}{https://compomics.com/bioinformatics-for-proteomics/}}. Both provide not just beautiful GUIs, but also a comprehensive and extremely well documented CLI \footnote{\href{https://github.com/compomics/searchgui/wiki/SearchCLI}{https://github.com/compomics/searchgui/wiki/SearchCLI}} \footnote{\href{https://github.com/compomics/peptide-shaker/wiki/PeptideShakerCLI}{https://github.com/compomics/peptide-shaker/wiki/PeptideShakerCLI}}. They easily enable the development of analytical pipelines finely fitted to each use case.
+%
+%moFF is less documented and integrated in the workflow. Furthermore, it does not offer a GUI yet. The group is currently working to better integrate moFF and PeptideShaker \footnote{\href{https://groups.google.com/forum/\#!topic/peptide-shaker/Lqe7lYKLcHI}{https://groups.google.com/forum/\#!topic/peptide-shaker/Lqe7lYKLcHI}}.
+%
+%The main issue in the Compomics suite of tools is the lack of a robust label-free quantification step, as they currently recommend the export of results to a third party tool. Only the spectral count based methods emPAi (Exponentially Modified Protein Abundance Index) and NSAF (Normalized Spectral Abundance Factor), which are not robust \cite{Griffin2010}, are supported.
+%
+%
+%\subsection{Other suites}
+%
+%Other software suites like ProteomeDiscoverer, Progenesis QI, GeneData Expressionist, etc, are available. They are not open, requiring a license to function. Furthermore, they are GUI oriented and make use of different data formats thus, making exchange across pipelines extremely difficult. The OpenMS \cite{Sturm2008} and Trans Proteomic Pipeline (TPP) \cite{Deutsch2011} suites are open, but they also suffer from data exchangeability and lack comprehensive documentations.
+%
+%\section{Label-free quantification}
+%
+%\subsection{MaxLFQ}
+%
+%The label-free quantification engine implemented in MaxQuant is MaxLFQ \cite{Cox2014}. It performs 2 minimisation steps to infer protein quantities from extracted ion currents (XIC), as stored in the spectra files.
+%
+%\subsubsection{Fractionated XIC aggreagation}
+%
+%First, due to the prefrationation of samples during the upstream mass spectrometry (MS) analysis, XIC signals for each peptide are distributed along multiple fractions. MaxLFQ summarises the XIC from several fractions for each peptide and sample into a single peptide intensity by minimising the sum of the square of the logarithm of the intensity 
+% between samples via Levenberg–Marquardt optimization (see figure \ref{figure:xic_normalization} for a graphical explanation). 
+%
+%The intensity of peptide $P$ in sample $A$ is defined as a weighted average of $P$ \textquotesingle s XIC signals across fractions $\{1..k\}$, where the weights are the normalization factors that the minimisation algorithm seeks to find.
+%%  this commented blank line prevents start of a new paragraph
+%\begin{equation}\label{eq:peptide_intensity}
+%I_{P,A}(\text{N}) = \sum\limits_{j=1}^{k}{\text{N}_{P,A,j} \times \text{XIC}_{P,A,j}}
+%\end{equation}
+%
+%
+%The minimisation assumes that the best normalization factors minimize the sum of squared logarithm pairwise-ratios $H$.
+%%  this commented blank line prevents start of a new paragraph
+%\begin{equation}\label{eq:sum_norm_intensity}
+%H_P(N) = \sum\limits_{a,b} \abs{\frac{I_{P,a}(N)}{I_{P,b}(N)}}^2
+%\end{equation}
+%%  this commented blank line prevents start of a new paragraph
+%\begin{equation}
+%H(N) = \sum\limits_{p} H_p(N) 
+%\end{equation}
+%
+%
+%where $a,b$ iterates over all possible pair-wise combinations of samples where P was detected.
+%
+%The peptide intensities can be computed from the estimated normalization factors and the observed XIC signals.
+%
+%\begin{figure}[!h]
+%\centering
+%\includegraphics[width=0.8\textwidth]{xic_normalization}
+%\caption{Taken from \cite{Cox2014}}
+%\label{figure:xic_normalization}
+%\end{figure}
+%
+%
+%\subsubsection{Protein intensity inference}
+%
+%Second, once the peptide intensities have been summarised, the intensity of the proteins that the peptides originated from are inferred. This is achieved in three steps (see figure \ref{figure:protein_quant_inference} for a graphical explanation).
+%
+%\begin{enumerate}
+%\item Peptide intensity ratios are computed for all possible pairwise combinations by dividing the normalized intensities obtained in the previous step.
+%
+%\item For every inferred protein A, its protein ratio $r_{A, a,b}$ for the pair of samples a,b is set to the median intensity of its children peptide ratio in samples a,b. The median is selected as a summarising statistic to protect from outliers. A minimal number of non-zero intensity peptides are required for the median to be valid, usually 2. Otherwise, the protein ratio for the pair of samples is set to 0.
+%
+%\item The correct protein intensities are assumed to minimise the sum of the squared difference of the logarithm of the protein ratios and logarithm of the protein intensities $I$.
+%
+%\end{enumerate}
+%
+%\begin{equation}\label{eq:least_squares}
+%\sum_{a,b} (\log{(r_{A, a,b})} - \log{(I_{A,a})} + \log{(I_{A,b})})^2
+%\end{equation}
+%
+%\begin{figure}[!h]
+%\centering
+%\includegraphics[width=0.8\textwidth]{protein_quant_inference}
+%\caption{Taken from \cite{Cox2014}}
+%\label{figure:protein_quant_inference}
+%\end{figure}
+%
+%For the three most intense tryptic peptides, the signal per mole of protein was shown to be constant within a coefficient of variation of $\pm 10 \%$ \cite{Mikalsen2007}. Thus, protein intensities are linearly proportional to protein quantities and protein quantity ratios can be computed from protein intensity ratios. These values are reported in the MaxQuant output in the \texttt{proteinGroups.txt} file under columns named \textit{LFQ Intensity}.
+%		
+%\subsubsection{Drawbacks of the model}
+%
+%The LFQ model provides a powerful method to infer protein quantities from a label-free experiment. However, it makes use of point estimates in different steps of the process, namely (1) during peptide intensity aggregation, where the Levenberg-Marquardt minimum is selected (2) during protein ratio estimation, where the peptide median is selected and (3) during protein intensity estimation, where the least squares minimum is selected. These point estimation bottlenecks, specially (2), discard increasing amounts of data that could otherwise be used for more accurate results. Moreover, not just quantities, but also the uncertainty behind them, could also be provided. The only way of MaxQuant to provide uncertainty measurements is the number of peptides supporting the quantification measurement.
+%
+%
+%\subsection{Bayesian model}
+%
+%Bayesian statistics provides probability measurements for observed data assuming underlying mathematical models. A model for protein quantification based on the \ac{MS1} intensities or XICs could be developed to assess both quantities and uncertainties behind the estimated quantities.
+%
+%While \ac{MS1} intensity measurements are dependent upon the underlying protein quantities, other factors influence the final measurement, thus adding noise and distorting the results. Besides the actual quantity, two more factors can be distinguished:
+%
+%\begin{itemize}
+%
+%\item \textbf{Sequence derived factors}: some peptides are easier to cleave for the cleaving enzyme (Trypsin, etc) than others. Moreover, the sequence of the peptide could influence the final measurement detected in the analyzer, by having different elution dynamics in the column or the analyzer.
+%
+%\item \textbf{Random noise}: the stochastic processes intrinsic to \ac{MS1} measurements could also have an impact.
+%
+%\end{itemize}
+%
+%The model would take as input:
+%
+%\begin{enumerate}
+%
+%\item \textbf{Features extracted from the precursor sequence}, including the surrounding aminoacids in the original protein. They can be used to model the sequenced derived factors.
+%
+%\item \textbf{Observed \ac{MS1} precursor intensities/XICs}.
+%
+%\end{enumerate}
+%
+%and return as output a protein quantification value for each protein, together with a measurement of the uncertainty behind it.
+%
+%
+%
+%
+%\subsection{Data}
+%
+%The MaxLFQ paper dataset is available \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. The authors submitted the RAW files (>50 GB) and the search files containing the final results. They can be used to benchmark any new quantification tool or method, for example, it has been used to benchmark third party quantification tools like StPeter from the TPP \cite{Hoopmann2018}.
+%
+%The dataset contains the results of the quantification of proteins in 2 different proteomes (\textit{E. coli} and \textit{Homo sapiens}) from 6 samples organized in 2 conditions with 3 replicates each. In the first condition (H), both proteomes were mixed in a 1:1 ratio, while in the second condition (L), the \textit{E. coli} proteome had 3 times more contribution to the mix (3:1). Thus, the fold change of protein quantities across conditions should be 1 for human proteins and 3 for bacterial proteins.
+%
+%A list of the protein groups identified that could be mapped unambiguously to each species was made available \footnote{\href{http://www.mcponline.org/content/13/9/2513/suppl/DC1}{http://www.mcponline.org/content/13/9/2513/suppl/DC1}}. Thus, a dataset of thousands of proteins of known ratios between conditions, producing tens of thousands of peptides with known sequence, \ac{MS1} intensity/XIC and parent protein can be built from the publication, and used to train new quantification methods (figure \ref{fig:screenshot_peptide_data}).
+%
+%% latex table generated in R 3.4.3 by xtable 1.8-2 package
+%% Fri Jun 01 17:11:23 2018
+%\begin{table}[ht]
+%\centering
+%\begin{tabular}{rlrr}
+%  \hline
+% & Taxonomy & Peptides & Proteins \\ 
+%  \hline
+%1 & Escherichia coli (strain K12) & 14483 & 1556 \\ 
+%  2 & Homo sapiens & 32647 & 3444 \\ 
+%   \hline
+%   & Total & 47130 & 5000
+%\end{tabular}
+%\caption{Summary table of the dataset}
+%\label{table:summary_peptide_data}
+%\end{table}
+%
+%\begin{figure}[!h]
+%\includegraphics[width=1\textwidth]{dataset}
+%\caption{Extract of the available dataset. Total of 47130 entries, one per peptide, for a global of 5000 proteins.}
+%\label{fig:screenshot_peptide_data}
+%\end{figure}
+%
+%This compiled dataset can be downloaded here \href{https://mega.nz/\#!AgcTgJYa!w9DoAKYRc6u-SaRy\_UIMz3aileUHXoaWgrxf-UycqiQ}{https://mega.nz/\#!AgcTgJYa!w9DoAKYRc6u-SaRy\_UIMz3aileUHXoaWgrxf-UycqiQ}
+%
+%\section{Extension of pipelines}
+%
+%The Compomics suite of programmes provides the best documented and accesible set of tools for proteomics analysis, but still lacks proper quantification tools. The implementation of a MS1 intensity-based downstream quantification tool compatible with the output of the Compomics tools would yield a free Linux compatible, CLI supported, complete proteomics pipeline featuring a robust quantification method.
 
 \bibliographystyle{unsrt_etal}
 \footnotesize{\bibliography{bibliography}}
