@@ -2,6 +2,8 @@
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+
 \DeclareUnicodeCharacter{2010}{-}% support older LaTeX versions
 \usepackage{wallpaper}
 \usepackage{palatino}
@@ -129,6 +131,11 @@
 %\makeatother
 
 \usepackage{mathtools}
+\usepackage{sectsty}
+
+\chapternumberfont{\LARGE} 
+\chaptertitlefont{\LARGE}
+
 
 \DeclarePairedDelimiter\abs{\lvert}{\rvert}%
 \DeclarePairedDelimiter\norm{\lVert}{\rVert}%
@@ -316,7 +323,7 @@
 
 \section*{Preface}
 
-\chapter{Introduction}
+\chapter*{Introduction}
 \label{chap:introduction}
 
 \section{Aminoacids and proteins}
@@ -327,14 +334,14 @@ Proteins are made up of 20 basic units, called aminoacids. All aminoacids share 
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.5\textwidth]{aminoacids.png}
-  \caption{}
+  \includegraphics[width=0.8\textwidth]{aminoacids2.png}
+  \caption{CAPTION AND REFERENCE}
   \label{fig:aminoacids}
 \end{figure}
 
-Two aminoacids are joined together through the formation of a peptidic (covalent) bond between them. Such a linkage is formed by removal of the elements of water (dehydration) from the $\alpha$-carboxyl group of one amino acid and the $\alpha$-amino group of another. CITE LEHNINGER PAG 82. The remaining $\alpha$-amino and $\alpha$-carboxyl groups are available for linkage to other aminoacids, and in this way peptidic chains or peptides can be created.
+Two aminoacids are joined together through the formation of a peptidic (covalent) bond between them. Such a linkage is formed by removal of the elements of water (dehydration) from the $\alpha$-carboxyl group of one amino acid and the $\alpha$-amino group of another \cite{Nelson2008}. The remaining $\alpha$-amino and $\alpha$-carboxyl groups are available for linkage to other aminoacids, and in this way peptidic chains or peptides can be created.
 
-While there are 20 basic units that constitute the majority of naturally observable proteins, their side chains can be modified both by physiological processes and by experimental procedures CITE. One frequent instance of such modifications is the oxidation of methionine
+While there are 20 basic units that constitute the majority of naturally observable proteins, their side chains can be modified both by physiological processes and by experimental procedures cite. One frequent instance of such modifications is the oxidation of methionine.
 
 
 \section{The protein-focused biotechnology industry}
@@ -376,7 +383,9 @@ An overview over the \ac{MS} and following computational data analysis steps is 
 
 Life systems consist of complex systems, meaning their behaviour cannot be easily explained by analyzing the individual elements alone. Moreover, they present multiple layers of complexity, given by the nature of the elements that make it up. The layer provided by proteins is one of them, and its study is called proteomics. It is a complex layer because thousands of different proteins can be present in a single cell at any time, and their exact composition and quantities constantly change, responding to the stimuli of the surrounding environment. The study of the protein-specific complexity is called proteomics. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts.
 
-It may be useful to divide the existing approaches into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. CITE 1.6.1 COMPUTATIONAL METHODS. Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly mass spectrometry (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry. The interested reader is directed to CITE 1.6.1 COMPUTATIONAL METHODS to learn why. The top-down paradigm will be ignored in the rest of the manuscript.
+It may be useful to divide the existing approaches into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. \cite{Barsnes2008} CITE 1.6.1 COMPUTATIONAL METHODS. Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly mass spectrometry (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as explained in \ref{subsec:the_detector}. The top-down paradigm will be ignored in the rest of the manuscript.
+
+
 
 MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for plenty of sample components. A detailed explanation of the sample processing required prior to MS is given in section \label{sec:sample processing}, while an overview on mass spectrometers is given in section \label{sec:the mass spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \label{sec:peptide and protein inference}. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \label{sec:quantification} CITE.
 
@@ -394,9 +403,9 @@ A summary of the bottom-up approach MS analytical pipeline is provided in the re
 \section{Sample processing}
 \label{sec:sample_processing}
 
-An \ac{MS} experiment starts with the generation of protein mixture samples. They are first separated in order to sort the proteins via physicochemical criteria. This is most frequently carried out via SDS-PAGE based on mass or isoelectric point. Once the electrophoresis is completed, protein bands can be excised from the gel. Each band will contain a subset, or even only one of the proteins originally available, thus making the downstream analysis simpler REFERENCE COMPUTATIONAL METHODS CHAPTER 2
+An \ac{MS} experiment starts with the generation of protein mixture samples. They are first separated in order to sort the proteins via physicochemical criteria. This is most frequently carried out via SDS-PAGE based on mass or isoelectric point. Once the electrophoresis is completed, protein bands can be excised from the gel. Each band will contain a subset, or even only one of the proteins originally available, thus making the downstream analysis simpler \cite{Barsnes2008} REFERENCE COMPUTATIONAL METHODS CHAPTER 2
 
-The reduced complexity protein mix is extracted in a denaturalized state so as to remove biases due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific enzymes, that can cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used for this task, which cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: COMPUTATIONAL METHODS 3.2
+The reduced complexity protein mix is extracted in a denaturalized state so as to remove biases due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific enzymes, that can cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used for this task, which cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: \cite{Barsnes2008} COMPUTATIONAL METHODS 3.2
 
 \begin{enumerate}
 
@@ -422,16 +431,17 @@ The mass spectrometer consists of three main parts: an ion source, a mass analyz
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{mass_spectrometer}
-\caption{Schematic view of a mass spectrometer. Taken from}
-%CITE THIS https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation
+\caption[]{Schematic view of a mass spectrometer. Taken from \footnotemark}
 \label{fig:mass_spectrometer}
 \end{figure}
+
+\footnotetext{\href{https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation}{https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation}}
 
 \subsection{The ion source}
 \label{subsec:the_ion_source}
 
 All mass spectrometers exploit the physical properties of mass and electric charge exhibited by the analyzed components. Ionization of the analytes is absolutely essential prior to any measurement, as analytes left uncharged will be unobservable to the equipment.
-This step is performed in the ion source CITE 5.1 COMPUTATIONAL METHODS. The most frequent ionization methods in proteomics are Matrix-Assisted Laser Desorption-Ionization (MALDI) and Electro Spray Ionization (ESI) CITE. Most peptides ionized by MALDI will acquire a single charge, whereas ESI can provide multiple charges (+2, +3, etc) too. Thus, the charge exhibited by an ion is not obvious when produced via ESI. Moreover, ESI can be run online with the right robotic equipment, while MALDI demands waiting time for vacuum generation. Finally, due to the chemical nature of the matrix components, MALDI ionizes more easily peptides containing aminoacids featuring aromatic rings (PYW), thus introducing a bias. Bias in ESI is less predictable. This is known as the competitive ionization problem. REF ALL THIS
+This step is performed in the ion source \cite{Barsnes2008} CITE 5.1 COMPUTATIONAL METHODS. The most frequent ionization methods in proteomics are Matrix-Assisted Laser Desorption-Ionization (MALDI) and Electro Spray Ionization (ESI) CITE. Most peptides ionized by MALDI will acquire a single charge, whereas ESI can provide multiple charges (+2, +3, etc) too. Thus, the charge exhibited by an ion is not obvious when produced via ESI. Moreover, ESI can be run online with the right robotic equipment, while MALDI demands waiting time for vacuum generation. Finally, due to the chemical nature of the matrix components, MALDI ionizes more easily peptides containing aminoacids featuring aromatic rings (PYW), thus introducing a bias. Bias in ESI is less predictable. This is known as the competitive ionization problem. REF ALL THIS
 
 The acquired charge yields a mass/charge (\ac{m/z}) ratio, a property that can be applied in the downstream component separation and measurement steps.
 
@@ -473,7 +483,7 @@ If the original sample was known to contain a single protein, PMF, or \textit{pr
 
 If presented with the problem of analyzing a mixture of proteins, the capacities of mass spectrometers are easily overwhelmed by a too complex mixture, resulting in the analysis of only a minor part of the total protein  of the sample. This can be surmounted by splitting the initial sample into fractions, and using a series, or tandem, of spectrometers in the analysis. The spectrometers are used to analyze each obtained fraction separately, using different schemes.
 
-Fractionation is achieved by different methods of separation CITE 1.7, most commonly via \ac{HPLC} methods, like reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point)  CITE 4.2 computational methods.
+Fractionation is achieved by different methods of separation CITE 1.7, most commonly via \ac{HPLC} methods, like reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point) \cite{Barsnes2008} CITE 4.2 computational methods.
 
 \ac{HPLC} methods work by loading the peptide mix in a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times (\ac{RT}) i.e the amount of time passed before the peptide is observed in the mass spectrometer. Therefore, the input to the machine will consist of a simplified mix of peptides at a time. Notably, the same peptide could elute in several contiguous fractions.
 
@@ -498,7 +508,7 @@ Learning the peptide sequences would provide an additional feature that would ma
 
 Provided enough mass resolution, the mass difference between contiguous fragments of the same series i.e a1 and a2, can be related to the mass of the extra residue in the longer fragment. If this comparison process is repeated for enough fragment pairs of the same peptide, a sequence can be read, finally providing sufficient information to perform an accurate peptide to protein mapping.
 
-Fragmentation in proteomics is performed via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. CID is an ergodic fragmentation technique where peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits between ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. PAG 123 COMPUTATIONAL METHODS. Since the kinetic energy is randomly distributed across the peptide, the weakest bonds will break first. This results in the production of mostly b and y fragments, as well as the loss of any chemical modifications CITE pag 134 computational methods.
+Fragmentation in proteomics is performed via (I) collision-induced (CID) or (II) electron-induced (EID) dissociation. CID is an ergodic fragmentation technique where peptides enter a collision cell containing an inert gas. Given enough kinetic energy, hits between ionized peptides and the gas will trigger the fragmentation of the peptide into smaller units. \cite{Barsnes2008} PAG 123 COMPUTATIONAL METHODS. Since the kinetic energy is randomly distributed across the peptide, the weakest bonds will break first. This results in the production of mostly b and y fragments, as well as the loss of any chemical modifications \cite{Barsnes2008} CITE pag 134 computational methods.
 
 EID is produced by the hits against the molecule, which tend to occur on the areas of the peptide more positively charged. Thus, the fragmentation process is not ergodic and returns TYPE ions. More importantly, chemical modifications are not lost in the process.
 
@@ -574,7 +584,7 @@ Protein quantification pipelines can be classified based on whether isobaric lab
 \subsection{Label-based and label-free approaches}
 \label{subsec:labelling}
 
-Two paradigms exist in protein quantification: label-based and label-free. In label-based quantification, originally identical peptides from a number of different samples are made distinguishable by their masses via the incorporation of a label. All label-based methods simultaneously analyze several samples in each experiment, removing the difficulties associated with between-run variability CITE PAGE 237 COMPUTATIONAL METHODS The finite number of "plexes" available for a given label sets the limit to how many samples can be differentially quantified CITE MAXLFQ. Different techniques, like Stable Isotope Labeling by Amino acids in Cell culture (SILAC) CITE or Isotope-Coded Affinity Tags (ICAT) CITE, differ in the nature of the label and the way it is introduced. Remarkably, peptide labeling costs can be quite high. This, together with the limited amount of samples that can be compared makes a case for label-free quantification.
+Two paradigms exist in protein quantification: label-based and label-free. In label-based quantification, originally identical peptides from a number of different samples are made distinguishable by their masses via the incorporation of a label. All label-based methods simultaneously analyze several samples in each experiment, removing the difficulties associated with between-run variability \cite{Barsnes2008} CITE PAGE 237 COMPUTATIONAL METHODS The finite number of "plexes" available for a given label sets the limit to how many samples can be differentially quantified \cite{Cox2014}. Different techniques, like Stable Isotope Labeling by Amino acids in Cell culture (SILAC) CITE or Isotope-Coded Affinity Tags (ICAT) CITE, differ in the nature of the label and the way it is introduced. Remarkably, peptide labeling costs can be quite high. This, together with the limited amount of samples that can be compared makes a case for label-free quantification.
 
 In the label-free quantification approach, peptides from different samples are not labelled differently and are thus distinguished by their presence in different, independent \ac{MS} runs. In order to account for inter-run variability in peptide identifications and \ac{RT}, a match-between-runs (MBR) processing can be carried out for pair-wise transfer of peptide identities from runs where identification was successful to those were it wasn't due to the randomness in the identification process. The transfer can be made based on shared precursor mass and corrected retention times CITE MOFF.
 
@@ -589,7 +599,7 @@ identified and in more spectra. Two approaches were hence followed: count the nu
 \ac{XIC} based methods rely on intensity measurements at any level of the \ac{MS} workflow as proxies for protein abundance CITE. A wide range of algorithms are available to process these data and output estimates of protein abundance. All of them require an intensive preprocessing step, usually including (I) taking the $log_2$ intensity to make the data distributions symmetrical and thus make it fit for diverse parametric tests, and (II) quantile normalization to address between-runs variability in the intensity measurements. They can be classified in the bases of which MS level is used as proxy for the protein abundances and on whether or not a summarization step is performed to aggregate peptide-level data into protein-level data, or not. 
 
 
-Although the abundance of proteins and the probability of their peptides being selected for \ac{MS/MS} sequencing are correlated to some extent, \ac{XIC}-based methods should clearly be superior to spectral counting given sufficient resolution and optimal algorithms. These advantages are most prominent for low-intensity protein/peptide species, for which a continuous intensity readout is more information-rich than discrete counts of spectra. CITE MAXLFQ For this reason, only the \ac{XIC} approach will be regarded in the rest of the manuscript.  
+Although the abundance of proteins and the probability of their peptides being selected for \ac{MS/MS} sequencing are correlated to some extent, \ac{XIC}-based methods should clearly be superior to spectral counting given sufficient resolution and optimal algorithms. These advantages are most prominent for low-intensity protein/peptide species, for which a continuous intensity readout is more information-rich than discrete counts of spectra. \cite{Cox2014} For this reason, only the \ac{XIC} approach will be regarded in the rest of the manuscript.  
 
 
 \subsection{\ac{XIC}-peptide-based models for label-free quantification}
@@ -597,17 +607,21 @@ Although the abundance of proteins and the probability of their peptides being s
 
 The data collected in the mass spectrometer refers to peptides originating from a latent protein composition, given by the original sample. However, the data interpretation requires the transfer of these peptide-level data into the protein level. This can be done by either (I) performing an aggregation of the peptide-level data, where a summary value of the peptide-level data is taken as representative for the protein-level data, or (II) performing the protein quantification directly at the peptide-level by means of linear regression models.
 
-As stated in  CITE SUMMARY MSQROB: \textit{Peptides originating from the same protein can indeed be considered technical replicates and theoretically should lead to similar abundance estimates. However, the summarization of the peptide intensities into protein expression values is cumbersome, and most summarization-based methods do not correct for differences in peptide characteristics or for the between-sample differences in the number of peptides that are identified per protein. This might introduce bias and differences in uncertainty between the aggregated protein expression values, which are typically ignored in downstream data analysis steps}.
+As stated in \cite{Goeminne2015}. \textit{Peptides originating from the same protein can indeed be considered technical replicates and theoretically should lead to similar abundance estimates. However, the summarization of the peptide intensities into protein expression values is cumbersome, and most summarization-based methods do not correct for differences in peptide characteristics or for the between-sample differences in the number of peptides that are identified per protein. This might introduce bias and differences in uncertainty between the aggregated protein expression values, which are typically ignored in downstream data analysis steps}.
 
-It is for this reason that peptide-based models offer the statistical framework required to learn as much from the data as possible. This translates into improved results when compared to the other aforementioned methods CITE MSQROB SUMMARY.
-
+It is for this reason that peptide-based models offer the statistical framework required to learn as much from the data as possible. This translates into improved results when compared to the other aforementioned methods \cite{Goeminne2015}.
 %CITE MAXQUANT
 %
 % The MaxLFQ algorithm, provided within the MaxQuant suite, is an \ac{MS1}, summarization method performing two optimisation steps to  
 
 
-\chapter{Assembly of an open-source Linux-based label-free quantification proteomics pipeline}
+\chapter{A label-free quantification proteomics pipeline}
 \label{chap:pipeline}
+
+
+\section*{Summary}
+A pipeline making use of the set of tools published by the Compomics  and StatOmics groups SearchGUI, PeptideShaker, moFF and MSqRob CITE THEM, was developed to support complete label-free protein quantification analyses using the most recent advances in the field with open-source software. The pipeline can be run on Linux computer clusters to perform (I) peptide to spectrum matching against a reference database, (II) quality control and filtering, (III) feature extraction, (IV) protein inference and (V) relative quantification. Its output can be passed to follow-up analyses in R or Python to get a biological interpretation of the results.  A benchmark of its performance was accomplished using the proteome benchmark dataset published in \cite{Cox2014}. The results exhibited an accuracy similar to those achieved by the MaxLFQ \cite{Cox2014} software, excepting a bias produced by the sample fraction of this dataset.
+
 
 \section{Introduction}
 
@@ -615,7 +629,6 @@ Several proteomics pipelines are available on the internet under different licen
 
 However, still only few of these tools have a fully Linux-supported, well-documented, command-line version available, which would make customised, automatic streamline analyses much easier to perform. As a GUI would not be required to run the pipeline, it would also be scalable to big datasets. Finally, having free licenses would imply that anyone, provided the technical knowledge, can perform the computational analysis independently, thus speeding the data to knowledge turnover in \ac{NZ} or any organization making use of it.
 
-In this chapter, a pipeline making use of the set of tools published by the Compomics  and StatOmics groups CITE THEM, which fulfill all the foregoing requirements, will be presented.
 
 \section{Materials and Methods}
 
@@ -640,16 +653,33 @@ In this chapter, a pipeline making use of the set of tools published by the Comp
 \section{Conclusion}
 
 
-\chapter{Pipeline benchmarking on a real biological setting}
+\chapter{Pipeline benchmarking on \ac{NZ} data}
 \label{chap:benchmark}
 
-\chapter{Bayesian approach to protein quantification}
+\section*{Summary}
+
+A benchmark dataset generated by \ac{NZ} technicians was run through the pipeline presented in chapter \ref{chap:pipeline} to showcase its performance. The experiment consisted of the application of two different treatments to THP-1 cell cultures. One group was subjected to an experimental procedure triggering the immunological response, while the other group was subjected to a negative control. The analysis of the resulting dataset through the aforementioned pipeline should thus reflect a change in the protein profile corresponding to an activation of the immune system in the first group when compared to the second. The results confirmed that the computational analysis successfully captured this response. It was concluded that the software can be used in future experiments where the expected biological phenomena is not known.
+
+
+
+\chapter{Bayesian modelling of fold change estimates}
 \label{chap:model}
+
+\section*{Summary}
+
+The current label-free quantification methods, reviewed in section \ref{sec:quantification} all rely on frequentist statistics, which return point estimates of model parameters such as the estimate of the fold change across conditions. However, a Bayesian based approach to this problem is lacking in the literature. As a response to this shortcoming, a statistical model implemented in the probabilistic programming framework Pymc3 was developed and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability and its strengths.
+
+
 
 %As such, they are the target of multiple regulatory pathways ensuring their quantities are kept within homeostatic ranges.
 
-\chapter{Conclusion of the Thesis}
+\chapter*{Conclusion}
 \label{chap:conclusion}
+
+\chapter*{Appendix}
+\label{chap:appendix}
+
+\includepdf[pages=-]{appendix.pdf}
 
 
 \bibliographystyle{unsrt_etal}
