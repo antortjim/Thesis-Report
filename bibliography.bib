@@ -10,6 +10,97 @@ title = {{A Guided Tour of the Trans-Proteomic Pipeline}},
 volume = {10},
 year = {2011}
 }
+@article{Goeminne2016,
+abstract = {Peptide intensities from mass spectra are increasingly used for relative quantitation of proteins in complex samples. However, numerous issues inherent to the mass spectrometry workflow turn quantitative proteomic data analysis into a crucial challenge. We and others have shown that modeling at the peptide level outperforms classical summarization-based approaches, which typically also discard a lot of proteins at the data preprocessing step. Peptide-based linear regression models, however, still suffer from unbalanced datasets due to missing peptide intensities, outlying peptide intensities and overfitting. Here, we further improve upon peptide-based models by three modular extensions: ridge regression, improved variance estimation by borrowing information across proteins with empirical Bayes and M-estimation with Huber weights. We illustrate our method on the CPTAC spike-in study and on a study comparing wild-type and ArgP knock-out Francisella tularensis proteomes. We show that the fold change estimates of our robust approach are more precise and more accurate than those from state-of-the-art summarization-based methods and peptide-based regression models, which leads to an improved sensitivity and specificity. We also demonstrate that ionization competition effects come already into play at very low spike-in concentrations and confirm that analyses with peptide-based regression methods on peptide intensity values aggregated by charge state and modification status (e.g. MaxQuant's peptides.txt file) are slightly superior to analyses on raw peptide intensity values (e.g. MaxQuant's evidence.txt file).},
+author = {Goeminne, Ludger J. E. and Gevaert, Kris and Clement, Lieven},
+doi = {10.1074/mcp.M115.055897},
+file = {:home/antortjim/MEGA/Master/Thesis/MSqRob/Mol Cell Proteomics-2016-Goeminne-657-68.pdf:pdf},
+isbn = {1535-9484 (Electronic)$\backslash$r1535-9476 (Linking)},
+issn = {1535-9476},
+journal = {Molecular {\&} Cellular Proteomics},
+mendeley-groups = {TFM},
+number = {2},
+pages = {657--668},
+pmid = {26566788},
+title = {{Peptide-level Robust Ridge Regression Improves Estimation, Sensitivity, and Specificity in Data-dependent Quantitative Label-free Shotgun Proteomics}},
+url = {http://www.mcponline.org/lookup/doi/10.1074/mcp.M115.055897},
+volume = {15},
+year = {2016}
+}
+
+@article{Goeminne2015,
+abstract = {Quantitative label-free mass spectrometry is increasingly used to analyze the proteomes of complex biological samples. However, the choice of appropriate data analysis methods remains a major challenge. We therefore provide a rigorous comparison between peptide-based models and peptide-summarization-based pipelines. We show that peptide-based models outperform summarization-based pipelines in terms of sensitivity, specificity, accuracy, and precision. We also demonstrate that the predefined FDR cutoffs for the detection of differentially regulated proteins can become problematic when differentially expressed (DE) proteins are highly abundant in one or more samples. Care should therefore be taken when data are interpreted from samples with spiked-in internal controls and from samples that contain a few very highly abundant proteins. We do, however, show that specific diagnostic plots can be used for assessing differentially expressed proteins and the overall quality of the obtained fold change estimates. Finally, our study also illustrates that imputation under the “missing by low abundance” assumption is beneficial for the detection of differential expression in proteins with low abundance, but it negatively affects moderately to highly abundant proteins. Hence, imputation strategies that are commonly implemented in standard proteomics software should be used with care.},
+author = {Goeminne, Ludger J.E. and Argentini, Andrea and Martens, Lennart and Clement, Lieven},
+doi = {10.1021/pr501223t},
+file = {:home/antortjim/MEGA/Master/Thesis/MSqRob/goeminne2015.pdf:pdf},
+isbn = {1535-3907 (Electronic)$\backslash$r1535-3893 (Linking)},
+issn = {15353907},
+journal = {Journal of Proteome Research},
+keywords = {data analysis,differential proteomics,linear model},
+mendeley-groups = {TFM},
+number = {6},
+pages = {2457--2465},
+pmid = {25827922},
+title = {{Summarization vs peptide-based models in label-free quantitative proteomics: Performance, pitfalls, and data analysis guidelines}},
+volume = {14},
+year = {2015}
+}
+
+
+@article{Goeminne2018,
+abstract = {Label-free shotgun proteomics is routinely used to assess proteomes. However, extracting relevant information from the massive amounts of generated data remains difficult. This tutorial provides a strong foundation on analysis of quantitative proteomics data. We provide key statistical concepts that help researchers to design proteomics experiments and we showcase how to analyze quantitative proteomics data using our recent free and open-source R package MSqRob, which was developed to implement the peptide-level robust ridge regression method for relative protein quantification described by Goeminne et al. MSqRob can handle virtually any experimental proteomics design and outputs proteins ordered by statistical significance. Moreover, its graphical user interface and interactive diagnostic plots provide easy inspection and also detection of anomalies in the data and flaws in the data analysis, allowing deeper assessment of the validity of results and a critical review of the experimental design. Our tutorial discusses interactive preprocessing, data analysis and visualization of label-free MS-based quantitative proteomics experiments with simple and more complex designs. We provide well-documented scripts to run analyses in bash mode on GitHub, enabling the integration of MSqRob in automated pipelines on cluster environments (https://github.com/statOmics/MSqRob). Significance The concepts outlined in this tutorial aid in designing better experiments and analyzing the resulting data more appropriately. The two case studies using the MSqRob graphical user interface will contribute to a wider adaptation of advanced peptide-based models, resulting in higher quality data analysis workflows and more reproducible results in the proteomics community. We also provide well-documented scripts for experienced users that aim at automating MSqRob on cluster environments.},
+author = {Goeminne, Ludger J.E. and Gevaert, Kris and Clement, Lieven},
+doi = {10.1016/j.jprot.2017.04.004},
+file = {:home/antortjim/MEGA/Master/Thesis/MSqRob/goeminne2017.pdf:pdf},
+isbn = {0256-9574},
+issn = {18767737},
+journal = {Journal of Proteomics},
+keywords = {Biostatistics,Differential protein abundance,Experimental design,Label-free quantification,Peptide-based linear model,Tandem mass spectrometry},
+mendeley-groups = {TFM},
+pages = {23--36},
+pmid = {28391044},
+publisher = {Elsevier B.V},
+title = {{Experimental design and data-analysis in label-free quantitative LC/MS proteomics: A tutorial with MSqRob}},
+url = {http://dx.doi.org/10.1016/j.jprot.2017.04.004},
+volume = {171},
+year = {2018}
+}
+
+
+
+@book{Barsnes2008,
+author = {{I. Eidhammer, K. Flikka}, L. Martens and S.-O. Mikalsen},
+booktitle = {John Wiley {\&} Sons},
+file = {:home/antortjim/MEGA/Master/Thesis/Papers/books/Computational Methods for Mass Spectrometry Proteomics.pdf:pdf},
+isbn = {9780470512975},
+mendeley-groups = {TFM},
+title = {{Computational Methods for Mass Spectrometry Proteomics}},
+year = {2008}
+}
+@book{Barsnes2013,
+author = {{Ingvar Eidhammer, Harald Barsnes}, Geir Egil Eide and Lennart Martens},
+file = {:home/antortjim/MEGA/Master/Thesis/Papers/books/Computational and Statistical Methods.pdf:pdf},
+isbn = {9781119964001},
+mendeley-groups = {TFM},
+title = {{Computational and Statistical Methods for Protein Quantification by Mass Spectrometry Computational and Statistical Methods for Protein Quantification by Mass Spectrometry}},
+year = {2013}
+}
+
+@book{Nelson2008,
+address = {New York :},
+author = {Nelson, David L.},
+edition = {5},
+isbn = {9780716771081},
+publisher = {W. H. Freeman and Co,},
+title = {{Lehninger : principles of biochemistry}},
+url = {http://encore.fama.us.es/iii/encore/record/C{\_}{\_}Rb1989396{\_}{\_}Slehninger{\_}{\_}Orightresult{\_}{\_}U{\_}{\_}X7?lang=spi{\&}suite=cobalt},
+year = {2008},
+page=82
+}
+
+
+
+
 
 @article{Marshall2013,
 abstract = {Accurate mass measurement requires the highest possible mass resolution, to ensure that only a single elemental composition contributes to the mass spectral peak in question. Although mass resolution is conventionally defined as the closest distinguishable separation between two peaks of equal height and width, the required mass resolving power can be ∼10× higher for equal width peaks whose peak height ratio is 100 : 1. Ergo, minimum resolving power requires specification of maximum dynamic range, and is thus 10–100× higher than the conventional definition. Mass resolving power also depends on mass-to-charge ratio. Mass accuracy depends on mass spectral signal-to-noise ratio and digital resolution. Finally, the reliability of elemental composition assignment can be improved by resolution of isotopic fine structure. Thus, the answer to the question of “how much is enough mass resolving power” requires that one first specify S/N ratio, dynamic range, digital resolution, mass-to-charge ratio, and (if available) isotopic fine structure. The highest available broadband mass resolving power and mass accuracy is from Fourier transform ion cyclotron resonance mass spectrometry. Over the past five years, FT-ICR MS mass accuracy has improved by about an order of magnitude, based on higher magnetic field strength, conditional averaging of time-domain transients, better mass calibration (spectral segmentation; inclusion of a space charge term); radially dispersed excitation; phase correction to yield absorption-mode display; and new ICR cell segmentation designs.},
@@ -108,19 +199,6 @@ volume = {17},
 year = {2018}
 }
 
-@book{Mikalsen2007,
-author = {Mikalsen, Ingvar EidhammerKristian FlikkaLennart MartensSvein‐Ole},
-doi = {10.1002/9780470724309},
-file = {:/hest/aoj/thesis/papers/books/Computational Methods for Mass Spectrometry Proteomics.pdf:pdf},
-isbn = {9780470724309},
-publisher = {Wiley},
-title = {{Computational Methods for Mass Spectrometry Proteomics}},
-url = {https://onlinelibrary.wiley.com/doi/book/10.1002/9780470724309},
-year = {2007},
-pages = 241,
-chapter = 15,
-  
-}
 
 
 @article{Cox2008,
