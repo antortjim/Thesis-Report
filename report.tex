@@ -290,7 +290,7 @@
     \vspace*{-1cm}
     \textbf{\Huge Bioinformatics Master Thesis} \\
     \vspace*{2.5cm} \\
-    \textbf{\Huge Topics in Mass Sectrometry and Proteomics} \\
+    \textbf{\Huge Development of a label-free quantification proteomics pipeline} \\
     \vspace*{.1cm} \\
     %{\huge No subtitle is available} \\
     \begin{tabbing}
@@ -590,15 +590,30 @@ Protein quantification pipelines can be classified based on whether isobaric lab
 
 Two paradigms exist in protein quantification: label-based and label-free. In label-based quantification, originally identical peptides from a number of different samples are made distinguishable by their masses via the incorporation of a label. All label-based methods simultaneously analyze several samples in each experiment, removing the difficulties associated with between-run variability \cite{Barsnes2008} CITE PAGE 237 COMPUTATIONAL METHODS The finite number of "plexes" available for a given label sets the limit to how many samples can be differentially quantified \cite{Cox2014}. Different techniques, like Stable Isotope Labeling by Amino acids in Cell culture (SILAC) CITE or Isotope-Coded Affinity Tags (ICAT) CITE, differ in the nature of the label and the way it is introduced. Remarkably, peptide labeling costs can be quite high. This, together with the limited amount of samples that can be compared makes a case for label-free quantification.
 
-In the label-free quantification approach, peptides from different samples are not labelled differently and are thus distinguished by their presence in different, independent \ac{MS} runs. In order to account for inter-run variability in peptide identifications and \ac{RT}, a match-between-runs (MBR) processing can be carried out for pair-wise transfer of peptide identities from runs where identification was successful to those were it wasn't due to the randomness in the identification process. The transfer can be made based on shared precursor mass and corrected retention times CITE MOFF.
+In the label-free quantification approach, peptides from different samples are not labelled differently and are thus distinguished by their presence in different, independent \ac{MS} runs. In order to account for inter-run variability in peptide identifications and \ac{RT}, a match-between-runs (MBR) processing can be carried out for pair-wise transfer of peptide identities from runs where identification was successful to those were it wasn't due to the randomness in the identification process. The transfer can be made based on shared precursor mass and corrected retention times CITE MOFF. Furthermore, in order to collect consistent \ac{XIC}, a feature extraction step can be  executed to extract the apex intensity of the identified peak clusters \ref{figure:moff}.
+
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}{.45\textwidth}
+    \caption*{A}
+\includegraphics[width=0.9\linewidth]{moff_workflow}
+\end{subfigure}
+\begin{subfigure}{.45\textwidth}
+    \caption*{B}
+\includegraphics[width=0.9\linewidth]{apex_intensity}
+\end{subfigure}
+\caption{Illustration of the \ac{MBR} and apex intensity extraction steps. \textbf{A} the information gathered from matches in replicate runs is collected for a reanalysis of the spectra. \textbf{B} A retention time window can be used to screen the peak clusters and highest \ac{MS1} intensity of a peak cluster (apex intensity). Taken from CITE MOFF}
+\label{figure:moff}
+\end{figure}
+
 
 \subsection{SC and XIC based quantification}
 \label{subsec:scvsxic}
 
 
 Quantification can be spectral counting or \ac{XIC} based.
-Spectrum counting based quantification is the simplest quantification method in proteomics. It relies on the rationale that highly abundant peptides will have a higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. As a result, peptides from abundant proteins are more likely to be
-identified and in more spectra. Two approaches were hence followed: count the number of peptides identified for a given protein – like in the emPAI index method – or count the number of spectra ascribed to a protein as in the NSAF method CITE COMPOMICS 4.1. These methods have the advantage that they are very simple to implement and don't require any further data processing.
+Spectrum counting based quantification is the simplest quantification method in proteomics. It relies on the rationale that highly abundant peptides will have a higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. As a result, peptides from abundant proteins are more likely to be identified and in more spectra. Two approaches were hence followed: count the number of peptides identified for a given protein – like in the emPAI index method – or count the number of spectra ascribed to a protein as in the NSAF method CITE COMPOMICS 4.1. These methods have the advantage that they are very simple to implement and don't require any further data processing.
 
 \ac{XIC} based methods rely on intensity measurements at any level of the \ac{MS} workflow as proxies for protein abundance CITE. A wide range of algorithms are available to process these data and output estimates of protein abundance. All of them require an intensive preprocessing step, usually including (I) taking the $log_2$ intensity to make the data distributions symmetrical and thus make it fit for diverse parametric tests, and (II) quantile normalization to address between-runs variability in the intensity measurements. They can be classified in the bases of which MS level is used as proxy for the protein abundances and on whether or not a summarization step is performed to aggregate peptide-level data into protein-level data, or not. 
 
@@ -624,7 +639,7 @@ It is for this reason that peptide-based models offer the statistical framework 
 
 
 \section*{Summary}
-A pipeline making use of the set of tools published by the Compomics  and StatOmics groups SearchGUI, PeptideShaker, moFF and MSqRob CITE THEM, was developed to support complete label-free protein quantification analyses using the most recent advances in the field with open-source software. The pipeline can be run on Linux computer clusters to perform (I) peptide to spectrum matching against a reference database, (II) quality control and filtering, (III) feature extraction, (IV) protein inference and (V) relative quantification. Its output can be passed to follow-up analyses in R or Python to get a biological interpretation of the results.  A benchmark of its performance was accomplished using the proteome benchmark dataset published in \cite{Cox2014}. The results exhibited an accuracy similar to those achieved by the MaxLFQ \cite{Cox2014} software, excepting a bias produced by the sample fractionation of this dataset.
+A pipeline making use of the set of tools published by the Compomics  and StatOmics groups SearchGUI, PeptideShaker, moFF and MSqRob CITE THEM, was developed to support complete label-free protein quantification analyses using the most recent advances in the field with open-source software. The pipeline can be run on Linux computer clusters to perform (I) peptide to spectrum matching against a reference database, (II) quality control and filtering, (III) MBR and feature extraction, (IV) protein inference and (V) relative quantification. Its output can be passed to follow-up analyses in R or Python to get a biological interpretation of the results.  A benchmark of its performance was accomplished using the proteome benchmark dataset published in \cite{Cox2014}. The results exhibited an accuracy similar to those achieved by the MaxLFQ \cite{Cox2014} software, excepting a bias produced by the sample fractionation of this dataset.
 
 
 \section{Introduction}
@@ -646,7 +661,7 @@ The development of a pipeline achieving these goals will be described in this ch
 
 \subsection{Data generation and loading}
 
-The proteome benchmark dataset from \cite{Cox2014} was reanalysed starting at the output RAW files available at the PRIDE repository \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. Briefly, the \textit{Homo sapiens} and \textit{E. coli (strain K12)} proteomes were mixed in 1:1 and 1:3 proportions, with 3 replicates for each combination. Moreover, each of the 3 replicates of the 2 conditions was analysed over 24 fractions. This experimental setting thus generated a total of $2 \times 3 \times 24=144$ RAW files. The ThermoRawFileParser CITE THERMORAWFILEPARSER program was used to convert RAW files to the open format MGF (Mascot Generic Format).
+The proteome benchmark dataset from \cite{Cox2014} was reanalysed starting at the output RAW files available at the PRIDE repository \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. Briefly, the \textit{Homo sapiens} and \textit{E. coli (strain K12)} proteomes were mixed in 1:1 (condition L) and 1:3 (condition H) proportions, with 3 replicates for each combination. Moreover, each of the 3 replicates of the 2 conditions was analysed over 24 fractions. This experimental setting thus generated a total of $2 \times 3 \times 24=144$ RAW files. One file was missing in the repository. The ThermoRawFileParser CITE THERMORAWFILEPARSER program was used to convert RAW files to the open format MGF (Mascot Generic Format).
 
 \subsection{Decoy database preparation and search}
 
@@ -657,7 +672,7 @@ The target database was created by combining the Uniprot proteomes for \textit{E
 
 \subsection{Quality control and validation}
 
-The SearchGUI results were filtered using the default built-in checks available in the PeptideShaker utility \texttt{PeptideShakerCLI} \footnote{\href{https://github.com/compomics/peptide-shaker/issues/300}{https://github.com/compomics/peptide-shaker/issues/300}}. By default, the FDR was set to 1\%. Output was extracted via the Default PSM report txt file, available in the \texttt{ReportCLI} utility.
+The SearchGUI results were filtered using the default built-in checks available in the PeptideShaker utility \texttt{PeptideShakerCLI} \footnote{\href{https://github.com/compomics/peptide-shaker/issues/300}{https://github.com/compomics/peptide-shaker/issues/300}}. By default, the FDR was set to 1\%. PEP and confidence statistics were computed using the PeptideShaker built-in algorithms. Output was extracted via the Default PSM report txt file, available in the \texttt{ReportCLI} utility.
 
 
 \subsection{Data refinement}
@@ -669,40 +684,38 @@ The moFF command line utility CITE was applied to perform (I) match-between-runs
 Relative quantification was performed using the MSqRob utility by passing the peptide summary file from moFF. Prior to quantification, the data was preprocessed using the \texttt{preprocess\_MSnSet()} function. In a nutshell, (I) MS1 apex intensities were $log_2$ transformed, (II) peptides belonging to protein groups that contained one or more proteins that were also present in a smaller protein group were discarded CITE MAIN MSQROB, and (III) protein groups with only 1 peptide were dropped. Intensity normalisation was not performed as a systematic bias in intensities is indeed expected for all \textit{E. coli} peptides from samples where the \textit{E. coli}proteome was 3 times more abundant.
 
 
-
 Once preprocessing is done, a ridge regression model with Huber weights and empirical Bayes estimation of the protein variance was fit to every protein individually. The significance of the treatment effect differences was assessed through a Student\textquotesingle s T test, implemented in the \texttt{test.contrast()} function.
+
+\subsection{Code implementation}
 
 \section{Results}
 
 \subsection{Peptide to spectrum matching step identified thousands of spectra}
 
+The preprocessing of the RAW files produced by the mass spectrometer into the MGF open format enabled searchGUI to dispose of the registered spectra. PeptideShaker quality control and filtering capabilities (see figure \ref{figure:qc_validation}) carried out the required search results validation. As expected, matches to the target and decoy exhibited similar score distributions at low score values, while a divergence is observed at higher score values. Likewise, the m/z error was found to be closer to 0 on validated PSMs than on those which did not pass the 1 \% FDR filter. The application of this filter implied that the FNR (false negative rate) was set to 5 \%, i.e 5 out of every 100 discarded matches were estimated to be true positives.
 
-
-The preprocessing of the RAW files produced by the mass spectrometer into the MGF open format enabled searchGUI to dispose of the registered spectra. PeptideShaker quality control and filtering capabilities (see figures \ref{figure:qc_validation}) carried out the required search results validation. As expected, matches to the target and decoy exhibited similar score distributions at low score values, while a divergence is observed at higher score values. Likewise, the m/z error was found to be closer to 0 on validated 
-
-The combination of both programs enabled the identification and validation (matching) of thousands of spectra with high confidence in all samples . However, when compared to the total amount of spectra available, the percentage of matched spectra was on average 37.4\%, with a marked decrease starting at fraction 14 (see figure \ref{fig:match_percent}).
 
 
 \begin{figure}[!h]
 \centering
-\begin{subfigure}{.4\textwidth}
+\begin{subfigure}{.45\textwidth}
   \centering
   \caption*{A}
   \includegraphics[width=.9\linewidth]{target_vs_decoy}
 \end{subfigure}
-\begin{subfigure}{.4\textwidth}
+\begin{subfigure}{.45\textwidth}
   \centering
     \caption*{B}
   \includegraphics[width=.9\linewidth]{score_vs_confidence}
 \end{subfigure}
 \bigskip
 
-\begin{subfigure}{.4\textwidth}
+\begin{subfigure}{.45\textwidth}
   \centering
     \caption*{C}
   \includegraphics[width=.8\linewidth]{qc}
 \end{subfigure}
-\begin{subfigure}{.4\textwidth}
+\begin{subfigure}{.45\textwidth}
   \centering
     \caption*{D}
   \includegraphics[width=.9\linewidth]{roc}
@@ -711,16 +724,60 @@ The combination of both programs enabled the identification and validation (matc
 \label{figure:qc_validation}
 \end{figure}
 
+The PSM confidence is defined as $1-PEP$, where PEP stands for the Posterior Error Probability. Also known as local FDR, the PEP is an estimate of the probability of a given PSM of being an incorrect assignment. Thus, the confidence is the probability of the PSM being a correct assigment CITE NEVINZKY. The 1\% FDR cutoff selected PSMs with a score higher than 78, which translated to a confidence of at least 65\%.
+
+
+The combination of both programs enabled the identification and validation (matching) of thousands of spectra with high confidence in all samples . However, when compared to the total amount of spectra available, the percentage of matched spectra was on average 37.4\%, with a marked decrease starting at fraction 14 (see figure \ref{fig:match_percent}).
 
 \begin{figure}[!h]
-\includegraphics[width=\textwidth]{match_percent}
-\caption{Percentage of matched spectra in all samples. The total number of spectra per sample ranged between 5894 and 20249. \textbf{A} Percentages are encoded with a blue palette, the darker, the higher, and viceversa. \textbf{B} The mean for each analysed fraction across conditions and replicates is displayed together with error bars to represent the standard deviation.}
+\includegraphics[width=0.8\textwidth]{match_percent}
+\caption{Percentage of matched spectra in all samples. The total number of spectra per sample ranged between 5894 and 20249. \textbf{A} Percentages are encoded with a blue palette, the darker, the higher, and viceversa. \textbf{B} The mean for each analysed fraction across conditions and replicates is displayed together with error bars to represent the standard deviation. The sixth fraction of the first replicate in condition H was missing in the PRIDE data repository.}
 \label{fig:match_percent}
 \end{figure}
 
 
+\newpage
+
 \subsection{MBR and Apex intensity extraction capacitate for accurate quantification}
 
+The match between runs step allows for increased identifications by transferring successful matches between replicate runs. The results of this process for the 13th fraction of the L condition is shown in figures \ref{fig:mbr_summary} and \ref{fig:mbr})
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=0.5\textwidth]{mbr_summary}
+\caption{Count of identifications on each run segreagated by source. More than 4k spectra were identified and validated by SearchGUI+peptideShaker. The MBR acts as an imputation step where extra identifications are performed by gathering the information collected from identifications in other samples and reprocessing the spectra files. As a consequence, more identifications with a lesser fraction of missing datapoints are achieved. In this particular case, hundreds of identifications were accomplished}
+
+\label{fig:mbr_summary}
+\end{figure}
+
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{mbr}
+\caption{Match Between Runs with moFF. Every dot represents a peptide shared across 2 runs. The coordinate system illustrates its retention time on the first run on the x axis and the difference with the second run on the y axis. The color depicts whether the identification was carried out during the PSM process, or thanks to a cross-identification achieved by the MBR module.}
+\label{fig:mbr}
+\end{figure}
+
+Once as many identifications as possible were gathered, a refinement of the measured MS1 intensity can be implemented to select the apex of every peak cluster, which yields robust intensity measurements for each sample (see figure \ref{fig:apex_intensity}). The extracted apex intensity can be used as a proxy for peptide abundance in the following quantification step.
+
+\begin{figure}[!h]
+\begin{subfigure}{.9\textwidth}
+  \centering
+    \caption*{A}
+\includegraphics[width=.9\linewidth]{peptide_profile}
+\end{subfigure}
+\bigskip
+
+\begin{subfigure}{.9\textwidth}
+  \centering
+    \caption*{B}
+\includegraphics[width=.9\linewidth]{density_ratio}
+\end{subfigure}
+\caption{\textbf{A} The apex intensity profile across fractions for 2 different peptides, one from \textit{Homo sapiens}, and one from \textit{E. coli}. The figure illustrates the intrinsic intensity variability between technical replicates, particularly in the case of the \textit{E. coli} QLLMMSGFDR peptide, as it was almost non-existent in one of the runs. \textbf{B} The expected pattern of overall similar intensities for the \textit{Homo sapiens} data and 3-fold higher intensities for the \textit{E. coli} data in condition H was observed, confirming the good performance of the protocol.}
+\label{fig:apex_intensity}
+\end{figure}
+
+\subsection{Quantification}
+
+The result of this step was a table where the $log_2(FC)$ estimate, together with test statistics are returned for every protein group.
 
 \section{Discussion}
 
@@ -734,22 +791,6 @@ The most important reason why many spectra remain unidentified is the presence o
 
 
 Finally, the extremely low matching rates in the latter fractions translates to decreased contributions to the number of identifications. This indicated that decreasing the number of fractions would not have had a major impact in the experiment\textquotesingle s depth.
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{match_percent}
-\caption{}
-\label{fig:match_percent}
-\end{figure}
-
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{pipeline}
-\caption{Pipeline}
-\label{fig:pipeline}
-\end{figure}
-
-The result of this step was a table where the $log_2(FC)$ estimate, together with test statistics are returned for every protein group.
-
 
 
 \section{Conclusion}
@@ -771,7 +812,10 @@ A benchmark dataset generated by \ac{NZ} technicians was run through the pipelin
 
 The current label-free quantification methods, reviewed in section \ref{sec:quantification} all rely on frequentist statistics, which return point estimates of model parameters such as the estimate of the fold change across conditions. However, a Bayesian based approach to this problem is lacking in the literature. As a response to this shortcoming, a statistical model implemented in the probabilistic programming framework Pymc3 was developed and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability and its strengths.
 
-
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{graph}
+\end{figure}
 
 %As such, they are the target of multiple regulatory pathways ensuring their quantities are kept within homeostatic ranges.
 
