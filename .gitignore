@@ -1,6 +1,11 @@
+*.bbl
 *.blg
 *.log
 *.out
+*.toc
 *.synctex.gz
 *.aux
 *.pptx
+summary*
+ku-forside.zip
+_minted*

@@ -1,14 +1,19 @@
 \documentclass[11pt, a4paper]{report}
+% FOR COLORFUL TABLES
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
 \usepackage[english]{babel}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{pdfpages}
+\usepackage{array}
 
 \DeclareUnicodeCharacter{2010}{-}% support older LaTeX versions
 \usepackage{wallpaper}
 \usepackage{palatino}
 \usepackage{changepage}
 \usepackage{mhchem} % for isotope nomeclature support
+
 % Setup captions
 %\captionstyle[\centering]{\centering}
 %\changecaptionwidth
@@ -387,7 +392,7 @@ An overview over the \ac{MS} and following computational data analysis steps is 
 Life systems consist of complex systems, meaning their behaviour cannot be easily explained by analyzing the individual elements alone. Moreover, they present multiple layers of complexity, given by the nature of the elements that make it up. The layer provided by proteins is one of them, and its study is called proteomics. It is a complex layer because thousands of different proteins can be present in a single cell at any time, and their exact composition and quantities constantly change, responding to the stimuli of the surrounding environment. The study of the protein-specific complexity is called proteomics. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts.
 
 %CITE 1.6.1 COMPUTATIONAL METHODS.
-It may be useful to divide the existing approaches into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm (see figure \ref{figure:proteomics_overview}, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. \cite{Barsnes2008}  Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as explained in \ref{subsec:the_detector}. The top-down paradigm will be ignored in the rest of the manuscript.
+The existing approaches are divided into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm (see figure \ref{figure:proteomics_overview}, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. \cite{Barsnes2008}  Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as explained in \ref{subsec:the_detector}. The top-down paradigm will be ignored in the rest of the manuscript.
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{proteomics_skema_book}
@@ -401,7 +406,7 @@ A summary of the bottom-up approach MS analytical pipeline is provided in the re
 
 \begin{enumerate}
 
-\item \ac{MS} analysis and data generation. Sections \ref{sec:sample_processing} to \ref{sec:mass_spectrometry_workflows}.
+\item \ac{MS} analysis and data generation. Sections \ref{sec:sample_processing} to \ref{sec:tandem_ms_workflow}.
 
 \item Computational analysis of data. Sections \ref{sec:search_engines} to \ref{sec:quantification}.
 
@@ -423,7 +428,7 @@ A summary of the bottom-up approach MS analytical pipeline is provided in the re
 \subsection{Protein digestion}
 \label{subsec:protein_digestion}
 
-An \ac{MS} experiment starts with the generation of a protein sample from the biological system of interest. Proteins are then denaturalized  so as to remove bias due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific enzymes, which cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used for this task. It cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Since roughly 1/10 residues are either R or K, the average peptide length is 10 residues. As explained in \ref{subsec:the_detector}, this length distribution is fitted to the resolution of the MS analyzer. Moreover, since R and K are positively charged aminoacids, the resulting peptide is guaranteed in most cases to be able to capture at least one charge, thus making it visible in the spectrometer. All of these properties combined, together with its low prize, makes Trypsin the enzyme of choice in this step for most cases CITE.
+An \ac{MS} experiment starts with the generation of a protein sample from the biological system of interest. Proteins are then denaturalized  so as to remove bias due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific enzymes, which cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used for this task. It cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Since roughly 1/10 residues are either R or K, the average peptide length is 10 residues. As explained in \ref{subsec:the_detector}, this length distribution is fitted to the resolution of the MS analyzer. Moreover, since R and K are positively charged aminoacids, the resulting peptide is guaranteed in most cases to be able to capture at least one charge, thus making it visible in the spectrometer. All of these properties combined, together with its low prize, makes Trypsin the enzyme of choice in this step for most cases.
 
 Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: \cite{Barsnes2008}
 %COMPUTATIONAL METHODS 3.2
@@ -699,7 +704,6 @@ For a more robust XIC based quantification, a feature extraction step is usually
 \label{figure:moff_apex}
 \end{figure}
 
-\newpage
 
 \subsection{\ac{XIC}-peptide-based models for label-free quantification}
 \label{subsec:peptide_model}
@@ -731,7 +735,7 @@ A pipeline making use of the set of tools published by the Compomics  and StatOm
 \end{figure}
 
 
-Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented models and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) or openMS  CITE ALL are nevertheless available for the community. MaxQuant, a freeware but closed-source proteomics analysis suite \cite{Cox2008}, has been extremely successfully adopted by the scientific community due to its ease of use and a comprehensive pipeline.
+Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented models and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) \cite{Deutsch2011} or openMS \cite{Sturm2008} are nevertheless available for the community. MaxQuant, a freeware but closed-source proteomics analysis suite \cite{Cox2008}, has been extremely successfully adopted by the scientific community due to its ease of use and a comprehensive pipeline.
 
 However, still only few of these tools have a fully Linux-supported, well-documented, command-line version available, which would make customised, automatic streamline analyses much easier to perform. As a GUI would not be required to run the pipeline, it would also be scalable to big datasets. Finally, having free licenses would imply that anyone, provided the technical knowledge, can perform the computational analysis independently, thus speeding the data to knowledge turnover in \ac{NZ} or any organization making use of it.
 
@@ -761,10 +765,9 @@ The moFF command line utility CITE was applied to perform (I) match-between-runs
 
 \subsection{Quantification}
 
-Relative quantification was performed using the MSqRob utility by passing the peptide summary file from moFF. Prior to quantification, the data was preprocessed using the \texttt{preprocess\_MSnSet()} function. In a nutshell, (I) MS1 apex intensities were $log_2$ transformed, (II) peptides belonging to protein groups that contained one or more proteins that were also present in a smaller protein group were discarded \cite{Goeminne2016}, and (III) protein groups with only 1 peptide were dropped. Intensity normalisation was not performed as a systematic bias in intensities is indeed expected for all \textit{E. coli} peptides from samples where the \textit{E. coli}proteome was 3 times more abundant.
+Relative quantification was performed using the MSqRob utility by passing the peptide summary file from moFF. Prior to quantification, the data was preprocessed using the \texttt{preprocess\_MSnSet()} function. In a nutshell, (I) MS1 apex intensities were $log_2$ transformed, (II) quantile normalized, (III) peptides belonging to protein groups that contained one or more proteins that were also present in a smaller protein group were discarded \cite{Goeminne2016}, and (IV) protein groups with only 1 peptide were dropped.
 
-
-Once preprocessing is done, a ridge regression model with Huber weights and empirical Bayes estimation of the protein variance was fit to every protein individually. The significance of the treatment effect differences was assessed through a Student\textquotesingle s T test, implemented in the \texttt{test.contrast()} function.
+Once preprocessing is done, the ridge regression model with Huber weights and empirical Bayes estimation of protein variance, implemented in the MSqRob package \cite{Goeminne2016}, was fit to every protein individually. The peptide and fraction effects were considered random, while the condition was treated as a fixed effect. The significance of the treatment effect differences was assessed through a Student\textquotesingle s T test, implemented in the \texttt{test.contrast()} function. Only protein groups that could be unambiguously mapped to one of the organisms were considered for the analysis.
 
 \subsection{Code implementation}
 
@@ -798,7 +801,7 @@ The preprocessing of the RAW files produced by the mass spectrometer into the MG
 \begin{subfigure}{.45\textwidth}
   \centering
     \caption*{D}
-  \includegraphics[width=.9\linewidth]{roc}
+  \includegraphics[width=.8\linewidth]{roc}
 \end{subfigure}
 \caption{Quality control and validation of the 13th fraction of the third replicate in condition L. \textbf{A} Score distribution for matches to the decoy and the target databases. \textbf{B} Evolution of the PSM score with confidence. The implemented cutoff at FDR of 1 \% is displayed with a red vertical line. \textbf{C} Distribution of the difference between the predicted and measured \ac{m/z} values, segregated by validation status. \textbf{D} ROC curve built upon the number of false positives and negatives estimated from the decoy search. The cutoff is displayed as a red dot.}
 \label{figure:qc_validation}
@@ -807,7 +810,7 @@ The preprocessing of the RAW files produced by the mass spectrometer into the MG
  The 1\% FDR cutoff selected PSMs with a score higher than 78, which translated to a confidence of at least 65\%.
 
 
-The combination of both programs enabled the identification and validation (matching) of thousands of spectra with high confidence in all samples . However, when compared to the total amount of spectra available, the percentage of matched spectra was on average 37.4\%, with a marked decrease starting at fraction 14 (see figure \ref{fig:match_percent}).
+The combination of both programs enabled the identification and validation (matching) of thousands of spectra with high confidence in all samples. However, when compared to the total amount of spectra available, the percentage of matched spectra was on average 37.4\%, with a marked decrease starting at fraction 14 (see figure \ref{fig:match_percent}).
 
 \begin{figure}[!h]
 \includegraphics[width=0.8\textwidth]{match_percent}
@@ -815,28 +818,39 @@ The combination of both programs enabled the identification and validation (matc
 \label{fig:match_percent}
 \end{figure}
 
+\subsection{Protein inference}
 
-\newpage
+\begin{table}[H]
+\begin{tabular}{ccccc}
+  \toprule
+ Total peptides & Unique peptides & Non-unique & Proteins & Protein groups \\ 
+  \midrule
+ 46595 & 27384 & 19211 & 25056 & 10039 \\
+ \bottomrule
+\end{tabular}
+\caption{\textbf{Protein inference results}. The counts of the different molecular entities detected by peptideShaker is displayed.}
+\label{tab:quantification_table}
+\end{table}
+
+A total of 46595 peptides were inferred to be present in at least one of the fractions. Of them more than 27 thousand mapped to a unique protein. However, a significant amount mapped to more than one protein. Such peptides are called non-unique peptides. The 25056 detected proteins were grouped into 10039 protein groups. Protein groups are peptide generating entities for which enough data to confirm the presence of at least one of them is available, but not to exactly assess which of them. Thus, protein inferene algorithms create them when a does not uniquely map to a protein becuase it is not possible to distinguish which protein it truly comes from. Protein grouping decreased the amount of  considered protein entities to 10039.
+
+Protein groups are very frequent due to several factors. For example, protein isoforms, consisting of protein sequences differing in potentially only one aminoacid, are very difficult to resolve. PeptideShaker executes a smart protein grouping by harnessing the annotation of proteins and classifying protein groups based on how well the annotation backs the protein group.
+
+However, in the present analysis the quality of the protein group was not taken into account, as explained in the Materials and Methods.
+
 
 \subsection{MBR and Apex intensity extraction capacitate for accurate quantification}
 
 The match between runs step allowed for increased identifications by transferring successful matches between replicate runs. The results of this process for the 13th fraction of the L condition is shown in figures \ref{fig:mbr_summary} and \ref{fig:mbr}.
 
-\begin{figure}[!h]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{mbr_summary}
-\caption{Count of identifications on each run segreagated by source. More than 4k spectra were identified and validated by SearchGUI+peptideShaker. In this particular case, hundreds of new identifications were accomplished.}
-
-\label{fig:mbr_summary}
-\end{figure}
-
-\begin{figure}[!h]
-\includegraphics[width=\textwidth]{mbr}
-\caption{Match Between Runs with moFF. Every dot represents a peptide shared across 2 runs. The coordinate system illustrates its retention time on the first run on the x axis and the difference with the second run on the y axis. The color depicts whether the identification was carried out during the PSM process (MS1), or thanks to a cross-identification achieved by the MBR module (MBR).}
+\includegraphics[width=\textwidth]{mbr_combined}
+\caption{Match Between Runs with moFF. \textbf{A} Count of identifications on each run segreagated by source. More than 4k spectra were identified and validated by SearchGUI+peptideShaker. In this particular case, hundreds of new identifications were accomplished. \textbf{B} Match visualization. Every dot represents a peptide shared across 2 runs. The coordinate system illustrates its retention time on the first run on the x axis and the difference with the second run on the y axis. The color depicts whether the identification was carried out during the PSM process (MS1), or thanks to a cross-identification achieved by the MBR module (MBR).}
 \label{fig:mbr}
 \end{figure}
 
-Once as many identifications as possible were gathered, a refinement of the measured MS1 intensity can be implemented to select the apex of every peak cluster, which yields robust intensity measurements for each sample (see figure \ref{fig:apex_intensity}). The extracted apex intensity can be used as a proxy for peptide abundance in the following quantification step.
+Once as many identifications as possible were gathered, a refinement of the measured MS1 intensity can be implemented to select the apex of every peak cluster, which yields robust intensity measurements for each sample (see figure \ref{fig:apex_intensity}). 
 
 \begin{figure}[!h]
 \begin{subfigure}{.9\textwidth}
@@ -855,22 +869,85 @@ Once as many identifications as possible were gathered, a refinement of the meas
 \label{fig:apex_intensity}
 \end{figure}
 
+
 \subsection{Quantification}
 
-The result of this step was a table where the $log_2(FC)$ estimate, together with test statistics are returned for every protein group.
+The extracted apex MS1 intensities were used as proxy for peptide abundance to estimate protein $log_2$(ratios), or \textit{log2-fold-changes} across condition H and condition L. During quantification, it is important to take into account as many of the effects influencing protein quantification. In this case, besides the different H and L conditions, peptide, run and fraction effects could be distinguished. The MSqRob quantification engine treats effects differently depending on whether or not they are random, or fixed. Fixed effects should have a consistent impact in the ion currents measured in the spectrometer, whereas random effects are truly random and thus unpredictable.
+
+The result of the process was the successful quantification of 5307 protein groups out of 10039 (see table \ref{tab:quantification_table}).
+
+% latex table generated in R 3.4.4 by xtable 1.8-2 package
+% Sun Jul 15 18:17:23 2018
+\begin{table}[ht]
+\centering
+\begin{tabular}{llll>{\itshape}l}
+  \toprule
+ & log2FC & qval & Protein & Organism \\ 
+  \midrule
+1 & -4.76E-01 & 1.42E-24 & P78527 & Homo sapiens \\ 
+   \rowcolor[gray]{0.95}2 & 6.80E-01 & 6.75E-24 & P0A8V2 & E. coli \\ 
+  3 & 8.50E-01 & 4.39E-22 & P25516 & E. coli \\ 
+   \rowcolor[gray]{0.95}4 & 7.07E-01 & 2.05E-18 & P63284 & E. coli \\ 
+  5 & 1.04E+00 & 1.21E-17 & P37095 & E. coli \\ 
+   \rowcolor[gray]{0.95}6 & 7.78E-01 & 1.51E-16 & P13029 & E. coli \\ 
+  7 & 8.89E-01 & 5.62E-16 & P77804 & E. coli \\ 
+   \rowcolor[gray]{0.95}8 & 8.53E-01 & 1.72E-15 & P23721 & E. coli \\ 
+  9 & -6.97E-01 & 1.41E-14 & P09874 & Homo sapiens \\ 
+   \rowcolor[gray]{0.95}10 & 1.37E+00 & 1.41E-14 & P37666 & E. coli \\ 
+   \bottomrule
+\end{tabular}
+\caption{Results of the quantification pipeline. The 10 protein groups with the lowest \textit{q-val}  as estimated by MSqRob are shown. Notably, eight correspond to proteins belonging to \textit{E.coli}. The two human proteins exhibited in both cases an absolute value of the log2FC below 1.}
+\label{tab:quantification_table}
+\end{table}
+
+The performance of the quantification can be evaluated thanks to the experimental design of the dataset. Since the \textit{E. coli} proteome was mixed on a 3:1 ratio in condition H, a log2FC of $log2(3)=1.58$ is expected for proteins coming from this organism. Likewise, human proteins should have a log2FC of 0. As such, the evaluation can be reformulated as a classification task were the quantification algorithm tries to distinguish between proteins coming from one or the other organism.
+
+Some of the most frequent evaluations of the performance of a binary classiffier are Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves \cite{Bradley1997}, which demonstrate the performance of the algorithm at different cutoff values of a predictor variable. Together, they show the False Positive Rate (FPR), the False Negative Rate (FNR) and the precision exhibited by the algorithm.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{curves_plot}
+\caption{ROC and PR curves displaying the behaviour of 3 different label-free quantification pipelines publicly available. \textbf{Compomics+MSqRob} is the pipeline presented in the previous sections. \textbf{MQ+MaxLFQ} consists of the standard MaxQuant analysis combined with its LFQ quantification engine. Finally, MQ+MSqRob blends the MaxQuant analysis with the MSqRob quantification engine. \textbf{A, B} ROC curve produced by the three algorithms with no log2FC filter, and keeping proteins with log2FC greater than 1, respectively. \textbf{C, D} PR curve produced by the three algorithms with no log2FC filter, and keeping proteins with log2FC greater than 1, respectively.}
+\label{fig:roc_curves}
+\end{figure}
+
+
+
+In the present problem, they can be used to show how good the \textit{q-val} associated to a protein group is at separating the two proteomes. Thus, \textit{E. coli} proteins are treated as positives, and those from \textit{Homo sapiens} are treated as negatives. Moreover, a filter based on the log2FC can be applied to enrich the data in positives and facilitate the classification task. The result of this analysis is shown in figure \ref{fig:roc_curves}). Remarkably, the pipeline presented in this manuscript (Compomics+MSqRob) achieved similar results to those resulting from using MaxQuant and MaxLFQ (MQ+MaxLFQ). Nonetheless, the latter performed clearly better when the log2FC filter was applied. In all cases, the combination of MaxQuant and MSqRob (Mq+MSqRob) was as good as MQ+MaxLFQ, if not much better.
+
+
+Additionally, the accuracy with which each program assigns a log2FC estimate to each protein group, and how significantly different from the null value of 0 it was found to be, provides further insights on the pros and cons of each pipeline, as shown in figure \ref{fig:combined_plot}.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{combined_plot}
+\caption{}
+\label{fig:combined_plot}
+\end{figure}
+
+
+
 
 \section{Discussion}
 
 
-\subsection{Improvement of the PSM process}
+\subsection{Improvement of the PSM step}
 
-The low attained matching rate manifests existing room for improvement in the currently available tools CITE THAT. Remarkably, it has been shown that the combined usage of multiple search engines can increase identifications, since the different statistical frameworks implemented in each of them compensate each other\textquotesingle s caveats CITE THAT. Furthermore, \textit{de novo} search engines are available and supported by SearchGUI. Their usage could contribute to further improvements in the identification rate.
+The low attained matching rate manifests existing room for improvement in the currently available tools. Remarkably, it has been shown that the combined usage of multiple search engines can increase identifications, since the different statistical frameworks implemented in each of them compensate each other\textquotesingle s caveats. Furthermore, \textit{de novo} search engines are available and supported by SearchGUI. Their usage could contribute to further improvements in the identification rate.
 
 The most important reason why many spectra remain unidentified is the presence of post-translational modifications (PTMs), which exponentially increase the search space, forcing most workflows to discard many of the peptides featuring a PTM. New approaches to the problem are emerging, mainly machine learning methods for the handling of unexpected modifications CITE ralf gabriels. Moreover, the prediction of \ac{MS2} peak intensities patterns from peptide sequences promises to increase the amount of evidence available during the PSM process, thus boosting correct identifications \cite{Kirik2018} \cite{Degroeve2013}.
 
-
-
 Finally, the extremely low matching rates in the latter fractions translates to decreased contributions to the number of identifications. This indicated that decreasing the number of fractions would not have had a major impact in the experiment\textquotesingle s depth.
+
+TALK ABOUT FRACTIONS PROBLEM
+HOW PEPTIDES SHOULD APPEAR IN AT MOST 3 FRACTIONS AND ONLY SIGNIFICANTLY A LOT IN THE CENTRAL ONE
+
+
+\subsection{Improvement of the quantification step}
+
+The deployed relative quantification approach successfully manages to estimate the log2FC or thousands of proteins in the dataset. However, other free tools are available to perform the same type of analysis. 
+
 
 
 \section{Conclusion}
