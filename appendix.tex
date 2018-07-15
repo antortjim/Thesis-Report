@@ -9,6 +9,34 @@
 \renewcommand{\theFancyVerbLine}{
   \sffamily\textcolor[rgb]{0.5,0.5,0.5}{\scriptsize\arabic{FancyVerbLine}}}
 
+
+            
+\begin{minted}[mathescape,
+               linenos,
+               xleftmargin=-70pt,
+               numbersep=10pt,
+               gobble=0,
+               frame=lines,
+               framesep=2mm]{python}
+
+with pm.Model() as model:
+               
+            ## Set priors on the peptide effect
+            ################################################
+            sigma_pep = pm.HalfNormal('sigma_pep', 1)
+    
+            mu_pep = pm.Normal('mu_pep', mu=0, sd=sigma_pep, shape=(n_peptides, 1))       
+    
+            ## Set priors on the treatment and run effects
+            ################################################    
+            sigma_treat = pm.HalfNormal('sigma_treat', 1)
+            mu_treat = pm.Normal('mu_treat', 0, sigma_treat)
+            sigma_run = pm.HalfNormal('sigma_run', 1)
+            mu_run = pm.Normal('mu_run', 0, sigma_run)
+\end{minted}       
+            
+\newpage
+            
 \begin{minted}[mathescape,
                linenos,
                xleftmargin=-70pt,
