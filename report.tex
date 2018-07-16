@@ -162,6 +162,21 @@
 \def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
 \makeatother
 
+
+
+\usepackage{setspace}
+\doublespacing 
+
+%\pagestyle{plain} % default for report
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@makechapterhead}{50\p@}{0pt}{}{}
+\patchcmd{\@makeschapterhead}{50\p@}{0pt}{}{}
+\makeatother
+
+
+
 \usepackage{acro}
 \acsetup{first-style=short}
 
@@ -337,6 +352,19 @@
 
 \newpage
 \setcounter{page}{1}
+
+% https://tex.stackexchange.com/questions/93859/condense-the-space-between-bibliographic-entries
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{
+  \begin{oldthebibliography}{#1}
+    \setlength{\itemsep}{0em}
+    \setlength{\parskip}{0em}
+}
+{
+  \end{oldthebibliography}
+}
+
 
 
 \section*{Preface}
@@ -627,7 +655,19 @@ FDR = \frac{\hat{n}_{fp}}{n_{fp} + n_{tp}}
 
 The equation tells us that we can compute the FDR at any score by counting how many decoy hits have a greater score ($\hat{n}_{fp}$), and dividing by the length of our target hits list. Thus, the score that makes the FDR equal to a predefined value, frequently 0.01 or 1 \%, can be computed and used as threshold for the target hits.
 
-The minimal FDR at which a given PSM is considered a valid match constitutes the PSM\textquotesingle s q-value, i.e it is the smallest FDR we can allow while still keeping the PSM. Related to the q-value, the Posterior Error Probability (PEP) is an estimate of the probability of a given PSM of being an incorrect assignment. The PSM\textquotesingle s confidence is just defined as $1-PEP$ \cite{Nesvizhskii2010}. PEP can be computed from the decoy search results and provides another useful measurement of the uncertainty in the target results.
+\begin{figure}[!h]
+\centering
+%\begin{subfigure}{.45\textwidth}
+%    \caption*{A}
+\includegraphics[width=0.9\linewidth]{pep}
+\caption{Visualizing FDR and PEP. The FDR is defined as the ratio between False Positives and the sum of True and False Positives found in the list of PSMs of score greater than s. The PEP corresponds to the same ratio, but only a specific score, hence its alternative name of local-FDR. Figure from \cite{Kall2008}.}
+\label{figure:pep}
+\end{figure}
+
+
+The minimal FDR at which a given PSM is considered a valid match constitutes the PSM\textquotesingle s q-value, i.e it is the smallest FDR we can allow while still keeping the PSM. Related to the q-value, the Posterior Error Probability (PEP) is an estimate of the probability of a given PSM of being an incorrect assignment (see figure \ref{fig:pep}). The PSM\textquotesingle s confidence is just defined as $1-PEP$ \cite{Nesvizhskii2010}. PEP can be computed from the decoy search results and provides another useful measurement of the uncertainty in the target results.
+
+
 
 
 \section{Peptide and protein inference}
@@ -962,7 +1002,7 @@ Additionally, the accuracy with which each program assigns a log2FC estimate to 
 
 \subsection{Improvement of the PSM step}
 
-The low attained matching rate manifests existing room for improvement in the currently available tools. Remarkably, it has been shown that the combined usage of multiple search engines can increase identifications, since the different statistical frameworks implemented in each of them compensate each other\textquotesingle s caveats. Furthermore, \textit{de novo} search engines are available and supported by SearchGUI. Their usage could contribute to further improvements in the identification rate.
+The low attained matching rate manifests existing room for improvement in the currently available tools. Remarkably, it has been shown that the combined usage of multiple search engines can increase identifications, since the different statistical frameworks implemented in each of them compensate each other\textquotesingle s caveats. Furthermore, \textit{de novo} search engines are available and supported by SearchGUI, and the latest developments in the field, like the IdentiPy engine \cite{Levitsky2018} are progressively incorporated to the framework \footnote{\href{https://github.com/compomics/peptide-shaker/issues/309}{https://github.com/compomics/peptide-shaker/issues/309}}. Their usage is predicted tor improve identification rates and quality of the matches.
 
 The most important reason why many spectra remain unidentified is the presence of post-translational modifications (\ac{PTM}s), which exponentially increase the search space, forcing most workflows to discard many of the peptides featuring a PTM. New approaches to the problem are emerging, mainly machine learning methods for the handling of unexpected modifications \cite{Gabriels}. Moreover, the prediction of \ac{MS2} peak intensities patterns from peptide sequences promises to increase the amount of evidence available during the PSM process, thus boosting correct identifications \cite{Kirik2018} \cite{Degroeve2013}.
 
@@ -1029,12 +1069,28 @@ An open-source, free, platform-agnostic and customisable label-free relative qua
 
 
 
-\chapter{BayesQuant: A Bayesian framework for the computation of pair-wise fold change estimates}
+\chapter{BayesQuant: Probabilistic estimation of protein ratios}
 \label{chap:model}
 
 \section*{Summary}
 
-The current label-free quantification methods, reviewed in section \ref{sec:quantification} all rely on frequentist statistics, which return point estimates of model parameters such as the estimate of the fold change across conditions. However, a Bayesian based approach to this problem is lacking in the literature. As a response to this shortcoming, a statistical model implemented in the probabilistic programming framework Pymc3 was developed and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability and its strengths.
+The current label-free quantification methods, reviewed in section \ref{sec:quantification} all rely on frequentist statistics, which return point estimates of model parameters such as the estimate of the abundance ratio (fold change) across conditions. However, a Bayesian based approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, a statistical model implemented in the probabilistic programming framework Pymc3 was developed and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability and its strengths.
+
+\section{Introduction}
+
+Both the LFQ and MSqRob quantitication engines presented in chapter \ref{chap:pipeline} took a frequentist approach to the problem of protein quantification. Such approaches, establish a null hypothesis, complementary to the actual hypothesis being tested (alternative hypothesis). The information about the phenomena being modelled is put to use to measure how likely this null hypothesis is via Null-Hypothesis Significance Testing (NHST).
+
+
+\begin{align}
+H_0: & \log_2(FC) = 0 \nonumber \\
+H_1: & \log_2(FC) \neq 0 \nonumber
+\end{align}
+
+The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools returned point estimates of the $\log_2$(FC) between a pair of conditions and a p-value, which provides a measurement of the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, p-values do not say anything about probability of the alternative (our) hypothesis.
+
+The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and comes equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes-theorem.
+ 
+
 
 \begin{figure}[!h]
 \centering
