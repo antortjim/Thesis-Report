@@ -251,7 +251,7 @@
 
 \DeclareAcronym{HPLC}{
   short = HPLC ,
-  long  = High pressure liquid chromatography,
+  long  = High Pressure Liquid Chromatography,
   class = abbrev
 }
 
@@ -281,12 +281,25 @@
   class = abbrev
 }
 
+\DeclareAcronym{log2FC}{
+  short = log2FC ,
+  long  = $\log_2$(FC),
+  class = abbrev
+}
+
 
 \DeclareAcronym{MBR}{
   short = MBR ,
   long  = Match Between Runs,
   class = abbrev
 }
+
+\DeclareAcronym{MGF}{
+  short = MGF ,
+  long  = Mascot Generic Format,
+  class = abbrev
+}
+
 
 \DeclareAcronym{XIC}{
   short = XIC ,
@@ -305,6 +318,15 @@
   long  = Trans Proteomic Pipeline,
   class = abbrev
 }
+
+\DeclareAcronym{NHST}{
+  short = NHST ,
+  long  = Null-Hypothesis Significance Testing,
+  class = abbrev
+}
+
+
+
 
 
 %%  Begin document
@@ -427,13 +449,13 @@ In line with the goal of making \ac{NZ} more competitive, this project aimed at 
 An overview over the \ac{MS} and following computational data analysis steps is presented in \ref{chap:mass_spec}. The pipeline development and its benchmark are explained in chapters \ref{chap:pipeline} and \ref{chap:benchmark}, while the modelling problem is introduced in chapter \ref{chap:model}. Finally, a conclusion of the work is given in chapter \ref{chap:conclusion}.
 
 
-\chapter{Mass spectrometry and shotgun proteomics overview}
+\chapter{Review on mass spectrometry and shotgun proteomics}
 \label{chap:mass_spec}
 
 Life systems consist of complex systems, meaning their behaviour cannot be easily explained by analyzing the individual elements alone. Moreover, they present multiple layers of complexity, given by the nature of the elements that make it up. The layer provided by proteins is one of them, and its study is called proteomics. It is a complex layer because thousands of different proteins can be present in a single cell at any time, and their exact composition and quantities constantly change, responding to the stimuli of the surrounding environment. The study of the protein-specific complexity is called proteomics. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts.
 
 %CITE 1.6.1 COMPUTATIONAL METHODS.
-The existing approaches are divided into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm (see figure \ref{figure:proteomics_overview}, the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. \cite{Barsnes2008}  Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as explained in \ref{subsec:the_detector}. The top-down paradigm will be ignored in the rest of the manuscript.
+The existing approaches are divided into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm (see figure \ref{fig:proteomics_overview}), the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. \cite{Barsnes2008}  Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as explained in \ref{subsec:the_detector}. The top-down paradigm will be ignored in the rest of the manuscript.
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{proteomics_skema_book}
@@ -661,7 +683,7 @@ The equation tells us that we can compute the FDR at any score by counting how m
 %    \caption*{A}
 \includegraphics[width=0.9\linewidth]{pep}
 \caption{Visualizing FDR and PEP. The FDR is defined as the ratio between False Positives and the sum of True and False Positives found in the list of PSMs of score greater than s. The PEP corresponds to the same ratio, but only a specific score, hence its alternative name of local-FDR. Figure from \cite{Kall2008}.}
-\label{figure:pep}
+\label{fig:pep}
 \end{figure}
 
 
@@ -709,8 +731,6 @@ In the label-free quantification approach, peptides from different samples are n
 
 \begin{figure}[!h]
 \centering
-%\begin{subfigure}{.45\textwidth}
-%    \caption*{A}
 \includegraphics[width=0.9\linewidth]{mbr_workflow}
 \caption{Illustration of the \ac{MBR} step. \textbf{A} the information gathered from matches in replicate runs is put to use during a reanalysis of the spectra. Modified from supplementary information in \cite{Argentini2016}.}
 \label{figure:moff_mbr}
@@ -723,18 +743,18 @@ This way, extra identifications are attained through a reanalysis of the spectra
 \label{subsec:scvsxic}
 
 
-Quantification can be spectral counting or \ac{XIC} based.
+Quantification can be \ac{SC} or \ac{XIC} based.
 
-On the one hand, spectrum counting based quantification is the simplest method in proteomics. It relies on the rationale that highly abundant peptides will have a higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. These methods have the advantage that they are very simple to implement and don't require any further data processing
+On the one hand, spectrum counting based quantification is the simplest method in proteomics. The number of peptides a peptide is detected in the spectrometer is detected as proxy for its abundance. It relies on the rationale that highly abundant peptides will have a higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. These methods have the advantage that they are very simple to implement and don't require any further data processing.
 
 On the other hand, \ac{XIC} based methods rely on intensity measurements at any level of the \ac{MS} workflow as proxies for protein abundance. A wide range of algorithms are available to process these data and output estimates of protein abundance. All of them require an intensive preprocessing step, usually including (I) taking the $log_2$ intensity to make the data distributions symmetrical and thus make it fit for diverse parametric tests, and (II) quantile normalization to address between-runs variability in the intensity measurements. They can be classified in the bases of which MS level is used as proxy for the protein abundances and on whether or not a summarization step is performed to aggregate peptide-level data into protein-level data, or not. 
 
 
-As stated in \cite{Cox2014}, \textit{although the abundance of proteins and the probability of their peptides being selected for \ac{MS/MS} sequencing are correlated to some extent, \ac{XIC}-based methods should clearly be superior to spectral counting given sufficient resolution and optimal algorithms. These advantages are most prominent for low-intensity protein/peptide species, for which a continuous intensity readout is more information-rich than discrete counts of spectra}. For this reason, only the \ac{XIC} approach will be regarded in the rest of the manuscript.  
+As stated in \cite{Cox2014}, \textit{although the abundance of proteins and the probability of their peptides being selected for \ac{MS/MS} sequencing are correlated to some extent, \ac{XIC}-based methods should clearly be superior to \ac{SC} given sufficient resolution and optimal algorithms. These advantages are most prominent for low-intensity protein/peptide species, for which a continuous intensity readout is more information-rich than discrete counts of spectra}. For this reason, only the \ac{XIC} approach will be regarded in the rest of the manuscript.  
 
 For a more robust XIC based quantification, a feature extraction step is usually executed to extract the apex intensity of the identified peak clusters, as shown in figure \ref{figure:moff_apex}.
 
-\begin{figure}[H]
+\begin{figure}[!h]
 \centering
 \begin{subfigure}{1\textwidth}
 \centering
@@ -761,58 +781,64 @@ As stated in \cite{Goeminne2015} \textit{peptides originating from the same prot
 
 It is for this reason that peptide-based models offer the statistical framework required to learn as much from the data as possible. This translates into improved results when compared to the other aforementioned methods \cite{Goeminne2015}. This hypothesis is the motivation for the method explained in chapter \ref{chap:model}.
 
-
-
-
 \chapter{A label-free quantification proteomics pipeline}
 \label{chap:pipeline}
 
 
 \section*{Summary}
 
-A pipeline making use of the set of tools published by the Compomics  and StatOmics groups SearchGUI, PeptideShaker, moFF and MSqRob, was developed to support complete label-free protein quantification analyses using the most recent advances in the field with open-source software. The pipeline can be run on Linux computer clusters to perform (I) peptide to spectrum matching against a reference database, (II) quality control and filtering, (III) MBR and feature extraction, (IV) protein inference and (V) relative quantification. Its output can be passed to follow-up analyses in R or Python to get a biological interpretation of the results.  A benchmark of its performance was accomplished using the proteome benchmark dataset published in \cite{Cox2014}. The results exhibited an accuracy similar to those achieved by the MaxQuant \cite{Cox2014} software, excepting a bias produced by the sample fractionation of this dataset.
+A pipeline making use of the set of tools published by the Compomics  and StatOmics groups SearchGUI \cite{Barsnes2018}, PeptideShaker \cite{Vaudel2015}, moFF \cite{Argentini2016} and MSqRob \cite{Goeminne2016} , was developed to support complete label-free protein quantification analyses using the most recent advances in the field with open-source software. The pipeline can be run on Linux computer clusters to perform (I) peptide to spectrum matching against a reference database, (II) quality control and filtering, (III) \ac{MBR} and feature extraction, (IV) protein inference and (V) relative quantification. Its output can be passed to follow-up analyses in R or Python to get a biological interpretation of the results.  A benchmark of its performance was accomplished using the proteome benchmark dataset published in \cite{Cox2014}. The results exhibited an accuracy similar to those achieved by the MaxQuant \cite{Cox2014} software, excepting a bias produced by the sample fractionation of this dataset.
 
 
 \section{Introduction}
 
+\subsection{Background}
+
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{pipeline}
-\caption{Schema of the presented pipeline. First, .RAW files produced by the spectrometer are converted to an open format like MGF. After that, spectra are searched by means of a search engine to perform the PSM step. Thereafter, PSMs are validated and the most likely set proteins is inferred. If quantative information is to be extracted, a quantification step attempting to estimate protein quantities is executed. The biological interpretation of the pipeline results can be achieved by interacting with public databases using R/Bioconductor or Python thanks to their open format.}
+\caption{Schema of the presented pipeline. First, .RAW files produced by the spectrometer are converted to an open format like the Mascot Generic Format (\ac{MGF}). After that, spectra are searched by means of a search engine to perform the PSM step. Thereafter, PSMs are validated and the most likely set proteins is inferred. If quantative information is to be extracted, a quantification step attempting to estimate protein quantities is executed. The biological interpretation of the pipeline results can be achieved by interacting with public databases using R/Bioconductor or Python thanks to their open format.}
 \label{fig:pipeline}
 \end{figure}
 
 
-Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented models and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) \cite{Deutsch2011} or openMS \cite{Sturm2008} are nevertheless available for the community. MaxQuant, a freeware but closed-source and monolithic proteomics analysis suite \cite{Cox2008}, has been extremely successfully adopted by the scientific community due to its ease of use and comprehensive pipeline.
+Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source commercial software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented models and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) \cite{Deutsch2011} or openMS \cite{Sturm2008} are nevertheless available for the community, but they either lack good documentation, good broad base or format exchangeability. MaxQuant, a freeware but closed-source and monolithic proteomics analysis suite \cite{Cox2008}, has been extremely successfully adopted by the scientific community due to its ease of use and comprehensive pipeline.
 
-However, still only few of these tools have a fully Linux-supported, well-documented, command-line version available, which would make customised, automatic streamline analyses much easier to perform. As a GUI would not be required to run the pipeline, it would also be scalable to big datasets. Finally, having free licenses would imply that anyone, provided the technical knowledge, can perform the computational analysis independently, thus speeding the data to knowledge turnover in \ac{NZ} or any organization making use of it.
+\subsection{Goals}
 
-The development of a pipeline attempting to achieve these goals will be described in this chapter.
+The development of a pipeline attempting to achieve the following goals will be described in this chapter.
+
+\begin{enumerate}
+
+\item Fully command line, documented and Linux-supported interface for easy automation and scalability.
+\item Open-source for easy customisation and innovation of analyses.
+\item Free-licensed and cost-free, so anybody with the knowledge can run it, democratizing the analyses.
+\end{enumerate}
 
 \section{Materials and Methods}
 
 \subsection{Data generation and loading}
 
-The proteome benchmark dataset from \cite{Cox2014} was reanalysed starting at the output RAW files available at the PRIDE repository \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. Briefly, the \textit{Homo sapiens} and \textit{E. coli (strain K12)} proteomes were mixed in 1:1 (condition L) and 1:3 (condition H) proportions, with 3 replicates for each combination. Moreover, each of the 3 replicates of the 2 conditions was analysed over 24 fractions. This experimental setting thus generated a total of $2 \times 3 \times 24=144$ RAW files. One file was missing in the repository. The ThermoRawFileParser \footnote{\href{https://github.com/compomics/ThermoRawFileParser}{https://github.com/compomics/ThermoRawFileParser}} program was used to convert RAW files to the open format MGF (Mascot Generic Format).
+The proteome benchmark dataset from \cite{Cox2014} was reanalysed starting at the output RAW files available at the PRIDE repository \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. Briefly, the \textit{Homo sapiens} and \textit{E. coli (strain K12)} proteomes were mixed in 1:1 (condition L) and 1:3 (condition H) proportions, with 3 replicates for each combination. Moreover, each of the 3 replicates of the 2 conditions was analysed over 24 fractions. This experimental setting thus generated a total of $2 \times 3 \times 24=144$ RAW files. One file was missing in the repository. The ThermoRawFileParser \footnote{\href{https://github.com/compomics/ThermoRawFileParser}{https://github.com/compomics/ThermoRawFileParser}} program was used to convert RAW files to the MGF open format.
 
-The MQ+MaxLFQ pipeline results were obtained starting at the Supplemental table 1 from the MaxLFQ paper supplemental data \footnote{\href{http://www.mcponline.org/content/13/9/2513/suppl/DC1}{http://www.mcponline.org/content/13/9/2513/suppl/DC1}} \cite{Cox2014}, which is available as an excel file. The results of the MQ+MSqRob pipeline employed the Levenberg-Marquandt minimised peptide intensities stored in the peptides.txt file contained in the spectraHeLaEColi.zip in the supplemental data.
+The MQ+LFQ pipeline results were obtained starting at the Supplemental table 1 from the MaxLFQ paper supplemental data \footnote{\href{http://www.mcponline.org/content/13/9/2513/suppl/DC1}{http://www.mcponline.org/content/13/9/2513/suppl/DC1}} \cite{Cox2014}, which is available as an excel file. The results of the MQ+Rob pipeline employed the Levenberg-Marquandt minimised peptide intensities stored in the peptides.txt file contained in the spectraHeLaEColi.zip in the supplemental data.
 
 %\href{http://www.mcponline.org/content/suppl/2014/06/17/M113.031591.DC1/mcp.M113.031591-1.xlsx}{http://www.mcponline.org/content/suppl/2014/06/17/M113.031591.DC1/mcp.M113.031591-1.xlsx}.
 
 \subsection{Decoy database preparation and search}
 
-The spectra saved in the MGF files obtained in the previous step were passed to the MS-GF+ search engine CITE by means of the SearchGUI \texttt{SearchCLI} tool CITE utility. The search parameters were set using the \texttt{IdentificationParametersCLI}. In order to account for potential post-translational modifications, the search was conducted allowing for the following variable modifications: oxidation of M and deamidation of N and Q. Moreover, C carbamidomethylation was set as fixed modification. The enzyme was set to semispecific Trypsin, allowing for a non-tryptic cleavage on any side of the peptide. Up to two missed cleavages were allowed. The precursor tolerance was 10 ppm and the fragment tolerance 0.5 Da. 
+The spectra saved in the MGF files obtained in the previous step were passed to the MS-GF+ search engine \cite{Kim2014} by means of the SearchGUI \texttt{SearchCLI} tool \cite{Barsnes2018} utility. The search parameters were set using the \texttt{IdentificationParametersCLI}. In order to account for potential post-translational modifications, the search was conducted allowing for the following variable modifications: oxidation of M and deamidation of N and Q. Moreover, C carbamidomethylation was set as fixed modification. The enzyme was set to semispecific Trypsin, allowing for a non-tryptic cleavage on any side of the peptide. Up to two missed cleavages were allowed. The precursor tolerance was 10 ppm and the fragment tolerance 0.5 Da. 
 
 
 The target database was created by combining the Uniprot proteomes for \textit{E. coli (strain K12)} (UP000000625) and \textit{Homo sapiens} (UP000005640), downloaded in June 2018. The decoy database was created using the \texttt{FastaCLI} utility in SearchGUI by reversing all sequences in the target.
 
 \subsection{Quality control and validation}
 
-The SearchGUI results were filtered using the default built-in checks available in the PeptideShaker utility \texttt{PeptideShakerCLI} \footnote{\href{https://github.com/compomics/peptide-shaker/issues/300}{https://github.com/compomics/peptide-shaker/issues/300}}. By default, the FDR was set to 1\%. PEP and confidence statistics were computed using the PeptideShaker built-in algorithms. Output was extracted via the Default PSM report txt file, available in the \texttt{ReportCLI} utility.
+The SearchGUI results were filtered using the default built-in checks available in the PeptideShaker utility \texttt{PeptideShakerCLI} \cite{Vaudel2015} \footnote{\href{https://github.com/compomics/peptide-shaker/issues/300}{https://github.com/compomics/peptide-shaker/issues/300}}. By default, the FDR was set to 1\%. PEP and confidence statistics were computed using the PeptideShaker built-in algorithms. Output was extracted via the Default PSM report txt file, available in the \texttt{ReportCLI} utility.
 
 
 \subsection{Data refinement}
 
-The moFF command line utility CITE was applied to perform (I) match-between-runs and (II) extract MS1 apex intensity of each peak cluster. This required passing the original RAW files, together with the Default PSM report from PeptideShaker. Output was exported to a peptide summary file, containing  one row per peptide and for every peptide, the detected apex intensity in each sample.
+The moFF command line utility \cite{Argentini2016} was applied to perform (I) match-between-runs and (II) extract MS1 apex intensity of each peak cluster. This required passing the original RAW files, together with the Default PSM report from PeptideShaker. Output was exported to a peptide summary file, containing  one row per peptide and for every peptide, the detected apex intensity in each sample.
 
 \subsection{Quantification}
 
@@ -820,7 +846,7 @@ Relative quantification was performed using the MSqRob utility by passing the pe
 
 Once preprocessing is done, a ridge regression model with Huber weights and empirical Bayes estimation of protein variance, implemented in the MSqRob package \cite{Goeminne2016}, was fit to every protein individually. The peptide and fraction effects were considered random, while the condition was treated as a fixed effect. The significance of the treatment effect differences was assessed through a Student\textquotesingle s T test, implemented in the \texttt{test.contrast()} function. Only protein groups that could be unambiguously mapped to one of the organisms were considered for the analysis.
 
-Quantification in the MQ+MaxLFQ pipeline was executed using the LFQ intensity columns stored in the supplemental data file. Intensities were log2 transformed and averaged. The difference between conditions H and L was taken as estimate of the log2FC. Significance was evaluated by means of the two-tailed Welch Two Sample t-test implemented in the \texttt{t.test()} function in R. P-values were corrected using the FDR method implemented in the \texttt{p.adjust()} function in R.
+Quantification in the MQ+LFQ pipeline was executed using the LFQ intensity columns stored in the supplemental data file. Intensities were log2 transformed and averaged. The difference between conditions H and L was taken as estimate of the log2FC. Significance was evaluated by means of the two-tailed Welch Two Sample t-test implemented in the \texttt{t.test()} function in R. P-values were corrected using the FDR method implemented in the \texttt{p.adjust()} function in R.
 
 
 \subsection{Code implementation}
@@ -937,7 +963,7 @@ The result of the process was the successful quantification of 5307 protein grou
 \centering
 \begin{tabular}{llll>{\itshape}l}
   \toprule
- & log2FC & qval & Protein & Organism \\ 
+ & \ac{log2FC} & qval & Protein & Organism \\ 
   \midrule
 1 & -4.76E-01 & 1.42E-24 & P78527 & Homo sapiens \\ 
    \rowcolor[gray]{0.95}2 & 6.80E-01 & 6.75E-24 & P0A8V2 & E. coli \\ 
@@ -951,40 +977,51 @@ The result of the process was the successful quantification of 5307 protein grou
    \rowcolor[gray]{0.95}10 & 1.37E+00 & 1.41E-14 & P37666 & E. coli \\ 
    \bottomrule
 \end{tabular}
-\caption{Results of the quantification pipeline. The 10 protein groups with the lowest \textit{q-val}  as estimated by MSqRob are shown. Notably, eight correspond to proteins belonging to \textit{E.coli}. The two human proteins exhibited in both cases an absolute value of the log2FC below 1.}
+\caption{Results of the quantification pipeline. The 10 protein groups with the lowest \textit{q-val}  as estimated by MSqRob are shown. Notably, eight correspond to proteins belonging to \textit{E.coli}. The two human proteins exhibited in both cases an absolute value of the \ac{log2FC} below 1.}
 \label{tab:quantification_table}
 \end{table}
 
-The performance of the quantification can be evaluated thanks to the experimental design of the dataset. Since the \textit{E. coli} proteome was mixed on a 3:1 ratio in condition H, a log2FC of $log2(3)=1.58$ is expected for proteins coming from this organism. Likewise, human proteins should have a log2FC of 0. As such, the evaluation can be reformulated as a classification task were the quantification algorithm tries to distinguish between proteins coming from one or the other organism.
+The performance of the quantification can be evaluated thanks to the experimental design of the dataset. Since the \textit{E. coli} proteome was mixed on a 3:1 ratio in condition H, a \ac{log2FC} of $log2(3)=1.58$ is expected for proteins coming from this organism. Likewise, human proteins should have a \ac{log2FC} of 0. As such, the evaluation can be reformulated as a classification task were the quantification algorithm tries to distinguish between proteins coming from one or the other organism.
 
-Some of the most frequent evaluations of the performance of a binary classiffier are Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves \cite{Bradley1997}, which demonstrate the performance of the algorithm at different cutoff values of a predictor variable. Together, they show the False Positive Rate (FPR), the True Positive Rate (TPR) or recall, and the precision exhibited by the algorithm.
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\textwidth]{curves_plot}
-\caption{ROC and PR curves displaying the behaviour of 3 different label-free quantification pipelines publicly available. \textbf{Compomics+MSqRob} is the pipeline presented in the previous sections. \textbf{MQ+MaxLFQ} consists a standard MaxQuant upstream analysis combined with its LFQ quantification engine. Finally, MQ+MSqRob blends MaxQuant upstream analysis with the MSqRob quantification engine. \textbf{A, B} ROC curve produced by the three algorithms with no log2FC filter, and keeping proteins with log2FC greater than 1, respectively. \textbf{C, D} PR curve produced by the three algorithms with no log2FC filter, and keeping proteins with log2FC greater than 1, respectively.}
+\caption{ROC and PR curves displaying the behaviour of 3 different label-free quantification pipelines publicly available. \textbf{Comp+Rob} is the pipeline presented in the previous sections. \textbf{MQ+LFQ} consists a standard MaxQuant upstream analysis combined with its LFQ quantification engine. Finally, MQ+Rob blends MaxQuant upstream analysis with the MSqRob quantification engine. \textbf{A, B} ROC curve produced by the three algorithms with no \ac{log2FC} filter, and keeping proteins with \ac{log2FC} greater than 1, respectively. \textbf{C, D} PR curve produced by the three algorithms with no \ac{log2FC} filter, and keeping proteins with \ac{log2FC} greater than 1, respectively.}
 \label{fig:roc_curves}
 \end{figure}
 
 
+Some of the most frequent evaluations of the performance of a binary classiffier are Receiver Operating Characteristic (ROC) and Precision-Recall (PR) curves \cite{Bradley1997}, which demonstrate the performance of the algorithm at different cutoff values of a predictor variable. Together, they show the False Positive Rate (FPR), the True Positive Rate (TPR) or recall, and the precision exhibited by the algorithm.
 
-In the present problem, they can be used to show how good the \textit{q-val} associated to a protein group is at separating the two proteomes. Thus, \textit{E. coli} proteins are treated as positives, and those from \textit{Homo sapiens} are treated as negatives. Moreover, a filter based on the log2FC can be applied to enrich the data in positives and facilitate the classification task.
-In order to compare the results of the here presented pipeline (Compomics+MSqRob) with those achieved by other available tools, the analysis was repeated using the data processing implemented in MaxQuant \cite{Cox2008} at different steps. The pipeline combining MaxQuant and MaxLFQ (MQ+MaxLFQ) was fully carried out using the MaxQuant suite, whereas the combination of MaxQuant and MSqRob (MQ+MSqRob) used MaxQuant up to the fraction normalization step.
 
-The result of this analysis is shown in figure \ref{fig:roc_curves}). Remarkably, Compomics+MSqRob achieved similar results to those resulting from MQ+MaxLFQ. Nonetheless, the latter performed clearly better when the log2FC filter was applied, indicating that a combined fold change and q-value criteria is best for declaring proteins as differentially abundant. In all cases MQ+MSqRob was as good as MQ+MaxLFQ, if not much better.
+
+
+In the present problem, they can be used to show how good the \textit{q-val} associated to a protein group is at separating the two proteomes. Thus, \textit{E. coli} proteins are treated as positives, and those from \textit{Homo sapiens} are treated as negatives. Moreover, a filter based on the \ac{log2FC} can be applied to enrich the data in positives and facilitate the classification task.
+In order to compare the results of the here presented pipeline (Comp+Rob) with those achieved by other available tools, the analysis was repeated using the data processing implemented in MaxQuant \cite{Cox2008} at different steps. The pipeline combining MaxQuant and MaxLFQ (MQ+LFQ) was fully carried out using the MaxQuant suite, whereas the combination of MaxQuant and MSqRob (MQ+Rob) used MaxQuant up to the fraction normalization step.
+
+The result of this analysis is shown in figure \ref{fig:roc_curves}. Remarkably, Comp+Rob achieved similar results to those resulting from MQ+LFQ. Nonetheless, the latter performed clearly better when the \ac{log2FC} filter was applied, indicating that a combined fold change and q-value criteria is best for declaring proteins as differentially abundant. In all cases MQ+Rob was as good as MQ+LFQ, if not much better.
+
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=0.8\textwidth]{vennDiagram}
-\caption{Agreement between the different pipelines. The Venn diagram displays the number of \textit{E. coli} proteins found to be differentially abundant by each pipeline.}
-\label{fig:venn}
+\begin{subfigure}{.40\textwidth}
+\caption*{A}
+\includegraphics[width=.9\textwidth]{vennDiagram}
+\end{subfigure}
+\begin{subfigure}{.52\textwidth}
+\caption*{B}
+\includegraphics[width=.95\textwidth]{correlation_plot}
+\end{subfigure}
+\caption{Agreement between the different pipelines. \textbf{A} The Venn diagram displays the number of \textit{E. coli} proteins found to be differentially abundant by each pipeline. \textbf{B} The log2FC estimated in all three pipelines for the 121 shared proteins is plotted by pairs to evaluate their correlation.}
+\label{fig:venn_cor}
 \end{figure}
 
 
-In order to visualize the level of agreement of the pipelines for the assignment of differentially abundant proteins, a Venn diagram was constructed (see figure \ref{fig:venn}). Venn diagrams provide a straightforward visualization of the overlap of several ensembles of proteins. The scrutiny of the counts reveals a high degree of agreement, with most proteins detected by Compomics+MSqRob or MQ+MaxLFQ being detectd by MQ+MSqRob too. Remarkably, 517 proteins were detected by MQ+MSqRob alone, which further confirmed its resolving power.
+In order to visualize the level of agreement of the pipelines for the assignment of differentially abundant proteins, a Venn diagram was constructed (see figure \ref{fig:venn_cor} A). Venn diagrams provide a straightforward visualization of the overlap of several ensembles of proteins. The scrutiny of the counts reveals a high degree of agreement, with most proteins detected by Comp+Rob or MQ+LFQ being detectd by MQ+Rob too. Remarkably, 517 proteins were detected by MQ+Rob alone, which further confirmed its resolving power. Analyzing the log2FC pairwise-correlation (see figure \ref{fig:venn_cor} B) reveals that the highest correlation was found between pipelines using MaxQuant as upstream spectra processor, as expected. Even though the observed correlation was low, the estimated log2FC was always greater than 1.
 
 
-Additionally, the accuracy with which each program assigns a log2FC estimate to each protein group, and how significantly different from the null value of 0 it was found to be, provides further insights on the pros and cons of each pipeline, as shown in figure \ref{fig:combined_plot}. This analysis confirmed that the pipeline providing the best separation between organisms was MQ+MSqRob.
+Additionally, the accuracy with which each program assigns a \ac{log2FC} estimate to each protein group, and how significantly different from the null value of 0 it was found to be, provides further insights on the pros and cons of each pipeline, as shown in figure \ref{fig:combined_plot}. This analysis confirmed that the pipeline providing the best separation between organisms was MQ+Rob.
 
 
 
@@ -992,7 +1029,7 @@ Additionally, the accuracy with which each program assigns a log2FC estimate to 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\textwidth]{combined_plot}
-\caption{Overview over the different pipelines performance. Quantification results are segregated by the source organism. \textbf{A} Histogram of the log2FC estimates. \textbf{B} Volcano plot, where every protein group is represented by a dot and the coordinates map to its log2FC on x and the minus logarithm of the q-value on y. \textbf{C} Boxplots of the minus logarithm of the q-value distribution.}
+\caption{Overview over the different pipelines performance. Quantification results are segregated by the source organism. \textbf{A} Histogram of the \ac{log2FC} estimates. \textbf{B} Volcano plot, where every protein group is represented by a dot and the coordinates map to its \ac{log2FC} on x and the minus logarithm of the q-value on y. \textbf{C} Boxplots of the minus logarithm of the q-value distribution.}
 \label{fig:combined_plot}
 \end{figure}
 
@@ -1016,7 +1053,7 @@ While the apex intensity is a good estimate of the peptide abundance, other meth
 
 \subsection{Improvement of the quantification step}
 
-The deployed relative quantification approach successfully manages to estimate the log2FC of several of proteins in the dataset with high confidence. However, it was not found to be the best performing of the assayed pipelines in the benchmark dataset. Several axes of improvement are clear from the results.
+The deployed relative quantification approach successfully manages to estimate the \ac{log2FC} of several of proteins in the dataset with high confidence. However, it was not found to be the best performing of the assayed pipelines in the benchmark dataset. Several axes of improvement are clear from the results.
 
 \subsubsection{Management of sample fractionation}
 
@@ -1024,7 +1061,7 @@ Sample fractionation allows for a deeper analysis of the peptide mix, which in t
 
 The way the MaxLFQ engine solves the problem is by aggregating the data from the same sample across fractions using a ponderated average. One normalizing weight is determined for every sample via the \textit{Levenberg-Marquant minimisation of the overall proteome variation} $H(N)$ as defined in \cite{Cox2014}. A custom implementation was written in Python using the scipy module, but the results were not satisfactory.
 
-MSqRob treats the fractions as a random effect, as explained in section \ref{subsec:quantification}. As a consequence, the statistical model in MSqRob can be overwhelmed by the resulting inconsistency, and eventually provide null estimates of the ratio. This is clearly manifested in figure \ref{fig:combined_plot} as the bins at log2FC of 0, which represent protein groups for which MSqRob did not find enough evidence to discard the null hypothesis. While no \textit{E. coli} proteins fell in this category in the MQ-MSqRob pipeline, many did in the Compomics+MSqRob, proving room for improvement in this aspect.
+MSqRob treats the fractions as a random effect, as explained in section \ref{subsec:quantification}. As a consequence, the statistical model in MSqRob can be overwhelmed by the resulting inconsistency, and eventually provide null estimates of the ratio. This is clearly manifested in figure \ref{fig:combined_plot} as the bins at \ac{log2FC} of 0, which represent protein groups for which MSqRob did not find enough evidence to discard the null hypothesis. While no \textit{E. coli} proteins fell in this category in the MQ-MSqRob pipeline, many did in the Comp+Rob, proving room for improvement in this aspect.
 
 In any case, the way sample fractionation is handled should depend upon the fractionation method. For example, membrane fractionation can be exploited when working with membrane proteins \cite{Marmagne2006}.
 
@@ -1052,7 +1089,7 @@ To sum up, the presently implemented fraction handling is correct and provides g
 
 \subsubsection{The pitfalls of mass spectrometry}
 
-The application of mass spectrometry to proteomics is a very hot topic in research, driving innovations in the way the different components of the spectrometer work. One recent example is the development of the timsTOF\texttrademark\xspace Pro (Trapped Ion Mobility Spectrometry-Time Of Flight) system by Bruker, which supports PASEF (Parallel Accumulation and SErial Fragmentation) spectrometry \footnote{\href{https://www.prnewswire.com/news-releases/bruker-launches-the-timstof-pro-mass-spectrometer-to-enable-the-revolutionary-pasef-method-for-next-generation-proteomics-300520791.html}{https://www.prnewswire.com/news-releases/bruker-launches-the-timstof-pro-mass-spectrometer-to-enable-the-revolutionary-pasef-method-for-next-generation-proteomics-300520791.html}}. Notwithstanding, it reveals the immature state of the technology. Slight inconsistencies in the protein extraction and digestion, bias in the peptide ionization, presence of unexpected PTMs, and detector saturation and insensitivity, remain as problems contributing to the eventual measurement variability characteristic of mass spectrometry \cite{Piehowski2013}. Thus, adequate cleaning of the peptide dataset, and care to ignore outliers is preeminent. Indeed, the input file for the MQ+MaxLFQ consisted of a preprocessed file which removed the most problematic proteins \cite{Cox2014}, which explains why more than 500 extra proteins could be quantified when using MSqRob (see figure \ref{fig:venn}).
+The application of mass spectrometry to proteomics is a very hot topic in research, driving innovations in the way the different components of the spectrometer work. One recent example is the development of the timsTOF\texttrademark\xspace Pro (Trapped Ion Mobility Spectrometry-Time Of Flight) system by Bruker, which supports PASEF (Parallel Accumulation and SErial Fragmentation) spectrometry \footnote{\href{https://www.prnewswire.com/news-releases/bruker-launches-the-timstof-pro-mass-spectrometer-to-enable-the-revolutionary-pasef-method-for-next-generation-proteomics-300520791.html}{https://www.prnewswire.com/news-releases/bruker-launches-the-timstof-pro-mass-spectrometer-to-enable-the-revolutionary-pasef-method-for-next-generation-proteomics-300520791.html}}. Notwithstanding, it reveals the immature state of the technology. Slight inconsistencies in the protein extraction and digestion, bias in the peptide ionization, presence of unexpected PTMs, and detector saturation and insensitivity, remain as problems contributing to the eventual measurement variability characteristic of mass spectrometry \cite{Piehowski2013}. Thus, adequate cleaning of the peptide dataset, and care to ignore outliers is preeminent. Indeed, the input file for the MQ+LFQ consisted of a preprocessed file which removed the most problematic proteins \cite{Cox2014}, which explains why more than 500 extra proteins could be quantified when using MSqRob (see figure \ref{fig:venn_cor} A).
 
 \subsubsection{Support for absolute quantification}
 
@@ -1078,7 +1115,9 @@ The current label-free quantification methods, reviewed in section \ref{sec:quan
 
 \section{Introduction}
 
-Both the LFQ and MSqRob quantitication engines presented in chapter \ref{chap:pipeline} took a frequentist approach to the problem of protein quantification. Such approaches, establish a null hypothesis, complementary to the actual hypothesis being tested (alternative hypothesis). The information about the phenomena being modelled is put to use to measure how likely this null hypothesis is via Null-Hypothesis Significance Testing (NHST).
+\subsection{Bayesian statistics}
+
+Both the LFQ and MSqRob quantitication engines presented in chapter \ref{chap:pipeline} took a frequentist approach to the problem of protein quantification. Such approaches, establish a null hypothesis, complementary to the actual hypothesis being tested (alternative hypothesis). The information about the phenomena being modelled is put to use to measure how likely this null hypothesis is via Null-Hypothesis Significance Testing (\ac{NHST}).
 
 
 \begin{align}
@@ -1086,10 +1125,33 @@ H_0: & \log_2(FC) = 0 \nonumber \\
 H_1: & \log_2(FC) \neq 0 \nonumber
 \end{align}
 
-The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools returned point estimates of the $\log_2$(FC) between a pair of conditions and a p-value, which provides a measurement of the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, p-values do not say anything about probability of the alternative (our) hypothesis.
+The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools returned point estimates of the log2FC between a pair of conditions and a p-value, which provides a measurement of the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, p-values do not say anything about probability of the alternative (our) hypothesis.
 
 The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and comes equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes-theorem.
- 
+
+\begin{equation}
+P(\theta | y) = \cfrac{P(y | \theta) P(\theta)}{P(y)}
+\end{equation}
+
+The Bayes theorem is an extremely versatile tool taking a role analogous to that of statistics like T, F, or $\chi^2$. Unlike them, which are tailored to specific scenarios, it can be used compute the probability distribution of almost any parameter in any model. 4 terms can be distinguished in its expression
+
+\begin{enumerate}
+
+\item $P(\theta)$: the \textbf{prior} probability distribution of the model parameter, introduces previous knowledge about the phenomenon being modelled.
+
+\item $P(y | \theta)$: the probability distribution of the observed data (y) over the possible parameter space. It is also known as \textbf{likelihood} of the model, and its duty is updating our beliefs about the phenomenon by capturing the information in the data.
+
+\item $P(y)$: the probability of the data, defined as the marginal probability of the data given a parameter value, for all possible values. It acts as a normalizing constant that makes the resulting distribution a true probability distribution adding up to 1. It is also known as the data \textbf{evidence}.
+
+\item $P(\theta | y)$: the updated probability distribution of the model parameter, with the information extracted from the observed data. Since it reflects the beliefs about the phenomena after observing data, it is called \textbf{posterior} probability distribution,as opposite to the prior.
+
+\end{enumerate}
+
+
+The Bayesian framework enunciated above can be applied to the quantification problem. All is needed is the computation of the posterior probability distribution. Unfortunately, this is tractable analytically for simple models only. However, Markov Chain-Monte Carlo methods can be used to approximate this posterior, and are guaranteed to reach an infinitely exact fit if ran for long enough. Their demanding computational cost has only been recently met by the power of modern computers, thus making the approach feasible. Several Bayesian statistics frameworks are available on popular programming languages like R (JAGS) and Python (Pymc3), all making use of a programming paradigm called \textbf{probabilistic programming}.
+
+
+\subsection{Probabilistic programming}
 
 
 \begin{figure}[!h]
