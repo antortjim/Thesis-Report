@@ -1,0 +1,49 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Wenneker Article
+% LaTeX Template
+% Version 2.0 (28/2/17)
+%
+% This template was downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Vel (vel@LaTeXTemplates.com)
+% Frits Wenneker
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[10pt, a4paper, twocolumn]{article} % 10pt font size (11 and 12 also possible), A4 paper (letterpaper for US letter) and two column layout (remove for one column)
+\usepackage{amsmath}
+\begin{document}
+
+\textbf{Bayes theorem}
+
+$P(\theta | y) = \cfrac{P(y | \theta) P(\theta)}{P(y)}$
+
+
+\textbf{RSqM output}
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrll}
+  \hline
+ & estimate & se & df & Tval & pval & qval & signif & Protein.IDs \\ 
+  \hline
+3875 & -0.00 & 0.00 & 194.44 & -0.00 & 1.00 & 1.00 & FALSE & Q96P70 \\ 
+  343 & 1.72 & 0.37 & 27.31 & 4.64 & 0.00 & 0.00 & TRUE & Q8TCJ2 \\ 
+  1782 & 0.22 & 0.24 & 170.37 & 0.92 & 0.36 & 0.88 & FALSE & P0ACX3 \\ 
+  859 & 0.63 & 0.27 & 349.89 & 2.39 & 0.02 & 0.10 & FALSE & P0A903 \\ 
+  1386 & 0.99 & 0.59 & 9.47 & 1.68 & 0.13 & 0.42 & FALSE & Q49AJ0 \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+
+\end{document}
