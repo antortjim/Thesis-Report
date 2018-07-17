@@ -137,7 +137,7 @@ Protein groups are very frequent due to several factors. For example, protein is
 However, in the present analysis the quality of the protein group was not taken into account, as explained in the Materials and Methods.
 
 
-\subsection{MBR and apex intensity extraction quantification}
+\subsection{MBR and apex intensity extraction evaluation}
 
 The match between runs step allowed for increased identifications by transferring successful matches between replicate runs. The results of this process for the 13th fraction of the L condition is shown in figure \ref{fig:mbr}.
 
@@ -265,7 +265,7 @@ Finally, the extremely low matching rates in the latter fractions translated to 
 
 \subsection{Improvement of the feature extraction step}
 
-While the apex intensity is a good estimate of the peptide abundance, other methods are available that could potentially provide more robust data, such as the area of the peak. This is the approach taken by the recently published tool RawQuant \cite{Kovalchik2018}, or the feature detection tool in the OpenMS pipeline \cite{Sturm2008}. 
+While the apex intensity is a good estimate of the peptide abundance, other methods are available that could potentially provide more robust data, such as the area of the peak. This is the approach taken by the recently published tool RawQuant \cite{Kovalchik2018}, or the feature detection tool in the OpenMS pipeline \cite{Sturm2008}. Moreover, in order to fine tune the performance of the \ac{MBR} and Apex intensity extraction steps, several input arguments can be adapted to each dataset. These are the spectrometer\textquotesingle s \ac{m/z} resolution, the time window used during the apex search and whether or not to activate outlier filtering and what weights to use.
 
 \subsection{Improvement of the quantification step}
 

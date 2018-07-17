@@ -50,6 +50,7 @@ The management of uncertainty in statistics is done by means of probability dist
 
 Pymc3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (\ac{ADVI}) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilisitc estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
 
+
 \subsection{Goals}
 
 \begin{enumerate}
@@ -65,21 +66,108 @@ Pymc3 is a mature Python module dedicated to support probabilistic programming. 
 \subsection{Data input}
 The peptides.txt and proteinGroups.txt files produced by MaxQuant \cite{Cox2008} after the analysis of the dataset published in \cite{Cox2014} were used as input for the modelling algorithm when running without sequence modelling, and processed using the \texttt{preprocess\_MaxQuant} and \texttt{MSnSet2protdata} functions in the MSqRob \cite{Goeminne2016} package, similar to what was done in section \ref{subsec:database_preparation}.
 
-\subsection{Sequence modelling}
+The final state of the data is the following:
+
+\begin{table}
+\begin{tabular}{lllrrrrrr}
+\toprule
+{} & protein &    organism &     H1 &     H2 &     H3 &     L1 &     L2 &     L3 \\
+\midrule
+     &  P0A8I8 &  E. coli &  25.13 &  25.24 &  24.39 &  21.71 &  22.67 &  22.40 \\
+     &  P0A8I8 &  E. coli &  21.49 &  23.10 &  23.38 &  21.34 &  22.65 &  21.25 \\
+     &  P0A8I8 &  E. coli &  24.10 &  24.54 &  23.81 &  19.88 &  20.87 &  20.30 \\
+\bottomrule
+\end{tabular}
+\caption{Sample data input for the Bayesian model. Every row represents a unique peptide. The first column refers to the protein it was found to map to in the protein inference step. The second column is an annotation field, in this case indicating the protein\textquotesingle s organism. The remaining columns indicate the $log_2(Intensity)$ registered for each peptide in the corresponding run. In this case, three peptides were observed for the protein with id P0A8I8.}
+\end{table}
+
+\subsection{Sequence feature extraction}
 
 When running with active sequence modelling, the peptide sequences and their neighborhood in the protein was extracted from \textit{E. coli} and \textit{Homo sapiens} proteome databases (\ref{subsec:database_preparation}). The protein neighborhood was defined by a window spanning 15 aminoacids on both sides of the peptide. It was extracted using the seqinr \cite{Charif2007} and GenomicRanges \cite{Lawrence2013} packages implemented in R and Bioconductor.
 
 Features to model the peptide effect based on sequence were extracted using BLABLA
 
-\subsection{Bayesian modelling using Pymc3}
+\subsection{Hierarchical model}
 
-In order to get started with Pymc3, we first need to import it.
+The \ac{MS1} intensity measurements are affected by two main sources of variation:
+
+\begin{enumerate}
+\item The fixed effect that the researcher aims at unraveling with proteomics (treatment effect)
+\item Random noise produced by experimental procedures, sequence bias, etc, which lead to a loss of data quality and resolving power.
+\end{enumerate}
+
+
+The mass spectrometry-proteomics workflow aims at providing estimates of the treatment effect while minimising the remaining unwanted effects. The mathematical framework implemented to model these effects was similar to the one used by MSqRob:
+
+\begin{equation}\label{eq:model}
+y_{ijkl} = \beta_{ijkl}^{0} + \beta_{ij}^{treatment} + \beta_{ik}^{peptide} + \beta_{il}^{run} + \epsilon_{i}
+\end{equation}
+
+where $y_{ijkl}$ stands for the $\log_2$-transformed intensity registered in treatment $j$, peptide $k$ and run $l$. This way, separate treatment, peptide and run effects are distinguished. $i$ stands for the protein index, which is evidently the same for all measurements belonging to peptides mapped to the same protein. $\epsilon$ models the noise that cannot be explained with the three effects aforementioned, and is the same for all measurements associated to the same protein.
+
+For example, the measurement $y_{P,A,p,1}$ corresponds to a measurement mapped to protein $P$. The measurement is impacted by a fixed effect, produced by treatment $A$, but also the peptide effect in peptide $p$ and the run effect in run $1$. An intercept term was also added to account for the starting intensity value.
+
+The data is thus affected by different effects acting in parallel, and in order to model them properly, multilevels need to be defined. Multilevel effects can be modelled with three approaches: pooled, unpooled, and with hierarchies (see figure \ref{fig:multilevel}). Hierarchical modeling is used when information is available on several different levels of observational units \cite{gelman2013bayesian}. The three effects were modeled as independent hierarchies.
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}{.9\textwidth}
+\centering
+\caption*{Pooled}
+\includegraphics[width=0.85\linewidth]{model_pooled}
+\end{subfigure}
+\bigskip
+\begin{subfigure}{.9\textwidth}
+\centering
+\caption*{Unpooled}
+\includegraphics[width=0.85\linewidth]{model_unpooled}
+\end{subfigure}
+\bigskip
+\begin{subfigure}{.9\textwidth}
+\centering
+\caption*{Hierarchical}
+\includegraphics[width=0.85\linewidth]{model_hierarchical}
+\end{subfigure}
+\caption[]{Alternative multilevel modelling approaches. A pooled model assumes that the parameter distribution is the same for all the datapoints.  The unpooled model represents the opposite case, there every datapoint is assumed to be modelled by a different probability distribution of the parameter for each. Finally, a hierarchical model settles for a middle ground where the parameters will not be exactly the same but not completely different either. This is achieved by generating a global distribution from which the parameter for each datapoint is sampled \footnotemark{}.}
+\label{fig:multilevel}
+\end{figure}
+
+\footnotetext{\href{https://docs.pymc.io/notebooks/multilevel\_modeling.html}{https://docs.pymc.io/notebooks/multilevel\_modeling.html}}
+
+
+This way, common probability distributions were set as priors for the intercept, treatment, peptide and run effect. The particular effect observed on each peptide was then modelled as a value sampled from the corresponding probability distribution. A diagram of the resulting model is displayed in figure \ref{fig:daft_model}).
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=\textwidth]{graph}
+\caption{Diagram of the Bayesian model developed in the present work, without sequence modelling of the peptide effect. It is represented as a Directed Acyclic Graph (\ac{DAG}) where nodes represent hyperparameters or random variables (in a circle) and directed edges  represent the dependencies between them. The nodes on the top depict the hyperparameters of the model, governing the prior probability distributions represented by the nodes to which their edges lead to. The remaining nodes articulate the probabilistic model and all lead to a final node ($y_{ijkl}$) which represents the modelling of the observed data with the instantiated model. The model hierarchies are organized in boxes. The one corresponding to the treatment effect can be read as \textit{the treatment effect $\beta_{ij}^{t}$ observed in the data is modelled as a probability distribution conditional on the value of $\mu^t$ and $\sigma^t$, which are in turn probability distributions governed by the hyperparameters 0 and 1.}}
+\label{fig:daft_model}
+\end{figure}
+
+\subsection{Prior probability distribution specification}
+
+Both because of the little knowledge on the value of the parameters governing the data generation process and to provide a prior that everyone can agree upon, non informative priors were provided to the model. This was condensed in the specification of Normal and Half Normal distributions for all the random stochastic variables in the model. The hyperparameters were selected to be as non informative as possible.
+
+
+
+\subsection{Approximation to the posterior probability distribution}
+
+The posterior probability distribution can be approximated by means of \ac{MCMC} methods, which can be run with the power of modern computing. The first sampling algorithms, like Metropolis-Hastings \cite{Chib1995} have given way to the much more efficient sampler \ac{NUTS} \cite{Hoffman2011}. \ac{MCMC} methods simulate sampling from the posterior distribution by randomly exploring the parameter space with some heuristics that guarantee convergence with the true posterior given a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018} \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}.
+
+\ac{ADVI} methods, very recently developed and introduced in PyMC3, attempt to solve the time and computational cost requirements characteristic of \ac{MCMC} methods by performing an approximation. The approximation consists of the selection of the best performing distribution $q$ within a family of distributions $Q$ that are computationally easy to work with. Thus the problem becomes an optimisation problem, where the inference algorithm needs to maximise the performance of the approximate function. Several specific methods can do this, but the mean-field implementation  is the default in PyMC3.
+
+Both NUTS and ADVI-powered approximations to the posterior were implemented in the program here presented using PyMC3.
+
+
+\subsection{PyMC3 implementation}
+
+In order to get started with PyMC3, we first need to import it.
 
 \begin{minted}[mathescape,
                linenos,
                numbersep=5pt,
                autogobble=true,
-               %frame=lines,
+               frame=lines,
                framesep=2mm]{python}
 
 
@@ -88,13 +176,14 @@ import pymc3 as pm
 
 The model is initialized as a Python context manager. Within the context manager, the model is implemented by defining prior distributions for the model parameters and establishing the dependency relationships between them.
 
-The code below formalizes the bias in \ac{MS1} intensity measurements due to a random effect in Pymc3 code.
+The code below formalizes the bias in \ac{MS1} intensity measurements due to a random effect in PyMC3 code.
 
 \begin{minted}[mathescape,
                linenos,
                numbersep=5pt,
                obeytabs=true,tabsize=2,
                firstnumber=last,
+               frame=lines,
                framesep=2mm]{python}
 
 with pm.Model() as model:             
@@ -107,32 +196,57 @@ Which is equivalent to the following statistical notation:
 
 \begin{align}
 \sigma \sim \mathcal{HN}(1)\,.  \\
-\mu \sim \mathcal{N}(0,\,\sigma^{2})\,.
+\mu \sim \mathcal{N}(0,\,\sigma)\,.
 \end{align}
 
-and can be read aloud as \textit{the prior probability distribution of the random effect follows a normal distribution with mean 0 and standard deviation $\sigma$. In turn, $\sigma$\textquotesingle s prior probability distribution follows a half normal distribution with standard deviation 1.}
+and can be read aloud as \textit{the prior probability distribution of the random effect follows a normal distribution with mean 0 and standard deviation $\sigma$. In turn, $\sigma$\textquotesingle s prior probability distribution follows a half normal distribution with standard deviation 1}. 1 and 0 act as hyperparameters of the model, and introduce the state of beliefs or knowledge on the system prior to seeing the data.
 
-\textit{hola}
 
+The hierarchical structure of the model is set by the definition of a parameter distribution from which the value for each element (peptide) being modelled is sampled. This can be done by defining a new normal distribution with $\mu$ and $\sigma$ set to the random variables defined above. Thus, the following was implemented,
 
 \begin{minted}[mathescape,
                linenos,
                numbersep=5pt,
                obeytabs=true,tabsize=2,
                firstnumber=last,
+               frame=lines,
                framesep=2mm]{python}
-effect = pm.Normal("pep", mu, sigma, n_elements)  
+         beta = pm.Normal("beta", mu, sigma, n_elements)  
 \end{minted}
 
+which is equivalent to:
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=\textwidth]{graph}
-\caption{Diagram of the Bayesian model developed in the present paper, without sequence modelling of the peptide effect. It is represented as a Directed Acyclic Graph \ac{DAG} where nodes represent hyperparameters or random variables (in a circle) and directed edges  represent the dependencies between them. The nodes on the top depict the hyperparameters of the model, governing the prior probability distributions represented by the nodes to which their edges lead to. The remaining nodes articulate the probabilistic model and all lead to a final node ($y_{ijkl}$) which represents the modelling of the observed data with the instantiated model.}
-\label{fig:daft_model}
-\end{figure}
+\begin{equation}
+\beta_i \sim \mathcal{N}(\mu, \sigma)\,.  \\
+\end{equation}
 
+and can be read as \textit{the bias observed in the $i^{th}$ element due to the effect here modelled is said to follow a normal distribution with mean $\mu$ and standard deviation $\sigma$ both defined as random probability distributions above.}
 
+Finally, the equation \ref{eq:model} defined above closes the model and binds the data to the model parameters. Its PyMC3 implementation is the following:
+
+\begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               obeytabs=true,tabsize=2,
+               firstnumber=last,
+               frame=lines,
+               framesep=2mm]{python}
+               
+         epsilon = pm.HalfNormal('epsilon', 1)                
+         m = pm.Deterministic("m", beta0 + beta)
+         obs = pm.Normal("obs", m, epsilon, observed=y)
+      
+\end{minted}
+
+which is equivalent to
+
+\begin{align}
+\nonumber \epsilon \sim \mathcal{HN}(1) \,. \\ 
+m = \beta^0 + \sum_{i=1} \beta_i \,. \\ 
+\nonumber y \sim \mathcal{N}(m, \epsilon)
+\end{align}
+
+and is read as \textit{the observed data is modelled as a normal distribution with mean $m$ and standard deviation $\epsilon$. $m$ is set defined as a random deterministic variable resulting from the sum of the intercept and the effects defined above. $\epsilon$ follows a new half normal distribution with standard deviation 1}. A deterministic variable is a random variable that acquires a fixed value if all random variables it has a dependency on take a fixed value too, i.e its stochasticity disappears if its parameters are fixed.
 
 \section{Results}
 

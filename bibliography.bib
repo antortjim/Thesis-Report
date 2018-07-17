@@ -14,6 +14,63 @@ title = {{Proposal for a Common Nomenclature for Sequence Ions in Mass Spectra o
 volume = {11},
 year = {1984}
 }
+
+@article{Tran2018,
+abstract = {Variational Bayes (VB), also known as independent mean-field approximation, has become a popular method for Bayesian network inference in recent years. Its application is vast, e.g. in neural network, compressed sensing, clustering, etc. to name just a few. In this paper, the independence constraint in VB will be relaxed to a conditional constraint class, called copula in statistics. Since a joint probability distribution always belongs to a copula class, the novel copula VB (CVB) approximation is a generalized form of VB. Via information geometry, we will see that CVB algorithm iteratively projects the original joint distribution to a copula constraint space until it reaches a local minimum Kullback-Leibler (KL) divergence. By this way, all mean-field approximations, e.g. iterative VB, Expectation-Maximization (EM), Iterated Conditional Mode (ICM) and k-means algorithms, are special cases of CVB approximation. For a generic Bayesian network, an augmented hierarchy form of CVB will also be designed. While mean-field algorithms can only return a locally optimal approximation for a correlated network, the augmented CVB network, which is an optimally weighted average of a mixture of simpler network structures, can potentially achieve the globally optimal approximation for the first time. Via simulations of Gaussian mixture clustering, the classification's accuracy of CVB will be shown to be far superior to that of state-of-the-art VB, EM and k-means algorithms.},
+archivePrefix = {arXiv},
+arxivId = {1803.10998},
+author = {Tran, Viet Hung},
+eprint = {1803.10998},
+file = {:home/antortjim/MEGA/Master/Thesis/Report/papers/1803.10998.pdf:pdf},
+mendeley-groups = {TFM},
+pages = {1--23},
+title = {{Copula Variational Bayes inference via information geometry}},
+url = {http://arxiv.org/abs/1803.10998},
+volume = {2018},
+year = {2018}
+}
+@article{Hoffman2011,
+abstract = {Hamiltonian Monte Carlo (HMC) is a Markov chain Monte Carlo (MCMC) algorithm that avoids the random walk behavior and sensitivity to correlated parameters that plague many MCMC methods by taking a series of steps informed by first-order gradient information. These features allow it to converge to high-dimensional target distributions much more quickly than simpler methods such as random walk Metropolis or Gibbs sampling. However, HMC's performance is highly sensitive to two user-specified parameters: a step size {\{}$\backslash$epsilon{\}} and a desired number of steps L. In particular, if L is too small then the algorithm exhibits undesirable random walk behavior, while if L is too large the algorithm wastes computation. We introduce the No-U-Turn Sampler (NUTS), an extension to HMC that eliminates the need to set a number of steps L. NUTS uses a recursive algorithm to build a set of likely candidate points that spans a wide swath of the target distribution, stopping automatically when it starts to double back and retrace its steps. Empirically, NUTS perform at least as efficiently as and sometimes more efficiently than a well tuned standard HMC method, without requiring user intervention or costly tuning runs. We also derive a method for adapting the step size parameter {\{}$\backslash$epsilon{\}} on the fly based on primal-dual averaging. NUTS can thus be used with no hand-tuning at all. NUTS is also suitable for applications such as BUGS-style automatic inference engines that require efficient "turnkey" sampling algorithms.},
+archivePrefix = {arXiv},
+arxivId = {1111.4246},
+author = {Hoffman, Matthew D. and Gelman, Andrew},
+eprint = {1111.4246},
+file = {:home/antortjim/.local/share/data/Mendeley Ltd./Mendeley Desktop/Downloaded/Hoffman, Gelman - 2011 - The No-U-Turn Sampler Adaptively Setting Path Lengths in Hamiltonian Monte Carlo.pdf:pdf},
+mendeley-groups = {TFM},
+month = {nov},
+title = {{The No-U-Turn Sampler: Adaptively Setting Path Lengths in Hamiltonian Monte Carlo}},
+url = {http://arxiv.org/abs/1111.4246},
+year = {2011}
+}
+@article{Chib1995,
+author = {Chib, Siddhartha and Greenberg, Edward},
+doi = {10.1080/00031305.1995.10476177},
+issn = {0003-1305},
+journal = {The American Statistician},
+mendeley-groups = {TFM},
+month = {nov},
+number = {4},
+pages = {327--335},
+title = {{Understanding the Metropolis-Hastings Algorithm}},
+url = {http://www.tandfonline.com/doi/abs/10.1080/00031305.1995.10476177},
+volume = {49},
+year = {1995}
+}
+
+
+
+@book{gelman2013bayesian,
+  title={Bayesian Data Analysis, Third Edition},
+  author={Gelman, A. and Carlin, J.B. and Stern, H.S. and Dunson, D.B. and Vehtari, A. and Rubin, D.B.},
+  isbn={9781439840955},
+  lccn={2013039507},
+  series={Chapman \& Hall/CRC Texts in Statistical Science},
+  url={https://books.google.es/books?id=ZXL6AQAAQBAJ},
+  year={2013},
+  publisher={Taylor \& Francis}
+}
+
+
 @article{Levitsky2018,
 abstract = {We present an open-source, extensible search engine for shotgun proteomics. Implemented in Python programming language, IdentiPy shows competitive processing speed and sensitivity compared with the state-of-the-art search engines. It is equipped with a user-friendly web interface, IdentiPy Server, enabling the use of a single server installation accessed from multiple workstations. Using a simplified version of X!Tandem scoring algorithm and its novel “autotune” feature, IdentiPy outperforms the popular alternatives on high-resolution data sets. Autotune adjusts the search parameters for the particular data set, resulting in improved search efficiency and simplifying the user experience. IdentiPy with the autotune feature shows higher sensitivity compared with the evaluated search engines. IdentiPy Server has built-in postprocessing and protein inference procedures and provides graphic visualization of the statistical properties of the data set and the search results. It is open-source and can be freely e...},
 author = {Levitsky, Lev I. and Ivanov, Mark V. and Lobas, Anna A. and Bubis, Julia A. and Tarasova, Irina A. and Solovyeva, Elizaveta M. and Pridatchenko, Marina L. and Gorshkov, Mikhail V.},
