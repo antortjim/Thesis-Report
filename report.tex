@@ -8,6 +8,7 @@
 \usepackage{pdfpages}
 \usepackage{array} % to make table column italic
 \usepackage{textcomp} % to support the trademark symbol
+\usepackage{minted}
 
 
 \DeclareUnicodeCharacter{2010}{-}% support older LaTeX versions
@@ -255,12 +256,25 @@
   class = abbrev
 }
 
+
+\DeclareAcronym{MCMC}{
+  short = MCMC,
+  long  = Markov Chain Monte Carlo,
+  class = abbrev
+}
+
+
 \DeclareAcronym{PTM}{
   short = PTM ,
   long  = Post-Translational Modification,
   class = abbrev
 }
 
+\DeclareAcronym{DAG}{
+  short = DAG ,
+  long  = Directed Acyclic Graph,
+  class = abbrev
+}
 
 
 \DeclareAcronym{NZ}{
@@ -293,6 +307,21 @@
   long  = Match Between Runs,
   class = abbrev
 }
+
+\DeclareAcronym{ADVI}{
+  short = ADVI ,
+  long  = Automatic Differentiation Variational Inference,
+  class = abbrev
+}
+
+\DeclareAcronym{NUTS}{
+  short = NUTS ,
+  long  = No-U-Turn-Sampler,
+  class = abbrev
+}
+
+
+
 
 \DeclareAcronym{MGF}{
   short = MGF ,
@@ -825,6 +854,7 @@ The MQ+LFQ pipeline results were obtained starting at the Supplemental table 1 f
 %\href{http://www.mcponline.org/content/suppl/2014/06/17/M113.031591.DC1/mcp.M113.031591-1.xlsx}{http://www.mcponline.org/content/suppl/2014/06/17/M113.031591.DC1/mcp.M113.031591-1.xlsx}.
 
 \subsection{Decoy database preparation and search}
+\label{subsec:database_preparation}
 
 The spectra saved in the MGF files obtained in the previous step were passed to the MS-GF+ search engine \cite{Kim2014} by means of the SearchGUI \texttt{SearchCLI} tool \cite{Barsnes2018} utility. The search parameters were set using the \texttt{IdentificationParametersCLI}. In order to account for potential post-translational modifications, the search was conducted allowing for the following variable modifications: oxidation of M and deamidation of N and Q. Moreover, C carbamidomethylation was set as fixed modification. The enzyme was set to semispecific Trypsin, allowing for a non-tryptic cleavage on any side of the peptide. Up to two missed cleavages were allowed. The precursor tolerance was 10 ppm and the fragment tolerance 0.5 Da. 
 
@@ -909,10 +939,10 @@ The combination of both programs enabled the identification and validation (matc
  \bottomrule
 \end{tabular}
 \caption{\textbf{Protein inference results}. The counts of the different molecular entities detected by peptideShaker are displayed.}
-\label{tab:quantification_table}
+\label{tab:protein_inference}
 \end{table}
 
-A total of 46595 peptides were inferred to be present in at least one of the fractions. Of them more than 27 thousand mapped to a unique protein. However, a significant amount mapped to more than one protein. Such peptides are called non-unique peptides. The 25056 detected proteins were grouped into 10039 protein groups. Protein groups are peptide generating entities for which enough data to confirm the presence of at least one of them is available, but not to exactly assess which of them. Thus, protein inferene algorithms create them when a does not uniquely map to a protein becuase it is not possible to distinguish which protein it truly comes from. Protein grouping decreased the amount of  considered protein entities to 10039.
+A total of 46595 peptides were inferred to be present in at least one of the fractions (see table \ref{tab:protein_inference}). Of them more than 27 thousand mapped to a unique protein. However, a significant amount mapped to more than one protein. Such peptides are called non-unique peptides. The 25056 detected proteins were grouped into 10039 protein groups. Protein groups are peptide generating entities for which enough data to confirm the presence of at least one of them is available, but not to exactly assess which of them. Thus, protein inferene algorithms create them when a does not uniquely map to a protein becuase it is not possible to distinguish which protein it truly comes from. Protein grouping decreased the amount of  considered protein entities to 10039.
 
 Protein groups are very frequent due to several factors. For example, protein isoforms, consisting of protein sequences differing in potentially only one aminoacid, are very difficult to resolve. PeptideShaker executes a smart protein grouping by harnessing the annotation of proteins and classifying protein groups based on how well the annotation backs the protein group.
 
@@ -953,7 +983,7 @@ Once as many identifications as possible were gathered, a refinement of the meas
 \subsection{Quantification}
 \label{subsec:quantification}
 
-The extracted apex MS1 intensities were used as proxy for peptide abundance to estimate protein $log_2$(ratios), or \textit{log2-fold-changes} across condition H and condition L. During quantification, it is important to take into account as many of the effects influencing protein quantification. In this case, besides the different H and L conditions, peptide, run and fraction effects could be distinguished. The MSqRob quantification engine treats effects differently depending on whether or not they are random, or fixed. Fixed effects should have a consistent impact in the ion currents measured in the spectrometer, whereas random effects are truly random and thus unpredictable.
+The extracted apex MS1 intensities were used as proxy for peptide abundance to estimate protein $log_2$(ratios), or \textit{log2-fold-changes} (\ac{log2FC}) across condition H and condition L. During quantification, it is important to take into account as many of the effects influencing protein quantification. In this case, besides the different H and L conditions, peptide, run and fraction effects could be distinguished. The MSqRob quantification engine treats effects differently depending on whether or not they are random, or fixed. Fixed effects should have a consistent impact in the ion currents measured in the spectrometer, whereas random effects are truly random and thus unpredictable.
 
 The result of the process was the successful quantification of 5307 protein groups out of 10039 (see table \ref{tab:quantification_table}).
 
@@ -1018,7 +1048,7 @@ The result of this analysis is shown in figure \ref{fig:roc_curves}. Remarkably,
 \end{figure}
 
 
-In order to visualize the level of agreement of the pipelines for the assignment of differentially abundant proteins, a Venn diagram was constructed (see figure \ref{fig:venn_cor} A). Venn diagrams provide a straightforward visualization of the overlap of several ensembles of proteins. The scrutiny of the counts reveals a high degree of agreement, with most proteins detected by Comp+Rob or MQ+LFQ being detectd by MQ+Rob too. Remarkably, 517 proteins were detected by MQ+Rob alone, which further confirmed its resolving power. Analyzing the log2FC pairwise-correlation (see figure \ref{fig:venn_cor} B) reveals that the highest correlation was found between pipelines using MaxQuant as upstream spectra processor, as expected. Even though the observed correlation was low, the estimated log2FC was always greater than 1.
+In order to visualize the level of agreement of the pipelines for the assignment of differentially abundant proteins, a Venn diagram was constructed (see figure \ref{fig:venn_cor} A). Venn diagrams provide a straightforward visualization of the overlap of several ensembles of proteins. The scrutiny of the counts reveals a high degree of agreement, with most proteins detected by Comp+Rob or MQ+LFQ being detectd by MQ+Rob too. Remarkably, 517 proteins were detected by MQ+Rob alone, which further confirmed its resolving power. Analyzing the log2FC pairwise-correlation (see figure \ref{fig:venn_cor} B) reveals that the highest correlation was found between pipelines using MaxQuant as upstream spectra processor, as expected. Even though the observed correlation was low, the estimated log2FC was always greater than 1. The MQ+Rob pipeline systematically estimated log2FV values greater than the other 2.
 
 
 Additionally, the accuracy with which each program assigns a \ac{log2FC} estimate to each protein group, and how significantly different from the null value of 0 it was found to be, provides further insights on the pros and cons of each pipeline, as shown in figure \ref{fig:combined_plot}. This analysis confirmed that the pipeline providing the best separation between organisms was MQ+Rob.
@@ -1039,13 +1069,11 @@ Additionally, the accuracy with which each program assigns a \ac{log2FC} estimat
 
 \subsection{Improvement of the PSM step}
 
-The low attained matching rate manifests existing room for improvement in the currently available tools. Remarkably, it has been shown that the combined usage of multiple search engines can increase identifications, since the different statistical frameworks implemented in each of them compensate each other\textquotesingle s caveats. Furthermore, \textit{de novo} search engines are available and supported by SearchGUI, and the latest developments in the field, like the IdentiPy engine \cite{Levitsky2018} are progressively incorporated to the framework \footnote{\href{https://github.com/compomics/peptide-shaker/issues/309}{https://github.com/compomics/peptide-shaker/issues/309}}. Their usage is predicted tor improve identification rates and quality of the matches.
+The low attained matching rate manifests existing room for improvement in the currently available tools. As explained in section \ref{sec:search_engines}, it has been shown that the combined usage of multiple search engines can increase identifications, since the different statistical frameworks implemented in each of them compensate each other\textquotesingle s caveats. Only MS-GF+ was used in thi work for simplicity. Furthermore, \textit{de novo} search engines are available and supported by SearchGUI, and the latest developments in the field, like the IdentiPy engine \cite{Levitsky2018} are progressively incorporated to the tool \footnote{\href{https://github.com/compomics/peptide-shaker/issues/309}{https://github.com/compomics/peptide-shaker/issues/309}}. Their usage is predicted to improve identification rates and quality of the matches.
 
 The most important reason why many spectra remain unidentified is the presence of post-translational modifications (\ac{PTM}s), which exponentially increase the search space, forcing most workflows to discard many of the peptides featuring a PTM. New approaches to the problem are emerging, mainly machine learning methods for the handling of unexpected modifications \cite{Gabriels}. Moreover, the prediction of \ac{MS2} peak intensities patterns from peptide sequences promises to increase the amount of evidence available during the PSM process, thus boosting correct identifications \cite{Kirik2018} \cite{Degroeve2013}.
 
 Finally, the extremely low matching rates in the latter fractions translated to decreased contributions to the number of identifications. This indicated that decreasing the number of fractions would not have had a major impact in the experiment\textquotesingle s depth.
-
-
 
 \subsection{Improvement of the feature extraction step}
 
@@ -1104,6 +1132,9 @@ All the quantification approaches enunciated until now make use of different fre
 
 An open-source, free, platform-agnostic and customisable label-free relative quantification pipeline assembling publicly available tools was presented in this work. The pipeline is capable of providing qualitative information on the protein composition of a sample using the latest proteomics search engines and validation software. Moreover, it can be extended to support more complex tasks, like \textit{De novo} search, or the study of \ac{PTM}s, thanks to its non-monolithic nature and usage of open-formats. Likewise, the openness of the data in all steps allows for quality control checks along the way. However, the comparison against other workflows shows the room for improvement in the quantification step when dealing with fractionated data, albeit deficiencies in this aspect should have no impact in non-fractionated datasets.
 
+Either the pipeline developed in the presented chapter or those based on MaxQuant are ready to be deployed in a real environment and provide \ac{NZ} with useful insights on its proteomics data for free.
+
+
 
 
 \chapter{BayesQuant: Probabilistic estimation of protein ratios}
@@ -1115,7 +1146,7 @@ The current label-free quantification methods, reviewed in section \ref{sec:quan
 
 \section{Introduction}
 
-\subsection{Bayesian statistics}
+\subsection{Frequentist and Bayesian statistics}
 
 Both the LFQ and MSqRob quantitication engines presented in chapter \ref{chap:pipeline} took a frequentist approach to the problem of protein quantification. Such approaches, establish a null hypothesis, complementary to the actual hypothesis being tested (alternative hypothesis). The information about the phenomena being modelled is put to use to measure how likely this null hypothesis is via Null-Hypothesis Significance Testing (\ac{NHST}).
 
@@ -1127,7 +1158,7 @@ H_1: & \log_2(FC) \neq 0 \nonumber
 
 The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools returned point estimates of the log2FC between a pair of conditions and a p-value, which provides a measurement of the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, p-values do not say anything about probability of the alternative (our) hypothesis.
 
-The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and comes equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes-theorem.
+The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and comes equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes\textquotesingle s theorem.
 
 \begin{equation}
 P(\theta | y) = \cfrac{P(y | \theta) P(\theta)}{P(y)}
@@ -1148,16 +1179,80 @@ The Bayes theorem is an extremely versatile tool taking a role analogous to that
 \end{enumerate}
 
 
-The Bayesian framework enunciated above can be applied to the quantification problem. All is needed is the computation of the posterior probability distribution. Unfortunately, this is tractable analytically for simple models only. However, Markov Chain-Monte Carlo methods can be used to approximate this posterior, and are guaranteed to reach an infinitely exact fit if ran for long enough. Their demanding computational cost has only been recently met by the power of modern computers, thus making the approach feasible. Several Bayesian statistics frameworks are available on popular programming languages like R (JAGS) and Python (Pymc3), all making use of a programming paradigm called \textbf{probabilistic programming}.
+The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterir probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the likelihood divided by a constant}
 
+It can be applied to the quantification problem, where $\theta$ turns into the log2FC parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Unfortunately, this is tractable analytically for simple models only. However, Markov Chain-Monte Carlo (\ac{MCMC}) methods can be used to approximate this posterior, and are guaranteed to reach an infinitely exact fit if ran for long enough. Their demanding computational cost has only been recently met by the power of modern computers, thus making the approach feasible. Several Bayesian statistics frameworks are available on popular programming languages like R (JAGS) and Python (Pymc3 \cite{Salvatier2016}), all making use of a programming paradigm called \textbf{probabilistic programming}.
 
 \subsection{Probabilistic programming}
+
+The management of uncertainty in statistics is done by means of probability distributions, which account for the possible values that a parameter could take, together with how likely they are. Probabilistic programming offers the framework to build complex statistical models by storing probability distributions as variables of the program. Moreover, probabilistic programming packages supply the tools needed to perform inference with these models by taking experimental evidence (data) and fitting the distributions to the data using Bayes theorem. The fit of the model to the data entails the computation of the posterior probability distribution, which is tallied using \ac{MCMC} algorithms provided with the probabilistic programming tool.
+
+Pymc3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (\ac{ADVI}) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilisitc estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
+
+\subsection{Goals}
+
+\begin{enumerate}
+
+\item Develop a Bayesian model to estimate log2FC in proteomics datasets together with the uncertainty of the estimate.
+
+\item Make it scalable and fast for usability in ordinary modern computers.
+
+\end{enumerate}
+
+\section{Materials and Methods}
+
+\subsection{Data input}
+The peptides.txt and proteinGroups.txt files produced by MaxQuant \cite{Cox2008} after the analysis of the dataset published in \cite{Cox2014} were used as input for the modelling algorithm when running without sequence modelling, and processed using the \texttt{preprocess\_MaxQuant} and \texttt{MSnSet2protdata} functions in the MSqRob \cite{Goeminne2016} package, similar to what was done in section \ref{subsec:database_preparation}.
+
+\subsection{Sequence modelling}
+
+When running with active sequence modelling, the peptide sequences and their neighborhood in the protein was extracted from \textit{E. coli} and \textit{Homo sapiens} proteome databases (\ref{subsec:database_preparation}). The protein neighborhood was defined by a window spanning 15 aminoacids on both sides of the peptide. It was extracted using the seqinr \cite{Charif2007} and GenomicRanges \cite{Lawrence2013} packages implemented in R and Bioconductor.
+
+Features to model the peptide effect based on sequence were extracted using BLABLA
+
+\subsection{Bayesian modelling using Pymc3}
+
+The model was initialized 
+
+\begin{minted}[mathescape,
+               linenos,
+               xleftmargin=-70pt,
+               numbersep=10pt,
+               gobble=0,
+               frame=lines,
+               framesep=2mm]{python}
+with pm.Model() as model:
+\end{minted}
 
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\textwidth]{graph}
+\caption{Diagram of the Bayesian model developed in the present paper, without sequence modelling of the peptide effect. It is represented as a Directed Acyclic Graph \ac{DAG} where nodes represent hyperparameters or random variables (in a circle) and directed edges  represent the dependencies between them. The nodes on the top depict the hyperparameters of the model, governing the prior probability distributions represented by the nodes to which their edges lead to. The remaining nodes articulate the probabilistic model and all lead to a final node ($y_{ijkl}$) which represents the modelling of the observed data with the instantiated model.}
+\label{fig:daft_model}
 \end{figure}
+
+
+
+\section{Results}
+
+\subsection{Model implementation (I) peptide as a random process}
+
+\subsection{Model implementation (II) peptide effect with sequence features}
+
+\subsection{Posterior probability distribution computation}
+
+\ac{ADVI} returns good results faster than \ac{NUTS}
+
+\subsection{Model checking}
+
+
+\section{Discussion}
+
+
+
+\section{Conclusion}
+
 
 %As such, they are the target of multiple regulatory pathways ensuring their quantities are kept within homeostatic ranges.
 
