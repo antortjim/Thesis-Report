@@ -11,18 +11,22 @@
 \usepackage{minted}
 \usemintedstyle{autumn}
 \usepackage{amsmath}
-\usepackage{unicode-math}
-%\setmainfont{TeXGyrePagella}
-%\setmathfont{TeX Gyre Pagella Math}
-%\setmainfont[
-%    Ligatures=TeX,
-%    %UprightFont={*-Light},
-%    BoldFont={*},
-%    ItalicFont={*-Italic},
-%    BoldItalicFont={*-BoldItalic},
-%    Scale=MatchLowercase
-%]{TeXGyrePagella}
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\argmin}{arg\!\min}
 
+\usepackage{unicode-math}
+\usepackage{mathtools}
+
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+
+
+\newcommand{\infdiv}{KL\infdivx}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+
+\usepackage{subfiles}
 
 %\setsansfont{Calibri}
 \setmonofont{Ubuntu Mono}
@@ -33,7 +37,7 @@
 %\DeclareUnicodeCharacter{2010}{-}% support older LaTeX versions
 \usepackage{wallpaper}
 \usepackage{changepage}
-\usepackage{mhchem} % for isotope nomeclature support
+\usepackage[version=4]{mhchem} % for isotope nomeclature support
 
 % Setup captions
 %\captionstyle[\centering]{\centering}
@@ -163,14 +167,8 @@
 %\makeatother
 
 \usepackage{mathtools}
-\usepackage{sectsty}
-
-\chapternumberfont{\LARGE} 
-\chaptertitlefont{\LARGE}
-
-
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+%\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+%\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
 
 % Swap the definition of \abs* and \norm*, so that \abs
 % and \norm resizes the size of the brackets, and the 
@@ -213,6 +211,21 @@
   class = abbrev
 }
 
+
+
+\DeclareAcronym{ROPE}{
+  short = ROPE ,
+  long  = Region Of Practical Equivalence,
+  class = abbrev
+}
+
+
+\DeclareAcronym{IID}{
+  short = IID,
+  long  = Independent Identically Distributed,
+  class = abbrev
+}
+
 \DeclareAcronym{MS2}{
   short = MS2 ,
   long  = second tandem MS analyzer ,
@@ -224,6 +237,19 @@
   long  = Tandem mass spectrometry,
   class = abbrev
 }
+
+\DeclareAcronym{KL}{
+  short = KL ,
+  long  = Kullback-Leibler (divergence),
+  class = abbrev
+}
+
+\DeclareAcronym{ELBO}{
+  short = ELBO,
+  long  = Evidence Lower Bound,
+  class = abbrev
+}
+
 
 
 \DeclareAcronym{m/z}{
@@ -269,6 +295,11 @@
   class = abbrev
 }
 
+\DeclareAcronym{HPDI}{
+  short = HPDI,
+  long  = High Probability Density Interval,
+  class = abbrev
+}
 
 \DeclareAcronym{HPLC}{
   short = HPLC ,
@@ -310,14 +341,14 @@
 }
 
 \DeclareAcronym{RT}{
-  short = RT ,
+  short = RT,
   long  = Retention time,
   class = abbrev
 }
 
 \DeclareAcronym{log2FC}{
   short = log2FC ,
-  long  = $\log_2$(FC),
+  long  = $\log_2$(Fold Change),
   class = abbrev
 }
 
@@ -328,9 +359,9 @@
   class = abbrev
 }
 
-\DeclareAcronym{ADVI}{
-  short = ADVI ,
-  long  = Automatic Differentiation Variational Inference,
+\DeclareAcronym{VI}{
+  short = VI ,
+  long  = Variational Inference,
   class = abbrev
 }
 
@@ -396,7 +427,7 @@
     %{\huge No subtitle is available} \\
     \begin{tabbing}
     % adjust the hspace below for the longest author name
-    Antonio Ortega Jiménez \hspace{1cm} \= \texttt{<ntoniohu@gmail.com>}
+    Antonio Ortega Jiménez \hspace{1cm} \= \texttt{<rnq313@alumni.ku.dk>}
     %Second Author \> \texttt{<second@author.com>} \\       
     \\[10.5cm] 
     
@@ -439,11 +470,11 @@
 
 
 \input{preface}
-\include{introduction}
-\include{msreview}
-\include{pipeline}
-\include{modelling}
-\include{thp1}
+\subfile{introduction}
+\subfile{msreview}
+\subfile{pipeline}
+\subfile{modelling}
+\subfile{thp1}
 
 
 
