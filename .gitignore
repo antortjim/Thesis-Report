@@ -6,6 +6,8 @@
 *.synctex.gz
 *.aux
 *.pptx
+*.lof
+*.tks
 summary*
 ku-forside.zip
 _minted*
