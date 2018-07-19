@@ -1,6 +1,3 @@
-\documentclass[thesis]{subfiles}
-\begin{document}
-
 \chapter{Review on mass spectrometry and shotgun proteomics}
 \label{chap:mass_spec}
 
@@ -11,7 +8,7 @@ The existing approaches are divided into two types of paradigms: top-down and bo
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{proteomics_skema_book}
-\caption{Overview of a standard bottom-up proteomics analysis. Figure 1.3 from \cite{Barsnes2008}.}
+\caption[Overview of a standard bottom-up proteomics analysis]{Figure 1.3 from \cite{Barsnes2008}.}
 \label{fig:proteomics_overview}
 \end{figure}
 
@@ -332,5 +329,3 @@ The data collected in the mass spectrometer refers to peptides originating from 
 As stated in \cite{Goeminne2015} \textit{peptides originating from the same protein can indeed be considered technical replicates and theoretically should lead to similar abundance estimates. However, the summarization of the peptide intensities into protein expression values is cumbersome, and most summarization-based methods do not correct for differences in peptide characteristics or for the between-sample differences in the number of peptides that are identified per protein. This might introduce bias and differences in uncertainty between the aggregated protein expression values, which are typically ignored in downstream data analysis steps}.
 
 It is for this reason that peptide-based models offer the statistical framework required to learn as much from the data as possible. This translates into improved results when compared to the other aforementioned methods \cite{Goeminne2015}. This hypothesis is the motivation for the method explained in chapter \ref{chap:model}.
-
-\end{document}

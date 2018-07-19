@@ -1,12 +1,9 @@
-\documentclass[thesis]{subfiles}
-\begin{document}
-
 \chapter{BayesQuant: Probabilistic estimation of protein ratios}
 \label{chap:model}
 
 \section*{Summary}
 
-The current label-free quantification methods, reviewed in section \ref{sec:quantification} all rely on frequentist statistics, which return point estimates of model parameters such as the estimate of the abundance ratio (fold change) across conditions. However, a Bayesian based approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, a statistical model, named BayesQuant, was written in the probabilistic programming framework PyMC3 and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability and its strengths.
+The current label-free quantification methods reviewed in section \ref{sec:quantification} rely on frequentist statistics, which return point estimates of model parameters such as the estimate of the abundance ratio (fold change) across conditions. However, a Bayesian  approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, a statistical model, named BayesQuant, was written in the probabilistic programming framework PyMC3 and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability, its strengths and its weaknesses.
 
 \section{Introduction}
 
@@ -62,7 +59,7 @@ where $q(\theta)$ stands for the whole family of densities, $p(\theta|x)$ stands
 From \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}} \textit{the term variational is used because the best $q$ in $Q$ is picked. The term derives from the "calculus of variations," which deals with optimization problems that pick} [...] \textit{a particular $q$ in $Q$, specified by setting some variational parameters i.e the knobs on $Q$ that need to be turned to get a good approximation.}
 
 
-One of the terms yielded by the decomposition of the conditional density embodied by the posterior is the evidence of the data $p(x)$. This term is computationally intractable, thus making the computation of the exact \ac{KL} divergence impossible. A lower bound up to an additive constant can however be computed thanks to Jensen\textquotesingle s inequality \cite{jensen1906fonctions} \. This approximate amount is the Variational or Evidence Lower BOund (\ac{ELBO}). \textit{The \ac{ELBO} is the negative \ac{KL} divergence of plus $logp(x)$, which is a constant with respect to $q(z)$. Thus maximizing
+One of the terms yielded by the decomposition of the conditional density embodied by the posterior is the evidence of the data $p(x)$.  $p(x)$ is computationally intractable, thus making the computation of the exact \ac{KL} divergence impossible. A lower bound up to an additive constant can however be computed thanks to Jensen\textquotesingle s inequality \cite{jensen1906fonctions} \. This approximate amount is the Variational or Evidence Lower BOund (\ac{ELBO}). \textit{The \ac{ELBO} is the negative \ac{KL} divergence of plus $logp(x)$, which is a constant with respect to $q(z)$. Thus maximizing
 the \ac{ELBO} is equivalent to minimizing the \ac{KL} divergence} \cite{Blei2018}.
 
 Finally, several density approximation families are available. The mean-field family of densities is one of the most simple, as it ignores all dependencies between latent variables, and treats them as independent. From \href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html} the mean-field approximations works by \textit{pretending that the variables are just behaving that way "on their own." The mean-field method throws away all of the interactions}. A generic mean-field family member is shown in equation \ref{eq:mean_field}.
@@ -71,11 +68,29 @@ Finally, several density approximation families are available. The mean-field fa
 q(\theta_1, ..., \theta_m) = \prod_{j=1}^{m}{q(\theta_j)}
 \end{equation} 
 
-The demanding computational cost of the \ac{MCMC} and \ac{VI} schemes has only been recently met by the power of modern computers, thus making the approach feasible. Several Bayesian statistics frameworks are available on popular programming languages like R (JAGS \cite{Plummer}) and Python (PyMC3 \cite{Salvatier2016}), all making use of a programming paradigm called \textbf{probabilistic programming}.
+The demanding computational cost of the \ac{MCMC} and \ac{VI} schemes has only been recently met by the power of modern computers, thus making the approach feasible.
+
+
+\subsection{Model checking}
+\label{subsec:model_checking}
+
+Whatever the posterior distribution is obtained, a proper Bayesian analysis is not finished without a model checking step that looks at potential problems happenning in the fitting step, and confirms the goodness of fit of the model to the data.
+
+\begin{itemize}
+
+\item Evidence for non-convergence must be collected. Albeit lack of evidence of non-convergence does not guarantee convergence, the existence of evidence definitely proofs it \cite{Kruschke}.
+
+\item Neither reaching convergence nor the best \ac{VI} approximation guarantee that the fitted model actually captures the data generation process. Therefore, the true posterior could be a bad reflection of the natural process being model and the best approximation will not solve it. Posterior Predictive Checks are carried out to measure how well the model captured the data properties \cite{Kruschke}.
+
+\end{itemize}
+
 
 
 
 \subsection{Probabilistic programming}
+
+The infrastructure providing the inference and model checking algorithms is available under several implementations in different programming languages, like R (JAGS \cite{Plummer}) and Python (PyMC3 \cite{Salvatier2016}). All these frameworks make use of a programming paradigm called \textbf{probabilistic programming}.
+
 
 The management of uncertainty in statistics is done by means of probability distributions, which account for the possible values that a parameter could take, together with how likely they are. Probabilistic programming offers the framework to build complex statistical models by storing probability distributions as variables of the program. Moreover, probabilistic programming packages supply the tools needed to perform inference with these models by taking experimental evidence (data) and fitting the distributions to the data using Bayes theorem. The fit of the model to the data entails the computation of the posterior probability distribution, which is tallied using \ac{MCMC} algorithms provided with the probabilistic programming tool.
 
@@ -122,7 +137,7 @@ protein &      Organism &     H1 &     H2 &     H3 &     L1 &     L2 &     L3 \\
 
 When running with active sequence modelling, the peptide sequences and their neighborhood in the protein was extracted from \textit{E. coli} and \textit{Homo sapiens} proteome databases (\ref{subsec:database_preparation}). The protein neighborhood was defined by a window spanning 15 aminoacids on both sides of the peptide. It was extracted using the seqinr \cite{Charif2007} and GenomicRanges \cite{Lawrence2013} packages implemented in R and Bioconductor.
 
-Features to model the peptide effect based on sequence were extracted using BLABLA
+Features to model the peptide effect based on sequence were extracted using the Biopython \cite{Cock2009} built-in  module \texttt{ProtParam.ProteinAnalysis()}. The following properties were extracted: amino-acid percentage, peptide length, molecular weight, mass/length ratio, isoelectric point, aromaticity and instability.
 
 \subsection{Hierarchical modelling}
 \label{subsec:hierarchy}
@@ -190,11 +205,11 @@ Both because of the little knowledge on the value of the parameters governing th
 \subsection{Posterior probability distribution computation}
 \label{subsec:posterior_compute}
 
-Both the \ac{MCMC} \ac{NUTS} sampler and \ac{VI} mean-field strategies were applied to approximate the posterior probability distribution of the \ac{log2FC}.
+The \ac{VI} mean-field strategy was applied to approximate the posterior probability distribution of the \ac{log2FC}. \ac{ELBO} optimisation was run for 40k iterations. Optimisation was validated by visual inspection of \ac{ELBO} traceplots over the 40k iterations. Once optimisation was validated, 10k samples were drawn from the approximate distribution to simulate the true posterior.
 
 \subsection{Model checking}
 
-Posterior predictive checks of the posterior distribution were carried out using the \texttt{sample\_ppc()} function in PyMC3. A visual evaluation of the differences between simulated and observed data was used to assert the correctness of the models.
+Posterior predictive checks of the posterior distribution were carried out using the \texttt{sample\_ppc()} function in PyMC3. 500 datapoints for each peptide, consisting of 6 numbers, one for each run, were simulated. The resulting 6D data was projected onto a 2D plane via Principal Component Analysis. The covariance matrix required was computed on the whole dataset. The visual evaluation of the differences between simulated and observed data was used to assert the correctness of the models.
 
 \subsection{PyMC3 implementation}
 
@@ -357,8 +372,7 @@ The values stored in the trace obtained via VI will follow an approximation to t
                frame=lines,
                firstnumber=last,
                framesep=2mm]{python}
-# VI approximation: much faster and pretty accurate
-bayesquant.pcc()
+bayesquant.ppc()
 \end{minted}
 
 
@@ -378,84 +392,190 @@ bayesquant.pcc()
 \includegraphics[width=.9\linewidth]{ELBO/A6NDG6}
 \end{subfigure}
 %\end{adjustbox}
-\caption{Progression of the \ac{ELBO} of the approximation for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}) over 40k iterations.}
+\caption{Progression of \ac{ELBO} maximisation during the \ac{VI} approximation for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}) over 40k iterations.}
 \label{fig:ELBO}
 \end{figure}
 
+Even though the ELBO took extremely low (negative) values at start (see figure \ref{fig:ELBO}), it was maximised fast to values around 0, indicating that the mean-field approximation was acceptably good.
 
 \subsection{Basic model}
+\label{subsec:basic_model}
 
-The results of the model fitting step are shown in figures \ref{fig:ecoli_res}, and \ref{fig:human_res} for one protein from \textit{E. coli} and \textit{Homo sapiens}, respectively.
+A protein from each proteome was used to test BayesQuant\textquotesingle s performance P0A818 (\textit{E. coli}) and A6NDG6 (\textit{Homo sapiens}).
+
+The traces produced by BayesQuant using \ac{VI} exhibited a clear random walk behaviour, which decreases the posibility that the approximation was wrong. Moreover, the  effects caused by the different peptides and runs were estimated and separated from the overall observed noise, allowing for a better estimation of the \ac{log2FC} (see figure \ref{traceplots}).
 
 \begin{figure}[!h]
 %\begin{adjustbox}{varwidth=\textwidth,fbox,center}
 \begin{subfigure}{\textwidth}
 \centering
 \caption*{A}
-\includegraphics[width=\linewidth]{trace_ecoli}
+\includegraphics[width=\linewidth]{traceplots/P0A8I8}
 \end{subfigure}
 \bigskip
 \begin{subfigure}{\textwidth}
 \centering
 \caption*{B}
-\includegraphics[width=\linewidth]{trace_human}
+\includegraphics[width=\linewidth]{traceplots/A6NDG6}
 \end{subfigure}
 %\end{adjustbox}
 \caption{Traceplot of the model fit for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The left panel shows the frequency density over the parameter space for several model parameters: (I) the \ac{log2FC} estimate (difference of treatment effects), (II) the effects in the three observed peptides, and (III) the effects in the six available runs. The right panel displays the sampled values from the \ac{VI} approximation stored in the trace.}
 \label{fig:traceplots}
 \end{figure}
 
+This way, a different posterior distribution was computed for the impact of each peptide and run in all the measurements collected for each protein.
 
+
+
+The study of the \ac{log2FC} posterior probability distribution reveals what are the most likely parameter values and allows for the fulfillment of Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentually the same as the null value \cite{Kruschke}. In the present application, the null value was set to 0, and the interval was given a width of 0.4 on each side.
 
 \begin{figure}[!h]
-\begin{subfigure}{0.8\textwidth}
 \centering
+\begin{subfigure}{0.8\textwidth}
 \caption*{A}
-\includegraphics[width=\linewidth]{posterior_ecoli}
+\includegraphics[width=\linewidth]{posteriors/P0A8I8}
 \end{subfigure}
 \bigskip
 \begin{subfigure}{0.8\textwidth}
-\centering
 \caption*{B}
-\includegraphics[width=\linewidth]{posterior_human}
+\includegraphics[width=\linewidth]{posteriors/A6NDG6}
 \end{subfigure}
 \label{fig:posteriors}
-\caption{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% High Probability Density Interval (\ac{HPDI}) is marked with a black line. The Region Of Practical Equivalence (\ac{ROPE}), shown in red, is a small range of parameter values that are considered to be practically equivalent to the null value in the present application \cite{Kruschke}, in this case a 0.4 window around 0. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)$.}
+\caption{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% \ac{HPDI} is marked with a black line. The \ac{ROPE} shown in red, is  \cite{Kruschke}, in this case a 0.4 window around 0. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)$).}
+\end{figure}
+
+The test analysis indicated that P0Q8I8 most likely has a \ac{log2FC} between 1.4 and 1.7, and it\textquotesingle significantly different from 0, as no overlap was observed between \ac{HPDI} and \ac{ROPE}. On the other hand, the human protein was found to acquire a \ac{log2FC} most likely between -0.1 and 0.192. This range is fully contained within the \ac{ROPE}, which indicates that the \ac{log2FC} was practically 0 (see figure \ref{fig:posteriors}).
+
+
+The posterior predictive checks on both proteins pinpoints that the fitted models captured a data generation process approximating what was observed (see figure \ref{fig:ppc}). The three observed peptides were found to be undistinguishable from the 500 simulated ones.
+
+\begin{figure}[!h]
+\centering
+\begin{subfigure}{0.8\textwidth}
+\caption*{A}
+\includegraphics[width=\linewidth]{PPC/PCA_P0A8I8}
+\end{subfigure}
+\bigskip
+\begin{subfigure}{0.8\textwidth}
+\caption*{B}
+\includegraphics[width=\linewidth]{PPC/PCA_A6NDG6}
+\end{subfigure}
+\label{fig:ppc}
+\caption{Projection of the posterior predictive checks on the 2D plane capturing most variance. Simulated datapoints are shown in blue, whereas actual observations are shown in red.}
 \end{figure}
 
 
+In order to further validate BayesQuant\textquotesingle s performance, it was tested on pairs of groups of 5 proteins from each proteome. Each pair was made by proteins with a different number of observed peptides (2,3,4,6,7,10) (see figure \ref{fig:dumbbell}). The more peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed.
+
 \begin{figure}[!h]
-\includegraphics[width=\textwidth]{performance}
-\caption{Visualization of the 95\% \ac{HPDI} inferred from 5 bacterial and human proteins with 2,3,4,7,6 and 10 peptides. The intervals are represented by horizontal lines. The dot represents the mean of the whole distribution. Vertical blue lines represent the ROPE defined as in figure \ref{fig:posteriors}, whereas the red line represents the expected estimate for bacterial proteins.}
+\centering
+\includegraphics[width=0.9\textwidth]{performance.png}
+\caption{Visualization of the 95\% \ac{HPDI} inferred from 5 bacterial and 5 human proteins with 2, 3, 4, 6, 7 and 10 peptides. The intervals are represented by horizontal lines. The dot represents the mean of the whole distribution, and it will be centered in the interval if the distribution is symmetrical. Vertical blue lines represent the ROPE defined as in figure \ref{fig:posteriors}, whereas the red line represents the expected estimate for bacterial proteins.}
 \label{fig:dumbbell}
 \end{figure}
 
 
+Indeed, a general trend of width reduction was observed with the increased amount of peptides. For example, the widest intervals are observed on proteins with just two peptides available, and the narrowest on proteins with ten. Moreover, the \ac{HPDI} tended to align more strongly around an agreement value as well. 
+
+The consistent observation that \textit{Homo sapiens} proteins got a \ac{log2FC} estimate around 0, and \textit{E. coli} proteins got an estimate which overlapped the predefinned \ac{ROPE} in only three cases (two of which on proteins with two peptides), confirmed the validity of the quantification framework.
+
 \subsection{Extended model: peptide effect with sequence features}
+\label{subsec:extended_model}
+
+Given the open-source nature of the program, it is possible to build upon it and extend its functionality. The possibility of making use of the peptide sequences to model the peptide effect using a linear model was considered and put to practice. The code was thus extended with the following snippets of code:
+
+\begin{minted}[mathescape,
+               linenos,
+               numbersep=5pt,
+               obeytabs=true,tabsize=2,
+               frame=lines,
+               framesep=2mm]{python}
+
+# Specification of priors
+sigma_theta = pm.HalfNormal('sigma_theta', sd=1)
+theta = pm.Normal('theta', mu=0, sd=sigma_theta, shape = (n_features, 1))
+theta_inter = pm.Normal('theta_inter', mu=0, sd=sigma_theta)
+mu_pep = pm.Normal("mu_pep",
+  mu=theta_inter + pm.math.sum(features.dot(theta)),
+  sd=sigma_pep)   
+\end{minted}
+
+which means that if the peptide effect is modelled as a function of the sequence, $\mu^p$ is redefined to:
+
+%\begin{align}
+%\nonumber \mu^p \sim \mathcal{N}(0, \sigma^p) \, \\
+%\end{align}
+        
+\begin{equation}
+\nonumber \sigma^{\theta} \sim \mathcal{HN}(1)
+\end{equation}
+\begin{equation}
+\nonumber \theta_k \sim \mathcal{N}(0, \sigma^{\theta})
+\end{equation}
+\begin{equation}
+\nonumber \mu^p \sim \mathcal{N}(\sum_{k=0}^{k=K}{x_k \theta_k}, \sigma^p)
+\end{equation}
+
+where $\theta_k$ is the weight of the $k^{th}$ feature, and $x_k$ is the numerical value of the $k^{th}$ feature. $\sigma^{\theta}$ is the prior for the standard deviation of the Normal all feature weights are sampled from.
+
+The same workflow as in section \ref{subsec:basic_model} was ran with the extended model, and the result is shown in figure \ref{fig:traceplots_seq}. The analysis illustrates the null predictive power of the sequence properties extracted, as all converge extremely strongly to a value of 0. The result is equivalent to not having defined any weights at all, and instead having run the basic model.
 
 
-\subsection{Model checking}
-\label{subsec:model_checking}
 
-However the posterior probability is computed, a proper Bayesian analysis is not finished without a model checking step where
-
-\begin{itemize}
-
-\item In \ac{MCMC} methods, evidence for non-convergence must be collected. Albeit lack of evidence of non-convergence does not guarantee convergence, the existence of evidence definitely proofs it \cite{Kruschke}.
-
-\item Posterior Predictive Checks are carried out to measure how well the model captures the data.
-
-\end{itemize}
-
-\ac{MCMC} asymptotically approaches the posterior after convergence, however, this condition is sometimes fulfilled by running long chains. Too short a chain, reflected by the lack of convergence, will fail to approximate the posterior and return wrong results. Most importantly, neither reaching convergence nor the best \ac{VI} approximation guarantee that the fitted model actually captures the data generation process. Therefore, the true posterior could be a bad reflection of the natural process being model and the best approximation will not solve it.
-
+\begin{figure}[H]
+\begin{subfigure}{\textwidth}
+\centering
+\caption*{A}
+\includegraphics[width=\linewidth]{traceplots/P0A8I8_seq.png}
+\end{subfigure}
+\bigskip
+\begin{subfigure}{\textwidth}
+\centering
+\caption*{B}
+\includegraphics[width=\linewidth]{traceplots/A6NDG6_seq.png}
+\end{subfigure}
+\caption{Traceplot obtained after fitting the extended model on the test proteins mentioned in \ref{subsec:basic_model}. No feature was found to have any predictive power.}
+\label{fig:traceplots_seq}
+\end{figure}
 
 \section{Discussion}
 
+\subsection{Improving usability: parallelization}
+
+While BayesQuant performed well on the majority of proteins, it took around 30 seconds to approximate each protein\textquotesingle posterior distributions using \ac{VI}, and more than two minutes with \ac{MCMC} methods. This translates to a dataset of 1k proteins taking 500 minutes (>8h) to be processed. However, the average modern computer comes with several processors that could support the parallelization of the program in several threads. Several proteins would be procesed simultaneously.
 
 
-\section{Conclusion}
+\subsection{Further robustness and validation checks}
+
+A solid way of checking the results are not flawed is the specification of alternative priors. Unless precise prior knowledge is available, the selection of one prior over another prior to model the beliefs about the system should not have any impact on the results. It is for that reason that models built upon different priors could be run to further validate the program.
 
 
-%As such, they are the target of multiple regulatory pathways ensuring their quantities are kept within homeostatic ranges.
-\end{document}
+\subsection{Advanced model comparison}
+
+Besides the predefinition of a \ac{ROPE} and the check of overlap with the 95 \% \ac{HPDI}, more advanced model comparison methods making use of the Bayes factor are available. The Bayes factor is defined as the ratio of the posterior probability of the models given the data \cite{Kruschke}. It could be used to measure how much more likely a model taking into account a treatment effect is compared to another one where the treatment effect is considered null i.e the \ac{log2FC} is set to 0. The result would provide an alternative criteria for the declaration of a protein being differentially abundant.
+
+\subsection{Improving the sequence modelling of the peptide effect}
+
+Unfortunately, during the development of the project, it was acknowledged that the peptide effect is very difficult phenomenon to capture in a simple Bayesian model as the one presented in this work. This is due to the motley and and multilevel nature of the noise caused by the aminoacidic sequences:
+
+\begin{itemize}
+
+\item The protein neighborhood, which might affect the protease\textquotesingle s efficiency.
+
+\item The competitive ionization problem, introduced in chapter \ref{chap:msreview} (\ref{subsec:the_ion_source}) implies that ionization prediction cannot be achieved without models that do not replicate this process mathematically. Thus, the ionization of a peptide ought to be predicted taking into account the peptide mix with which it accessed the ion source as a whole.
+
+%which states that the ionization efficiency of a peptide will not just depend of its sequence, but also of that of its competitors in the ion source. This is due to the ion source providing a limited amount of charges for an excess peptide input. Therefore, a different number of instances of the same peptide acquire charge, depending on how efficient the other peptides simultaneously present are.
+
+\item The mobile proton model \cite{Boyd2010}, which states that the peptide\textquotesingle s fragmentation pattern changes drastically depending on the number of charges and its distribution on the sequence. The charge distribution is hypothesised to be in turn determined by the position of positive residues that can allocate the charges. This phenomenon implies that search engines have a much harder time as a different spectrum is predicted for molecules with the same peptide sequence but different charges, thus decreasing identifications and the quality of the peaks shapes. As a consequence, feature extraction algorithms like the Apex module in moFF would extract worse \ac{MS1} intensities.
+
+\item The characterization of powerful sequence properties that specifically capture the differential ionization efficiency is undone work, as most feature extractors are designed to solve different problems, like protein sructure prediction.
+
+\end{itemize}
+
+Modelling such a complex phenomenon will require accordingly complex predictive architectures and the introduction of proper neural networks, capable of deciphering the intrincate pattern mapping sequence to noise in the spectrometer\textquotesingle s measurements.
+
+\subsection{Posterior assessment of the effects}
+
+The characterization of the uncertainty behind a \ac{log2FC} estimate can be used to better inform downstream analysis programs and eventually help interpret the biological results. For example, a functional analysis program could decide to drop proteins declared differentially abundant if the uncertainty is greater than a threshold.
+
+Moreover, the estimation of the different run effects could be used to help \ac{MS} technicians assess the presence of batch effects in their experiments, and correct them in future analyses.

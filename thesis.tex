@@ -444,7 +444,7 @@
 %%%%%%%%%%%%% Indholdsfortegnelse %%%%%%%%%%%%%
 \setcounter{tocdepth}{2}
 \tableofcontents % Indholdsfortegnelse
-%\listoffigures   % Liste over figurer \begin{figure} ... \end{figure}
+\listoffigures   % Liste over figurer \begin{figure} ... \end{figure}
 %\listoftables    % Liste over tabeller \begin{table} ... \end{table}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
@@ -468,24 +468,19 @@
 }
 
 
-
+\newcommand{\mycaption}[2]{\caption[#1]{\textbar\, \textbf{#1.} #2}}
 \input{preface}
-\subfile{introduction}
-\subfile{msreview}
-\subfile{pipeline}
-\subfile{modelling}
-\subfile{thp1}
-
-
+\input{introduction}
+\input{msreview}
+\input{pipeline}
+\input{modelling}
+\input{thp1}
 
 
 \chapter*{Conclusion}
+future prospects/work too!
 \label{chap:conclusion}
 
-\chapter*{Appendix}
-\label{chap:appendix}
-
-\includepdf[pages=-]{appendix.pdf}
 
 
 \bibliographystyle{unsrt_etal}

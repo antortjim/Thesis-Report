@@ -1,6 +1,3 @@
-\documentclass[thesis]{subfiles}
-\begin{document}
-
 \chapter{A label-free quantification proteomics pipeline}
 \label{chap:pipeline}
 
@@ -16,7 +13,7 @@ A pipeline making use of the set of tools published by the Compomics  and StatOm
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{pipeline}
-\caption{Schema of the presented pipeline. First, .RAW files produced by the spectrometer are converted to an open format like the Mascot Generic Format (\ac{MGF}). After that, spectra are searched by means of a search engine to perform the PSM step. Thereafter, PSMs are validated and the most likely set proteins is inferred. If quantative information is to be extracted, a quantification step attempting to estimate protein quantities is executed. The biological interpretation of the pipeline results can be achieved by interacting with public databases using R/Bioconductor or Python thanks to their open format.}
+\mycaption[Schema of the presented pipeline]{First, .RAW files produced by the spectrometer are converted to an open format like the Mascot Generic Format (\ac{MGF}). After that, spectra are searched by means of a search engine to perform the PSM step. Thereafter, PSMs are validated and the most likely set proteins is inferred. If quantative information is to be extracted, a quantification step attempting to estimate protein quantities is executed. The biological interpretation of the pipeline results can be achieved by interacting with public databases using R/Bioconductor or Python thanks to their open format.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -74,7 +71,7 @@ Quantification in the MQ+LFQ pipeline was executed using the LFQ intensity colum
 
 \section{Results}
 
-\subsection{Thousands of spectra were identified and validated}
+\subsection{Evaluation of the PSM step}
 
 The preprocessing of the RAW files produced by the mass spectrometer into the MGF open format enabled searchGUI to dispose of the registered spectra. PeptideShaker quality control and filtering capabilities (see figure \ref{figure:qc_validation}) carried out the required search results validation. As expected, matches to the target and decoy exhibited similar score distributions at low score values, while a divergence is observed at higher score values. Likewise, the m/z error was found to be closer to 0 on validated PSMs than on those which did not pass the 1 \% FDR filter. The application of this filter implied that the FNR (false negative rate) was set to 5 \%, i.e 5 out of every 100 discarded matches were estimated to be true positives.
 
@@ -104,7 +101,7 @@ The preprocessing of the RAW files produced by the mass spectrometer into the MG
     \caption*{D}
   \includegraphics[width=.95\linewidth]{roc}
 \end{subfigure}
-\caption{Quality control and validation of the 13th fraction of the third replicate in condition L. \textbf{A} Score distribution for matches to the decoy and the target databases. \textbf{B} Evolution of the PSM score with confidence. The implemented cutoff at FDR of 1 \% is displayed with a red vertical line. \textbf{C} Distribution of the difference between the predicted and measured \ac{m/z} values, segregated by validation status. \textbf{D} ROC curve built upon the number of false positives and negatives estimated from the decoy search. The cutoff is displayed as a red dot.}
+\mycaption[Quality control and validation of the 13th fraction of the third replicate in condition L]{\textbf{A} Score distribution for matches to the decoy and the target databases. \textbf{B} Evolution of the PSM score with confidence. The implemented cutoff at FDR of 1 \% is displayed with a red vertical line. \textbf{C} Distribution of the difference between the predicted and measured \ac{m/z} values, segregated by validation status. \textbf{D} ROC curve built upon the number of false positives and negatives estimated from the decoy search. The cutoff is displayed as a red dot.}
 \label{figure:qc_validation}
 \end{figure}
 
@@ -115,7 +112,7 @@ The combination of both programs enabled the identification and validation (matc
 
 \begin{figure}[!h]
 \includegraphics[width=0.8\textwidth]{match_percent}
-\caption{Percentage of matched spectra in all samples. The total number of spectra per sample ranged between 5894 and 20249. \textbf{A} Percentages are encoded with a blue palette, the darker, the higher, and viceversa. \textbf{B} The mean for each analysed fraction across conditions and replicates is displayed together with error bars to represent the standard deviation. The sixth fraction of the first replicate in condition H was missing in the PRIDE data repository.}
+\mycaption[Percentage of matched spectra in all samples]{The total number of spectra per sample ranged between 5894 and 20249. \textbf{A} Percentages are encoded with a blue palette, the darker, the higher, and viceversa. \textbf{B} The mean for each analysed fraction across conditions and replicates is displayed together with error bars to represent the standard deviation. The sixth fraction of the first replicate in condition H was missing in the PRIDE data repository.}
 \label{fig:match_percent}
 \end{figure}
 
@@ -171,7 +168,7 @@ Once as many identifications as possible were gathered, a refinement of the meas
 \end{figure}
 
 
-\subsection{Quantification}
+\subsection{Quantification benchmark}
 \label{subsec:quantification}
 
 The extracted apex MS1 intensities were used as proxy for peptide abundance to estimate protein $\log_2$(ratios), or \textit{log2-fold-changes} (\ac{log2FC}) across condition H and condition L. During quantification, it is important to take into account as many of the effects influencing protein quantification. In this case, besides the different H and L conditions, peptide, run and fraction effects could be distinguished. The MSqRob quantification engine treats effects differently depending on whether or not they are random, or fixed. Fixed effects should have a consistent impact in the ion currents measured in the spectrometer, whereas random effects are truly random and thus unpredictable.
@@ -325,5 +322,3 @@ All the quantification approaches enunciated until now make use of different fre
 An open-source, free, platform-agnostic and customisable label-free relative quantification pipeline assembling publicly available tools was presented in this work. The pipeline is capable of providing qualitative information on the protein composition of a sample using the latest proteomics search engines and validation software. Moreover, it can be extended to support more complex tasks, like \textit{De novo} search, or the study of \ac{PTM}s, thanks to its non-monolithic nature and usage of open-formats. Likewise, the openness of the data in all steps allows for quality control checks along the way. However, the comparison against other workflows shows the room for improvement in the quantification step when dealing with fractionated data, albeit deficiencies in this aspect should have no impact in non-fractionated datasets.
 
 Either the pipeline developed in the presented chapter or those based on MaxQuant are ready to be deployed in a real environment and provide \ac{NZ} with useful insights on its proteomics data for free.
-
-\end{document}
