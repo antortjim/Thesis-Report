@@ -25,6 +25,15 @@
 \newcommand{\infdiv}{KL\infdivx}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
+\newcommand\textfig[6][]{%
+    % #1: content inside figure (optional)
+    % #2: label
+    % #3: alignment command
+    % #4: width
+    % #5: figure caption
+    % #6: figure description
+    \textfloat{#2}{#3}{\centering\includegraphics[width=#4]{#2}#1}{#5}{#6}}
+   
 
 \usepackage{subfiles}
 
@@ -232,11 +241,32 @@
   class = abbrev
 }
 
+\DeclareAcronym{PSM}{
+  short = PSM ,
+  long  = Peptide-to-Spectrum Match(ing),
+  class = abbrev
+}
+
+
+\DeclareAcronym{HGNC}{
+  short = HGNC ,
+  long  = Hugo Gene Nomenclature Committee,
+  class = abbrev
+}
+
 \DeclareAcronym{MS/MS}{
   short = MS/MS ,
   long  = Tandem mass spectrometry,
   class = abbrev
 }
+
+\DeclareAcronym{DAP}{
+  short = DAP ,
+  long  = Differentially Abundant Protein,
+  class = abbrev
+}
+
+
 
 \DeclareAcronym{KL}{
   short = KL ,
@@ -267,6 +297,12 @@
 \DeclareAcronym{ESI}{
   short = ESI ,
   long  = Electrospray Ionization,
+  class = abbrev
+}
+
+\DeclareAcronym{GSEA}{
+  short = GSEA,
+  long = Gene Set Enrichment Analysis,
   class = abbrev
 }
 
@@ -404,10 +440,6 @@
   long  = Null-Hypothesis Significance Testing,
   class = abbrev
 }
-
-
-
-
 
 %%  Begin document
 %%  ==================================================================

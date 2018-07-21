@@ -18,7 +18,7 @@ A pipeline making use of the set of tools published by the Compomics  and StatOm
 \end{figure}
 
 
-Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source commercial software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented models and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) \cite{Deutsch2011} or openMS \cite{Sturm2008} are nevertheless available for the community, but they either lack good documentation, good broad base or format exchangeability. MaxQuant, a freeware but closed-source, monolithic proteomics analysis suite \cite{Cox2008}, is developed for Windows and has only very recently been ported to Linux \cite{Sinitcyn2018}. Nevertheless has been extremely successfully adopted by the scientific community due to its ease of use and comprehensive pipeline.
+Several proteomics pipelines are available on the internet under different licensing conditions. Many are released as closed-source commercial software, where information on how the program works is kept from the user. This is a serious drawback as it hinders the study of the implemented models and its customisation. Open-source, free alternatives, like the Trans Proteomic Pipeline (\ac{TPP}) \cite{Deutsch2011} or openMS \cite{Sturm2008} are nevertheless available for the community, but they either lack good documentation, good broad base or format exchangeability. MaxQuant, a freeware but closed-source, monolithic proteomics analysis suite \cite{Cox2008}, is developed for Windows and has only very recently been ported to Linux \cite{Sinitcyn2018}. Nevertheless it has been extremely successfully adopted by the scientific community due to its ease of use and comprehensive pipeline.
 
 \subsection{Goals}
 
@@ -27,7 +27,7 @@ The development of a pipeline attempting to achieve the following goals will be 
 \begin{enumerate}
 
 \item Fully command line, documented and Linux-supported interface for easy automation and scalability.
-\item Open-source for easy customisation and innovation of analyses.
+\item Open-source for easy customisation and extension.
 \item Free-licensed and cost-free, so anybody with the knowledge can run it, democratizing the analyses.
 \end{enumerate}
 
@@ -44,14 +44,14 @@ The MQ+LFQ pipeline results were obtained starting at the Supplemental table 1 f
 \subsection{Decoy database preparation and search}
 \label{subsec:database_preparation}
 
-The spectra saved in the MGF files obtained in the previous step were passed to the MS-GF+ search engine \cite{Kim2014} by means of the SearchGUI \texttt{SearchCLI} tool \cite{Barsnes2018} utility. The search parameters were set using the \texttt{IdentificationParametersCLI}. In order to account for potential post-translational modifications, the search was conducted allowing for the following variable modifications: oxidation of M and deamidation of N and Q. Moreover, C carbamidomethylation was set as fixed modification. The enzyme was set to semispecific Trypsin, allowing for a non-tryptic cleavage on any side of the peptide. Up to two missed cleavages were allowed. The precursor tolerance was 10 ppm and the fragment tolerance 0.5 Da. 
+The spectra saved in the MGF files obtained in the previous step were passed to the MS-GF+ search engine \cite{Kim2014} by means of the SearchGUI \texttt{SearchCLI} tool version 3.3.3 \cite{Barsnes2018} utility. The search parameters were set using the \texttt{IdentificationParametersCLI}. In order to account for potential post-translational modifications, the search was conducted allowing for the following variable modifications: oxidation of M and deamidation of N and Q. Moreover, C carbamidomethylation was set as fixed modification. The enzyme was set to semispecific Trypsin, allowing for a non-tryptic cleavage on any side of the peptide. Up to two missed cleavages were allowed. The precursor tolerance was 10 ppm and the fragment tolerance 0.5 Da. 
 
 
 The target database was created by combining the Uniprot proteomes for \textit{E. coli (strain K12)} (UP000000625) and \textit{Homo sapiens} (UP000005640), downloaded in June 2018. The decoy database was created using the \texttt{FastaCLI} utility in SearchGUI by reversing all sequences in the target.
 
 \subsection{Quality control and validation}
 
-The SearchGUI results were filtered using the default built-in checks available in the PeptideShaker utility \texttt{PeptideShakerCLI} \cite{Vaudel2015} \footnote{\href{https://github.com/compomics/peptide-shaker/issues/300}{https://github.com/compomics/peptide-shaker/issues/300}}. By default, the FDR was set to 1\%. PEP and confidence statistics were computed using the PeptideShaker built-in algorithms. Output was extracted via the Default PSM report txt file, available in the \texttt{ReportCLI} utility.
+The SearchGUI results were filtered using the default built-in checks available in the PeptideShaker version 1.16.22 utility \texttt{PeptideShakerCLI} \cite{Vaudel2015} \footnote{\href{https://github.com/compomics/peptide-shaker/issues/300}{https://github.com/compomics/peptide-shaker/issues/300}}. By default, the FDR was set to 1\%. PEP and confidence statistics were computed using the PeptideShaker built-in algorithms. Output was extracted via the Default PSM report txt file, available in the \texttt{ReportCLI} utility.
 
 
 \subsection{Data refinement}
@@ -306,7 +306,7 @@ To sum up, the presently implemented fraction handling is correct and provides g
 \subsubsection{The pitfalls of mass spectrometry}
 
 The application of mass spectrometry to proteomics is a very hot topic in research, driving innovations in the way the different components of the spectrometer work. One recent example is the development of the timsTOF\texttrademark\xspace Pro (Trapped Ion Mobility Spectrometry-Time Of Flight) system by Bruker, which supports PASEF (Parallel Accumulation and SErial Fragmentation) spectrometry \footnote{\href{https://www.prnewswire.com/news-releases/bruker-launches-the-timstof-pro-mass-spectrometer-to-enable-the-revolutionary-pasef-method-for-next-generation-proteomics-300520791.html}{https://www.prnewswire.com/news-releases/bruker-launches-the-timstof-pro-mass-spectrometer-to-enable-the-revolutionary-pasef-method-for-next-generation-proteomics-300520791.html}}. This technology adds  an extra dimension peptide separation process, leading to cleaner spectra.
-Notwithstanding, the developments also reveal the immature state of the technology. Slight inconsistencies in the protein extraction and digestion, bias in the peptide ionization, presence of unexpected PTMs, and detector saturation and insensitivity, remain as problems contributing to the eventual measurement variability characteristic of mass spectrometry \cite{Piehowski2013}. Thus, adequate cleaning of the peptide dataset, and care to ignore outliers is preeminent. Indeed, the input file for the MQ+LFQ consisted of a preprocessed file which removed the most problematic proteins \cite{Cox2014}, which explains why more than 500 extra proteins could be quantified when using MSqRob (see figure \ref{fig:venn_cor} A).
+Notwithstanding, the developments also reveal the immature state of the technology. Slight inconsistencies in the protein extraction and digestion, bias in the peptide ionization, presence of unexpected PTMs, and detector saturation and insensitivity, remain as problems contributing to the eventual measurement variability characteristic of mass spectrometry \cite{Piehowski2013}. Thus, adequate preprocessing of the peptide dataset, and care to ignore outliers is preeminent. Indeed, the input file for the MQ+LFQ consisted of a preprocessed file which removed the most problematic proteins \cite{Cox2014}, which explains why more than 500 extra proteins could be quantified when using MSqRob (see figure \ref{fig:venn_cor} A).
 
 \subsubsection{Support for absolute quantification}
 
