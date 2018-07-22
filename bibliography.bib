@@ -15,6 +15,76 @@ volume = {11},
 year = {1984}
 }
 
+
+@article{Righetti2005,
+author = {Righetti, Pier Giorgio and Castagna, Annalisa and Antonioli, Paolo and Boschetti, Egisto},
+doi = {10.1002/elps.200406189},
+issn = {0173-0835},
+journal = {Electrophoresis},
+keywords = {Prefractionation,Review},
+mendeley-groups = {TFM},
+month = {jan},
+number = {2},
+pages = {297--319},
+publisher = {Wiley-Blackwell},
+title = {{Prefractionation techniques in proteome analysis: The mining tools of the third millennium}},
+url = {http://doi.wiley.com/10.1002/elps.200406189},
+volume = {26},
+year = {2005}
+}
+
+@article{Sinitcyn2018,
+abstract = {Computational proteomics is the data science concerned with the identification and quantification of proteins from high-throughput data and the biological interpretation of their concentration changes, posttranslational modifications, interactions, and subcellular localizations. Today, these data most often originate from mass spectrometry–based shotgun proteomics experiments. In this review, we survey computational methods for the analysis of such proteomics data, focusing on the explanation of the key concepts. Starting with mass spectrometric feature detection, we then cover methods for the identification of peptides. Subsequently, protein inference and the control of false discovery rates are highly important topics covered. We then discuss methods for the quantification of peptides and proteins. A section on downstream data analysis covers exploratory statistics, network analysis, machine learning, and multiomics data integration. Finally, we discuss current developments and provide an outlook on wha...},
+author = {Sinitcyn, Pavel and {Daniel Rudolph}, Jan and Cox, J{\"{u}}rgen},
+doi = {10.1146/annurev-biodatasci-080917-013516},
+file = {:home/antortjim/MEGA/Master/Thesis/Report/papers/annurev-biodatasci-080917-013516.pdf:pdf},
+issn = {2574-3414},
+journal = {Annual Review of Biomedical Data Science},
+keywords = {computational proteomics,mass spectrometry,modifications,multiomics data analysis,multivariate analysis,network,posttranslational},
+number = {1},
+pages = {annurev--biodatasci--080917--013516},
+title = {{Computational Methods for Understanding Mass Spectrometry–Based Shotgun Proteomics Data}},
+url = {http://www.annualreviews.org/doi/10.1146/annurev-biodatasci-080917-013516},
+volume = {1},
+year = {2018}
+}
+
+@article{Wei2018,
+abstract = {Missing values exist widely in mass-spectrometry (MS) based metabolomics data. Various methods have been applied for handling missing values, but the selection can significantly affect following data analyses. Typically, there are three types of missing values, missing not at random (MNAR), missing at random (MAR), and missing completely at random (MCAR). Our study comprehensively compared eight imputation methods (zero, half minimum (HM), mean, median, random forest (RF), singular value decomposition (SVD), k-nearest neighbors (kNN), and quantile regression imputation of left-censored data (QRILC)) for different types of missing values using four metabolomics datasets. Normalized root mean squared error (NRMSE) and NRMSE-based sum of ranks (SOR) were applied to evaluate imputation accuracy. Principal component analysis (PCA)/partial least squares (PLS)-Procrustes analysis were used to evaluate the overall sample distribution. Student's t-test followed by correlation analysis was conducted to evaluate the effects on univariate statistics. Our findings demonstrated that RF performed the best for MCAR/MAR and QRILC was the favored one for left-censored MNAR. Finally, we proposed a comprehensive strategy and developed a public-accessible web-tool for the application of missing value imputation in metabolomics ( https://metabolomics.cc.hawaii.edu/software/MetImp/ ).},
+author = {Wei, Runmin and Wang, Jingye and Su, Mingming and Jia, Erik and Chen, Shaoqiu and Chen, Tianlu and Ni, Yan},
+doi = {10.1038/s41598-017-19120-0},
+file = {:home/antortjim/MEGA/Master/Thesis/Report/papers/s41598-017-19120-0.pdf:pdf},
+issn = {20452322},
+journal = {Scientific Reports},
+number = {1},
+pages = {1--10},
+pmid = {29330539},
+publisher = {Springer US},
+title = {{Missing Value Imputation Approach for Mass Spectrometry-based Metabolomics Data}},
+url = {http://dx.doi.org/10.1038/s41598-017-19120-0},
+volume = {8},
+year = {2018}
+}
+
+@article{Lazar2016,
+abstract = {Missing values are a genuine issue in label-free quantitative proteomics. Recent works have surveyed the different statistical methods to conduct imputation and have compared them on real or simulated data sets and recommended a list of missing value imputation methods for proteomics application. Although insightful, these comparisons do not account for two important facts: (i) depending on the proteomics data set, the missingness mechanism may be of different natures and (ii) each imputation method is devoted to a specific type of missingness mechanism. As a result, we believe that the question at stake is not to find the most accurate imputation method in general but instead the most appropriate one. We describe a series of comparisons that support our views: For instance, we show that a supposedly “under-performing” method (i.e., giving baseline average results), if applied at the “appropriate” time in the data-processing pipeline (before or after peptide aggregation) on a data set with the “appropriate” nature of missing values, can outperform a blindly applied, supposedly “better-performing” method (i.e., the reference method from the state-of-the-art). This leads us to formulate few practical guidelines regarding the choice and the application of an imputation method in a proteomics context.},
+author = {Lazar, Cosmin and Gatto, Laurent and Ferro, Myriam and Bruley, Christophe and Burger, Thomas},
+doi = {10.1021/acs.jproteome.5b00981},
+file = {:home/antortjim/MEGA/Master/Thesis/Report/papers/acs.jproteome.5b00981.pdf:pdf},
+isbn = {1535-3907 (Electronic) 1535-3893 (Linking)},
+issn = {15353907},
+journal = {Journal of Proteome Research},
+keywords = {label-free relative quantitative proteomics,missing value imputation},
+number = {4},
+pages = {1116--1125},
+pmid = {26906401},
+title = {{Accounting for the Multiple Natures of Missing Values in Label-Free Quantitative Proteomics Data Sets to Compare Imputation Strategies}},
+volume = {15},
+year = {2016}
+}
+
+
+
 @article{Szklarczyk2017,
 abstract = {A system-wide understanding of cellular function requires knowledge of all functional interactions between the expressed proteins. The STRING database aims to collect and integrate this information, by consolidating known and predicted protein-protein association data for a large number of organisms. The associations in STRING include direct (physical) interactions, as well as indirect (functional) interactions, as long as both are specific and biologically meaningful. Apart from collecting and reassessing available experimental data on protein-protein interactions, and importing known pathways and protein complexes from curated databases, interaction predictions are derived from the following sources: (i) systematic co-expression analysis, (ii) detection of shared selective signals across genomes, (iii) automated text-mining of the scientific literature and (iv) computational transfer of interaction knowledge between organisms based on gene orthology. In the latest version 10.5 of STRING, the biggest changes are concerned with data dissemination: the web frontend has been completely redesigned to reduce dependency on outdated browser technologies, and the database can now also be queried from inside the popular Cytoscape software framework. Further improvements include automated background analysis of user inputs for functional enrichments, and streamlined download options. The STRING resource is available online, at http://string-db.org/.},
 author = {Szklarczyk, Damian and Morris, John H and Cook, Helen and Kuhn, Michael and Wyder, Stefan and Simonovic, Milan and Santos, Alberto and Doncheva, Nadezhda T and Roth, Alexander and Bork, Peer and Jensen, Lars J. and von Mering, Christian},

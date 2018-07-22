@@ -46,7 +46,7 @@ It can be applied to the quantification problem, where $\theta$ turns into the l
 
 \subsection{Inference methods: \ac{MCMC} and \ac{VI}}
 
-On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2018}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. This heuristic guarantees convergence of the empirical estimate with the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018} \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}. The first sampling algorithms, like Metropolis-Hastings \cite{Chib1995} \footnote{A very nice tutorial on how Metropolis-Hastings works \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} have given way to the much more efficient sampler \ac{NUTS} \cite{Hoffman2011}.
+The posterior distribution can be approximated (inferred) by means of \ac{MCMC} and \ac{VI} methods. On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2018}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. This heuristic guarantees convergence of the empirical estimate with the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018} \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}. The first sampling algorithms, like Metropolis-Hastings \cite{Chib1995} \footnote{A very nice tutorial on how Metropolis-Hastings works \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} have given way to the much more efficient sampler \ac{NUTS} \cite{Hoffman2011}.
 
 On the other hand, \ac{VI} methods, very recently developed and introduced in PyMC3, provide a fast alternative to \ac{MCMC} methods, yet they are not guaranteed to asymptotically approximate the true posterior. In \ac{VI}, optimization, instead of sampling, is employed as way to approximate the posterior \cite{Blei2018}. More concretely, a family of densities $Q$ over the parameters $\theta$ is defined. The goal of \ac{VI} is to find the single density $q$ within the family $Q$ that best approximates $p(\theta|y)$. This approximate density should be complex enough to reach a good approximation, and at the same time simple enough to be computationally easy to work with. The best candidate is defined as the one minimising the Kullback-Leibler (\ac{KL}) divergence (see equation \ref{eq:KL}).
 
@@ -74,7 +74,7 @@ The demanding computational cost of the \ac{MCMC} and \ac{VI} schemes has only b
 \subsection{Model checking}
 \label{subsec:model_checking}
 
-Whatever the posterior distribution is obtained, a proper Bayesian analysis is not finished without a model checking step that looks at potential problems happenning in the fitting step, and confirms the goodness of fit of the model to the data.
+However the posterior distribution is obtained, a proper Bayesian analysis is not finished without a model checking step that looks at potential problems happenning in the fitting step, and confirms the goodness of fit of the model to the data.
 
 \begin{itemize}
 
@@ -92,9 +92,9 @@ Whatever the posterior distribution is obtained, a proper Bayesian analysis is n
 The infrastructure providing the inference and model checking algorithms is available under several implementations in different programming languages, like R (JAGS \cite{Plummer}) and Python (PyMC3 \cite{Salvatier2016}). All these frameworks make use of a programming paradigm called \textbf{probabilistic programming}.
 
 
-The management of uncertainty in statistics is done by means of probability distributions, which account for the possible values that a parameter could take, together with how likely they are. Probabilistic programming offers the framework to build complex statistical models by storing probability distributions as variables of the program. Moreover, probabilistic programming packages supply the tools needed to perform inference with these models by taking experimental evidence (data) and fitting the distributions to the data using Bayes theorem. The fit of the model to the data entails the computation of the posterior probability distribution, which is tallied using \ac{MCMC} algorithms provided with the probabilistic programming tool.
+The management of uncertainty in statistics is done by means of probability distributions, which account for the possible values that a parameter could take, together with how likely they are. Probabilistic programming offers the framework to build complex statistical models by storing probability distributions as variables of the program. Moreover, probabilistic programming packages supply the tools needed to perform inference with these models by taking experimental evidence (data) and fitting the distributions to the data using Bayes\textquotesingle theorem. The fit of the model to the data entails the computation of the posterior probability distribution, which is tallied using algorithms provided with the probabilistic programming tool.
 
-PyMC3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (\ac{VI}) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilisitc estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
+PyMC3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (ADVI) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilisitc estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
 
 
 \subsection{Goals}
@@ -442,8 +442,8 @@ The study of the \ac{log2FC} posterior probability distribution reveals what are
 \caption*{B}
 \includegraphics[width=\linewidth]{posteriors/A6NDG6}
 \end{subfigure}
-\label{fig:posteriors}
 \caption{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% \ac{HPDI} is marked with a black line. The \ac{ROPE} defined as a 0.4 window around 0 is shown in red. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)$).}
+\label{fig:posteriors}
 \end{figure}
 
 The test analysis indicated that P0Q8I8 most likely has a \ac{log2FC} between 1.4 and 1.7, and it\textquotesingle significantly different from 0, as no overlap was observed between \ac{HPDI} and \ac{ROPE}. On the other hand, the human protein was found to acquire a \ac{log2FC} most likely between -0.1 and 0.192. This range is fully contained within the \ac{ROPE}, which indicates that the \ac{log2FC} was practically 0 (see figure \ref{fig:posteriors}).
@@ -462,12 +462,12 @@ The posterior predictive checks on both proteins pinpoints that the fitted model
 \caption*{B}
 \includegraphics[width=\linewidth]{PPC/eps/PCA_A6NDG6}
 \end{subfigure}
-\label{fig:ppc}
 \caption{Projection of the posterior predictive checks on the 2D plane capturing most variance. Simulated datapoints are shown in blue, whereas actual observations are shown in red.}
+\label{fig:ppc}
 \end{figure}
 
 
-In order to further validate BayesQuant\textquotesingle s performance, it was tested on pairs of groups of 5 proteins from each proteome. Each pair was made by proteins with a different number of observed peptides (2,3,4,6,7,10) (see figure \ref{fig:dumbbell}). The more peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed.
+In order to further validate BayesQuant\textquotesingle s performance, it was tested on pairs of groups of 5 proteins from each proteome. Each pair was made by proteins with a different number of observed peptides (2, 3, 4, 6, 7, 10) (see figure \ref{fig:dumbbell}). The more peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed.
 
 \begin{figure}[!h]
 \centering
@@ -497,7 +497,7 @@ bayesquant.read_data(
     # table with ms1 intensity data
     data_path="data/ms1_intensities.tsv",
     # table with sequence features
-    features_path="data/protein_analysis.tsv")
+    features_path="data/features.tsv")
 \end{minted}
 
 
