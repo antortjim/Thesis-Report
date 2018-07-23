@@ -131,7 +131,7 @@ protein &      Organism &     H1 &     H2 &     H3 &     L1 &     L2 &     L3 \\
  A6NDG6 &  Homo sapiens &  21.18 &  22.51 &  23.25 &  22.30 &  21.75 &  23.61 \\
 \bottomrule
 \end{tabular}
-\caption{Sample data input for the Bayesian model. Every row represents a unique peptide. The first column refers to the protein it was found to map to in the protein inference step. The second column is an annotation field, in this case indicating the protein\textquotesingle s organism. The remaining columns indicate the $log_2(Intensity)$ registered for each peptide in the corresponding run. In this case, three peptides were observed for the proteins with ids \textit{P0A8I8} and \textit{A6NDG6}.}
+\caption[BayesQuant data input]{Sample data input for the Bayesian model. Every row represents a unique peptide. The first column refers to the protein it was found to map to in the protein inference step. The second column is an annotation field, in this case indicating the protein\textquotesingle s organism. The remaining columns indicate the $log_2(Intensity)$ registered for each peptide in the corresponding run. In this case, three peptides were observed for the proteins with ids \textit{P0A8I8} and \textit{A6NDG6}.}
 \label{tab:data_model}
 \end{table}
 
@@ -196,7 +196,7 @@ This way, independent and identically distributed (\ac{IID}) priors were set for
 \begin{figure}[!h]
 \centering
 \includegraphics[width=\textwidth]{graph}
-\caption{Diagram of the Bayesian model developed in the present work, without sequence modelling of the peptide effect. It is represented as a Directed Acyclic Graph (\ac{DAG}) where nodes represent hyperparameters or random variables (in a circle) and directed edges  represent the dependencies between them. The nodes on the top depict the hyperparameters of the model, governing the prior probability distributions represented by the nodes to which their edges lead to. The remaining nodes articulate the probabilistic model and all lead to a final node ($y_{ijkl}$) which represents the modelling of the observed data with the instantiated model. The model hierarchies are organized in boxes. The one corresponding to the treatment effect can be read as \textit{the treatment effect $\beta_{ij}^{t}$ observed in the data is modelled as a probability distribution conditional on the value of $\mu^t$ and $\sigma^t$, which are in turn probability distributions governed by the hyperparameters 0 and 1.}}
+\caption[Bayesian model simplified diagram]{Diagram of the Bayesian model developed in the present work, without sequence modelling of the peptide effect. It is represented as a Directed Acyclic Graph (\ac{DAG}) where nodes represent hyperparameters or random variables (in a circle) and directed edges  represent the dependencies between them. The nodes on the top depict the hyperparameters of the model, governing the prior probability distributions represented by the nodes to which their edges lead to. The remaining nodes articulate the probabilistic model and all lead to a final node ($y_{ijkl}$) which represents the modelling of the observed data with the instantiated model. The model hierarchies are organized in boxes. The one corresponding to the treatment effect can be read as \textit{the treatment effect $\beta_{ij}^{t}$ observed in the data is modelled as a probability distribution conditional on the value of $\mu^t$ and $\sigma^t$, which are in turn probability distributions governed by the hyperparameters 0 and 1.}}
 \label{fig:daft_model}
 \end{figure}
 
@@ -394,7 +394,7 @@ bayesquant.ppc()
 \includegraphics[width=.9\linewidth]{ELBO/A6NDG6}
 \end{subfigure}
 %\end{adjustbox}
-\caption{Progression of \ac{ELBO} maximisation during the \ac{VI} approximation for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}) over 40k iterations.}
+\caption[ELBO progression]{Progression of \ac{ELBO} maximisation during the \ac{VI} approximation for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}) over 40k iterations.}
 \label{fig:ELBO}
 \end{figure}
 
@@ -421,7 +421,7 @@ The traces produced by BayesQuant using \ac{VI} exhibited a clear random walk be
 \includegraphics[width=\linewidth]{traceplots/A6NDG6}
 \end{subfigure}
 %\end{adjustbox}
-\caption{Traceplot of the model fit for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The left panel shows the frequency density over the parameter space for several model parameters: (I) the \ac{log2FC} estimate (difference of treatment effects), (II) the effects in the three observed peptides, and (III) the effects in the six available runs. The right panel displays the sampled values from the \ac{VI} approximation stored in the trace.}
+\caption[Traceplots for 2 proteins]{Traceplot of the model fit for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The left panel shows the frequency density over the parameter space for several model parameters: (I) the \ac{log2FC} estimate (difference of treatment effects), (II) the effects in the three observed peptides, and (III) the effects in the six available runs. The right panel displays the sampled values from the \ac{VI} approximation stored in the trace.}
 \label{fig:traceplots}
 \end{figure}
 
@@ -442,7 +442,7 @@ The study of the \ac{log2FC} posterior probability distribution reveals what are
 \caption*{B}
 \includegraphics[width=\linewidth]{posteriors/A6NDG6}
 \end{subfigure}
-\caption{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% \ac{HPDI} is marked with a black line. The \ac{ROPE} defined as a 0.4 window around 0 is shown in red. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)$).}
+\caption[Posteriors for 2 proteins]{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% \ac{HPDI} is marked with a black line. The \ac{ROPE} defined as a 0.4 window around 0 is shown in red. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)$).}
 \label{fig:posteriors}
 \end{figure}
 
@@ -462,7 +462,7 @@ The posterior predictive checks on both proteins pinpoints that the fitted model
 \caption*{B}
 \includegraphics[width=\linewidth]{PPC/eps/PCA_A6NDG6}
 \end{subfigure}
-\caption{Projection of the posterior predictive checks on the 2D plane capturing most variance. Simulated datapoints are shown in blue, whereas actual observations are shown in red.}
+\caption[Posterior predictive checks]{Projection of the posterior predictive checks on the 2D plane capturing most variance. Simulated datapoints are shown in blue, whereas actual observations are shown in red.}
 \label{fig:ppc}
 \end{figure}
 
@@ -472,7 +472,7 @@ In order to further validate BayesQuant\textquotesingle s performance, it was te
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.9\textwidth]{performance}
-\caption{Visualization of the 95\% \ac{HPDI} inferred from 5 bacterial and 5 human proteins with 2, 3, 4, 6, 7 and 10 peptides. The intervals are represented by horizontal lines. The dot represents the mean of the whole distribution, and it will be centered in the interval if the distribution is symmetrical. Vertical blue lines represent the ROPE defined as in figure \ref{fig:posteriors}, whereas the red line represents the expected estimate for bacterial proteins.}
+\caption[BayesQuant performance]{Visualization of the 95\% \ac{HPDI} inferred from 5 bacterial and 5 human proteins with 2, 3, 4, 6, 7 and 10 peptides. The intervals are represented by horizontal lines. The dot represents the mean of the whole distribution, and it will be centered in the interval if the distribution is symmetrical. Vertical blue lines represent the ROPE defined as in figure \ref{fig:posteriors}, whereas the red line represents the expected estimate for bacterial proteins.}
 \label{fig:dumbbell}
 \end{figure}
 
@@ -552,7 +552,7 @@ The same workflow as in section \ref{subsec:basic_model} was ran with the extend
 \caption*{B}
 \includegraphics[width=\linewidth]{traceplots/A6NDG6_seq.png}
 \end{subfigure}
-\caption{Traceplot obtained after fitting the extended model on the test proteins mentioned in \ref{subsec:basic_model}. No feature was found to have any predictive power.}
+\caption[Traceplot from sequence modelling of peptide effect]{Traceplot obtained after fitting the extended model on the test proteins mentioned in \ref{subsec:basic_model}. No feature was found to have any predictive power.}
 \label{fig:traceplots_seq}
 \end{figure}
 

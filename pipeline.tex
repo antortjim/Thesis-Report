@@ -13,7 +13,7 @@ A pipeline making use of the set of tools published by the Compomics  and StatOm
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{pipeline}
-\mycaption[Schema of the presented pipeline]{First, .RAW files produced by the spectrometer are converted to an open format like the Mascot Generic Format (\ac{MGF}). After that, spectra are searched by means of a search engine to perform the PSM step. Thereafter, PSMs are validated and the most likely set proteins is inferred. If quantative information is to be extracted, a quantification step attempting to estimate protein quantities is executed. The biological interpretation of the pipeline results can be achieved by interacting with public databases using R/Bioconductor or Python thanks to their open format.}
+\caption[Schema of the presented pipeline]{First, .RAW files produced by the spectrometer are converted to an open format like the Mascot Generic Format (\ac{MGF}). After that, spectra are searched by means of a search engine to perform the PSM step. Thereafter, PSMs are validated and the most likely set proteins is inferred. If quantative information is to be extracted, a quantification step attempting to estimate protein quantities is executed. The biological interpretation of the pipeline results can be achieved by interacting with public databases using R/Bioconductor or Python thanks to their open format.}
 \label{fig:pipeline}
 \end{figure}
 
@@ -101,7 +101,7 @@ The preprocessing of the RAW files produced by the mass spectrometer into the MG
     \caption*{D}
   \includegraphics[width=.95\linewidth]{roc}
 \end{subfigure}
-\mycaption[Quality control and validation of the 13th fraction of the third replicate in condition L]{\textbf{A} Score distribution for matches to the decoy and the target databases. \textbf{B} Evolution of the PSM score with confidence. The implemented cutoff at FDR of 1 \% is displayed with a red vertical line. \textbf{C} Distribution of the difference between the predicted and measured \ac{m/z} values, segregated by validation status. \textbf{D} ROC curve built upon the number of false positives and negatives estimated from the decoy search. The cutoff is displayed as a red dot.}
+\caption[Quality control and validation of the 13th fraction of the third replicate in condition L]{\textbf{A} Score distribution for matches to the decoy and the target databases. \textbf{B} Evolution of the PSM score with confidence. The implemented cutoff at FDR of 1 \% is displayed with a red vertical line. \textbf{C} Distribution of the difference between the predicted and measured \ac{m/z} values, segregated by validation status. \textbf{D} ROC curve built upon the number of false positives and negatives estimated from the decoy search. The cutoff is displayed as a red dot.}
 \label{figure:qc_validation}
 \end{figure}
 
@@ -112,7 +112,7 @@ The combination of both programs enabled the identification and validation (matc
 
 \begin{figure}[!h]
 \includegraphics[width=0.8\textwidth]{match_percent}
-\mycaption[Percentage of matched spectra in all samples]{The total number of spectra per sample ranged between 5894 and 20249. \textbf{A} Percentages are encoded with a blue palette, the darker, the higher, and viceversa. \textbf{B} The mean for each analysed fraction across conditions and replicates is displayed together with error bars to represent the standard deviation. The sixth fraction of the first replicate in condition H was missing in the PRIDE data repository.}
+\caption[Percentage of matched spectra in all samples]{The total number of spectra per sample ranged between 5894 and 20249. \textbf{A} Percentages are encoded with a blue palette, the darker, the higher, and viceversa. \textbf{B} The mean for each analysed fraction across conditions and replicates is displayed together with error bars to represent the standard deviation. The sixth fraction of the first replicate in condition H was missing in the PRIDE data repository.}
 \label{fig:match_percent}
 \end{figure}
 
@@ -126,7 +126,7 @@ The combination of both programs enabled the identification and validation (matc
  46595 & 27384 & 19211 & 25056 & 10039 \\
  \bottomrule
 \end{tabular}
-\caption{\textbf{Protein inference results}. The counts of the different molecular entities detected by peptideShaker are displayed.}
+\caption[rotein inference results]{Protein inference results. The counts of the different molecular entities detected by peptideShaker are displayed.}
 \label{tab:protein_inference}
 \end{table}
 
@@ -144,7 +144,7 @@ The match between runs step allowed for increased identifications by transferrin
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{mbr_combined}
-\caption{Match Between Runs with moFF. \textbf{A} Count of identifications on each run segreagated by source. More than 4k spectra were identified and validated by SearchGUI+peptideShaker. In this particular case, hundreds of new identifications were accomplished. \textbf{B} Match visualization. Every dot represents a peptide shared across 2 runs. The coordinate system illustrates its retention time on the first run on the x axis and the difference with the second run on the y axis. The color depicts whether the identification was carried out during the PSM process (MS1), or thanks to a cross-identification achieved by the MBR module (MBR).}
+\caption[Proteome benchmark MBR results]{Match Between Runs with moFF. \textbf{A} Count of identifications on each run segreagated by source. More than 4k spectra were identified and validated by SearchGUI+peptideShaker. In this particular case, hundreds of new identifications were accomplished. \textbf{B} Match visualization. Every dot represents a peptide shared across 2 runs. The coordinate system illustrates its retention time on the first run on the x axis and the difference with the second run on the y axis. The color depicts whether the identification was carried out during the PSM process (MS1), or thanks to a cross-identification achieved by the MBR module (MBR).}
 \label{fig:mbr}
 \end{figure}
 
@@ -163,7 +163,7 @@ Once as many identifications as possible were gathered, a refinement of the meas
     \caption*{B}
 \includegraphics[width=.9\linewidth]{density_ratio}
 \end{subfigure}
-\caption{\textbf{A} The apex intensity profile across fractions for 2 different peptides, one from \textit{Homo sapiens}, and one from \textit{E. coli}. The figure illustrates the intrinsic intensity variability between technical replicates, particularly in the case of the \textit{E. coli} QLLMMSGFDR peptide, as it was almost non-existent in one of the runs. \textbf{B} The expected pattern of overall similar intensities for the \textit{Homo sapiens} data and 3-fold higher intensities for the \textit{E. coli} data in condition H was observed, confirming an acceptable performance of the protocol.}
+\caption[Proteome benchmark apex MS1 intensity results]{\textbf{A} The apex intensity profile across fractions for 2 different peptides, one from \textit{Homo sapiens}, and one from \textit{E. coli}. The figure illustrates the intrinsic intensity variability between technical replicates, particularly in the case of the \textit{E. coli} QLLMMSGFDR peptide, as it was almost non-existent in one of the runs. \textbf{B} The expected pattern of overall similar intensities for the \textit{Homo sapiens} data and 3-fold higher intensities for the \textit{E. coli} data in condition H was observed, confirming an acceptable performance of the protocol.}
 \label{fig:apex_intensity}
 \end{figure}
 
@@ -195,7 +195,7 @@ The result of the process was the successful quantification of 5307 protein grou
    \rowcolor[gray]{0.95}10 & 1.37E+00 & 1.41E-14 & P37666 & E. coli \\ 
    \bottomrule
 \end{tabular}
-\caption{Results of the quantification pipeline. The 10 protein groups with the lowest \textit{q-val}  as estimated by MSqRob are shown. Notably, eight correspond to proteins belonging to \textit{E.coli}. The two human proteins exhibited in both cases an absolute value of the \ac{log2FC} below 1.}
+\caption[Proteome benchmark dataset quantification results]{Results of the quantification pipeline. The 10 protein groups with the lowest \textit{q-val}  as estimated by MSqRob are shown. Notably, eight correspond to proteins belonging to \textit{E.coli}. The two human proteins exhibited in both cases an absolute value of the \ac{log2FC} below 1.}
 \label{tab:quantification_table}
 \end{table}
 
@@ -205,7 +205,7 @@ The performance of the quantification can be evaluated thanks to the experimenta
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{curves_plot}
-\caption{ROC and PR curves displaying the behaviour of 3 different label-free quantification pipelines publicly available. \textbf{Comp+Rob} is the pipeline presented in the previous sections. \textbf{MQ+LFQ} consists a standard MaxQuant upstream analysis combined with its LFQ quantification engine. Finally, \textbf{MQ+Rob} blends MaxQuant upstream analysis with the MSqRob quantification engine. \textbf{A, B} ROC curve produced by the three algorithms with no \ac{log2FC} filter, and keeping proteins with \ac{log2FC} greater than 1, respectively. \textbf{C, D} PR curve produced by the three algorithms with no \ac{log2FC} filter, and keeping proteins with \ac{log2FC} greater than 1, respectively.}
+\caption[Classifier evaluation: ROC and PR curves]{ROC and PR curves displaying the behaviour of 3 different label-free quantification pipelines publicly available. \textbf{Comp+Rob} is the pipeline presented in the previous sections. \textbf{MQ+LFQ} consists a standard MaxQuant upstream analysis combined with its LFQ quantification engine. Finally, \textbf{MQ+Rob} blends MaxQuant upstream analysis with the MSqRob quantification engine. \textbf{A, B} ROC curve produced by the three algorithms with no \ac{log2FC} filter, and keeping proteins with \ac{log2FC} greater than 1, respectively. \textbf{C, D} PR curve produced by the three algorithms with no \ac{log2FC} filter, and keeping proteins with \ac{log2FC} greater than 1, respectively.}
 \label{fig:roc_curves}
 \end{figure}
 
@@ -231,7 +231,7 @@ The result of this analysis is shown in figure \ref{fig:roc_curves}. Remarkably,
 \caption*{B}
 \includegraphics[width=.95\textwidth]{correlation_plot}
 \end{subfigure}
-\caption{Agreement between the different pipelines. \textbf{A} The Venn diagram displays the number of \textit{E. coli} proteins found to be differentially abundant by each pipeline. \textbf{B} The log2FC estimated in all three pipelines for the 121 shared proteins is plotted by pairs to evaluate their correlation.}
+\caption[Pipeline agreement]{Agreement between the different pipelines. \textbf{A} The Venn diagram displays the number of \textit{E. coli} proteins found to be differentially abundant by each pipeline. \textbf{B} The log2FC estimated in all three pipelines for the 121 shared proteins is plotted by pairs to evaluate their correlation.}
 \label{fig:venn_cor}
 \end{figure}
 
@@ -247,7 +247,7 @@ Additionally, the accuracy with which each program assigns a \ac{log2FC} estimat
 \begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{combined_plot}
-\caption{Overview over the different pipelines\textquotesingle performance. Quantification results are segregated by the source organism. \textbf{A} Histogram of the \ac{log2FC} estimates. \textbf{B} Volcano plot, where every protein group is represented by a dot and the coordinates map to its \ac{log2FC} on x and the minus logarithm of the q-value on y. \textbf{C} Boxplots of the minus logarithm of the q-value distribution.}
+\caption[Pipelines performance]{Overview over the different pipelines\textquotesingle performance. Quantification results are segregated by the source organism. \textbf{A} Histogram of the \ac{log2FC} estimates. \textbf{B} Volcano plot, where every protein group is represented by a dot and the coordinates map to its \ac{log2FC} on x and the minus logarithm of the q-value on y. \textbf{C} Boxplots of the minus logarithm of the q-value distribution.}
 \label{fig:combined_plot}
 \end{figure}
 
