@@ -1,0 +1,542 @@
+\documentclass[11pt, a4paper]{report}
+% FOR COLORFUL TABLES
+\usepackage{booktabs}
+\usepackage[table]{xcolor}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+\usepackage{array} % to make table column italic
+\usepackage{textcomp} % to support the trademark symbol
+\usepackage{minted}
+\usemintedstyle{autumn}
+\usepackage{amsmath}
+\DeclareMathOperator*{\argmax}{arg\!\max}
+\DeclareMathOperator*{\argmin}{arg\!\min}
+
+\usepackage{unicode-math}
+\usepackage{mathtools}
+
+\DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
+  #1\;\delimsize\|\;#2%
+}
+
+
+\newcommand{\infdiv}{KL\infdivx}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+\newcommand\textfig[6][]{%
+    % #1: content inside figure (optional)
+    % #2: label
+    % #3: alignment command
+    % #4: width
+    % #5: figure caption
+    % #6: figure description
+    \textfloat{#2}{#3}{\centering\includegraphics[width=#4]{#2}#1}{#5}{#6}}
+   
+
+\usepackage{subfiles}
+
+%\setsansfont{Calibri}
+\setmonofont{Ubuntu Mono}
+
+%\setmonofont[Scale=MatchLowercase]{WenQuanYi Zen Hei Mon
+%]{xits-math}
+
+%\DeclareUnicodeCharacter{2010}{-}% support older LaTeX versions
+\usepackage{wallpaper}
+\usepackage{changepage}
+\usepackage[version=4]{mhchem} % for isotope nomeclature support
+
+% Setup captions
+%\captionstyle[\centering]{\centering}
+%\changecaptionwidth
+%\captionwidth{0.8\linewidth}
+
+% Protect against widows and orphanso}
+%\setmathfont[
+%    Extension=.otf,
+%    BoldFont=*bold,
+%\clubpenalty=10000
+%\widowpenalty=10000
+
+%\linespread{1.2}
+
+%\raggedbottom
+
+%\chapterstyle{ger}
+
+%\maxsecnumdepth{subsection}
+
+%%  Setup fancy style quotation
+%%  ==================================================================
+%\usepackage{tikz}
+%\usepackage{framed}
+
+%\newcommand*\quotefont{\fontfamily{fxl}} % selects Libertine for quote font
+
+% Make commands for the quotes
+%\newcommand*{\openquote}{\tikz[remember picture,overlay,xshift=-15pt,yshift=-10pt]
+%     \node (OQ) {\quotefont\fontsize{60}{60}\selectfont``};\kern0pt}
+%\newcommand*{\closequote}{\tikz[remember picture,overlay,xshift=15pt,yshift=5pt]
+%     \node (CQ) {\quotefont\fontsize{60}{60}\selectfont''};}
+
+% select a colour for the shading
+%\definecolor{shadecolor}{rgb}{1,1,1}
+
+% wrap everything in its own environment
+%\newenvironment{shadequote}% 
+%{\begin{snugshade}\begin{quote}\openquote}
+%{\hfill\closequote\end{quote}\end{snugshade}}
+
+
+
+%% MY STUFF
+
+
+%% Language and font encodings
+
+%% Sets page size and margins
+%\usepackage[a4paper,top=2.5cm,bottom=2cm,left=2.5cm,right=2.5cm,marginparwidth=1.75cm]{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\captionsetup{font={small},skip=0.25\baselineskip}
+\captionsetup[subfigure]{font={bf, footnotesize}, skip=1pt, singlelinecheck=false}
+\graphicspath{{./plots/}{./figures/}}
+
+%\fancypagestyle{title}{%
+%  \setlength{\headheight}{120pt}%
+%  \fancyhf{}% No header/footer
+%  \renewcommand{\headrulewidth}{0pt}% No header rule
+%  \renewcommand{\footrulewidth}{0pt}% No footer rule
+%  %\fancyhead[L]{\small\begin{tabular}{@{}l}\includegraphics[width=0.15\textwidth]{ku}\end{tabular}}
+%   % \fancyhead[C]{\small\begin{tabular}{@{}l}\includegraphics[width=0.6\textwidth]{PROSCION}\end{tabular}}
+%  %\fancyhead[R]{\small\begin{tabular}{@{}r}\includegraphics[width=0.15\textwidth]{naturvidenskab}\end{tabular}}
+%}%
+
+
+%\usepackage[format=plain]{caption}
+\usepackage{subcaption}
+\usepackage{float} % force float
+\usepackage[nottoc]{tocbibind}
+%\usepackage[margin=-50pt]{caption}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{cleveref} % for enumerate/itemize item referencing
+
+%\setlength{\parindent}{4em}
+%\setlength{\parskip}{1em}
+%\usepackage{mathpazo} % Use the Palatino font
+\usepackage{parskip}% http://ctan.org/pkg/parskip
+\usepackage{xspace}
+\usepackage{wrapfig}
+\usepackage[export]{adjustbox}
+\usepackage{textcomp}
+\usepackage[bottom]{footmisc}
+
+
+\usepackage{titling}
+\newcommand{\subtitle}[1]{%
+  \posttitle{%
+    \par\end{center}
+    \begin{center}\large#1\end{center}
+    \vskip0.5em}%
+}
+
+\renewcommand\thesubfigure{\arabic{subfigure}}  
+\captionsetup{format=hang,labelsep=space,indention=-2cm,labelfont=bf,width=.9\textwidth,skip=.5\baselineskip}
+%\captionsetup[sub]{labelfont=bf, labelsep=period,labelformat=simple, subrefformat=brace}
+
+
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily,
+  showstringspaces=false,
+  commentstyle=\color{red},
+  keywordstyle=\color{blue}
+}
+
+\makeatletter
+\renewcommand\p@subfigure{\thefigure\,}
+\renewcommand\thesubfigure{\alph{subfigure})}
+% If desired for table as well:
+% \renewcommand\p@subtable{\thetable\,}
+% \renewcommand\thesubtable{\alph{subtable})}
+\DeclareCaptionLabelFormat{mysublabelfmt}{\alph{sub\@captype}}
+\makeatother
+
+\renewcommand{\baselinestretch}{1.5}
+\DeclareCaptionSubType*[arabic]{figure}
+
+
+
+%\makeatletter
+%\renewcommand\thesection{}
+%\renewcommand\thesubsection{\@arabic\c@subsection}
+%\makeatother
+
+\usepackage{mathtools}
+%\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+%\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+
+
+\usepackage{setspace}
+\doublespacing 
+
+%\pagestyle{plain} % default for report
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd{\@makechapterhead}{50\p@}{0pt}{}{}
+\patchcmd{\@makeschapterhead}{50\p@}{0pt}{}{}
+\makeatother
+
+
+
+\usepackage{acro}
+\acsetup{first-style=short}
+
+\DeclareAcronym{MS}{
+  short = MS ,
+  long  = Mass Spectrometry,
+  class = abbrev
+}
+
+\DeclareAcronym{MS1}{
+  short = MS1 ,
+  long  = first tandem MS analyzer ,
+  class = abbrev
+}
+
+
+
+\DeclareAcronym{ROPE}{
+  short = ROPE ,
+  long  = Region Of Practical Equivalence,
+  class = abbrev
+}
+
+
+\DeclareAcronym{IID}{
+  short = IID,
+  long  = Independent Identically Distributed,
+  class = abbrev
+}
+
+\DeclareAcronym{MS2}{
+  short = MS2 ,
+  long  = second tandem MS analyzer ,
+  class = abbrev
+}
+
+\DeclareAcronym{PSM}{
+  short = PSM ,
+  long  = Peptide-to-Spectrum Match(ing),
+  class = abbrev
+}
+
+
+\DeclareAcronym{HGNC}{
+  short = HGNC ,
+  long  = Hugo Gene Nomenclature Committee,
+  class = abbrev
+}
+
+\DeclareAcronym{MS/MS}{
+  short = MS/MS ,
+  long  = Tandem mass spectrometry,
+  class = abbrev
+}
+
+\DeclareAcronym{MNAR}{
+  short = MNAR ,
+  long  = Missing Not At Random,
+  class = abbrev
+}
+
+
+
+\DeclareAcronym{DAP}{
+  short = DAP ,
+  long  = Differentially Abundant Protein,
+  class = abbrev
+}
+
+
+\DeclareAcronym{LOD}{
+  short = LOD ,
+  long  = Limit Of Detection,
+  class = abbrev
+}
+
+
+\DeclareAcronym{KL}{
+  short = KL ,
+  long  = Kullback-Leibler (divergence),
+  class = abbrev
+}
+
+\DeclareAcronym{ELBO}{
+  short = ELBO,
+  long  = Evidence Lower Bound,
+  class = abbrev
+}
+
+
+
+\DeclareAcronym{m/z}{
+  short = m/z ,
+  long  = mass charge ratio,
+  class = abbrev
+}
+
+\DeclareAcronym{MALDI}{
+  short = MALDI ,
+  long  = Matrix-Assisted Laser-Desorption Ionization,
+  class = abbrev
+}
+
+\DeclareAcronym{ESI}{
+  short = ESI ,
+  long  = Electrospray Ionization,
+  class = abbrev
+}
+
+\DeclareAcronym{GSEA}{
+  short = GSEA,
+  long = Gene Set Enrichment Analysis,
+  class = abbrev
+}
+
+
+\DeclareAcronym{TOF}{
+  short = TOF ,
+  long  = Time of Flight,
+  class = abbrev
+}
+
+\DeclareAcronym{IT}{
+  short = IT ,
+  long  = Ion Trap,
+  class = abbrev
+}
+
+\DeclareAcronym{Q}{
+  short = Q,
+  long  = Quadrupole,
+  class = abbrev
+}
+
+\DeclareAcronym{FT-ICR}{
+  short = FT-ICR ,
+  long  = Fourier Transform Ion Cyclotron Resonance,
+  class = abbrev
+}
+
+\DeclareAcronym{HPDI}{
+  short = HPDI,
+  long  = High Probability Density Interval,
+  class = abbrev
+}
+
+\DeclareAcronym{HPLC}{
+  short = HPLC ,
+  long  = High Pressure Liquid Chromatography,
+  class = abbrev
+}
+
+
+\DeclareAcronym{MCMC}{
+  short = MCMC,
+  long  = Markov Chain Monte Carlo,
+  class = abbrev
+}
+
+
+\DeclareAcronym{PTM}{
+  short = PTM ,
+  long  = Post-Translational Modification,
+  class = abbrev
+}
+
+\DeclareAcronym{DAG}{
+  short = DAG ,
+  long  = Directed Acyclic Graph,
+  class = abbrev
+}
+
+
+\DeclareAcronym{NZ}{
+  short = NZ ,
+  long  = Novozymes A/S,
+  class = abbrev
+}
+
+\DeclareAcronym{FDR}{
+  short = FDR ,
+  long  = False Discovery Rate,
+  class = abbrev
+}
+
+\DeclareAcronym{RT}{
+  short = RT,
+  long  = Retention time,
+  class = abbrev
+}
+
+\DeclareAcronym{log2FC}{
+  short = log2FC ,
+  long  = $\log_2$(Fold Change),
+  class = abbrev
+}
+
+
+\DeclareAcronym{MBR}{
+  short = MBR ,
+  long  = Match Between Runs,
+  class = abbrev
+}
+
+\DeclareAcronym{VI}{
+  short = VI ,
+  long  = Variational Inference,
+  class = abbrev
+}
+
+\DeclareAcronym{NUTS}{
+  short = NUTS ,
+  long  = No-U-Turn-Sampler,
+  class = abbrev
+}
+
+
+
+
+\DeclareAcronym{MGF}{
+  short = MGF ,
+  long  = Mascot Generic Format,
+  class = abbrev
+}
+
+
+\DeclareAcronym{XIC}{
+  short = XIC ,
+  long  = Extracted Ion Current,
+  class = abbrev
+}
+
+\DeclareAcronym{SC}{
+  short = SC ,
+  long  = Spectral Counting,
+  class = abbrev
+}
+
+\DeclareAcronym{TPP}{
+  short = TPP ,
+  long  = Trans Proteomic Pipeline,
+  class = abbrev
+}
+
+\DeclareAcronym{NHST}{
+  short = NHST ,
+  long  = Null-Hypothesis Significance Testing,
+  class = abbrev
+}
+
+%%  Begin document
+%%  ==================================================================
+	\begin{document}
+
+%%  Begin title page
+%%  ==================================================================
+    \thispagestyle{empty}
+    \ULCornerWallPaper{1}{nat-farve.pdf}
+    \ULCornerWallPaper{1}{nat-en.pdf}
+    \begin{adjustwidth}{-3cm}{-1.5cm}
+    \vspace*{-1cm}
+    \textbf{\Huge Bioinformatics Master Thesis} \\
+    \vspace*{2.5cm} \\
+    \textbf{\Huge Development of label-free quantification \\ methods in proteomics} \\
+    \vspace*{.1cm} \\
+    %{\huge No subtitle is available} \\
+    \begin{tabbing}
+    % adjust the hspace below for the longest author name
+    Antonio Ortega Jiménez \hspace{1cm} \= \texttt{<rnq313@alumni.ku.dk>}
+    %Second Author \> \texttt{<second@author.com>} \\       
+    \\[10.5cm] 
+    
+    \textbf{\Large Supervisors} \\
+    Thomas Hamelryck \> \texttt{<thamelry@gmail.com>} \\
+    Mathias F. Gruber \> \texttt{<mafg@novozymes.com>} \\
+
+    \end{tabbing}
+    \end{adjustwidth}
+    \ClearWallPaper
+%%  ==================================================================
+%%  End title page
+
+%%%%%%%%%%%%% Indholdsfortegnelse %%%%%%%%%%%%%
+\setcounter{tocdepth}{2}
+\tableofcontents % Indholdsfortegnelse
+\listoffigures   % Liste over figurer \begin{figure} ... \end{figure}
+%\listoftables    % Liste over tabeller \begin{table} ... \end{table}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
+\thispagestyle{empty}
+\printacronyms[include-classes=abbrev,name=Abbreviations]
+
+\newpage
+\setcounter{page}{1}
+
+% https://tex.stackexchange.com/questions/93859/condense-the-space-between-bibliographic-entries
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{
+  \begin{oldthebibliography}{#1}
+    \setlength{\itemsep}{0em}
+    \setlength{\parskip}{0em}
+}
+{
+  \end{oldthebibliography}
+}
+
+
+\newcommand{\mycaption}[2]{\caption[#1]{\textbar\, \textbf{#1.} #2}}
+\input{preface}
+\input{introduction}
+\input{msreview}
+\input{pipeline}
+\input{modelling}
+\input{thp1}
+
+
+\chapter*{Conclusion of the Thesis}
+
+The pipelines presented in chapter \ref{chap:pipeline} and the MaxQuant suite offered the easiest to deploy and most output rich of all the cost-free pieces of software available for the proteomics community. All of them have pros and cons, and their combined usage was found to provide the best results, underlining the importance of the development of programs implementing open data formats exchangeable across tools. More functionalities can be added, including \textit{de novo} and \ac{PTM} search, and missing data management. BayesQuant, the probabilistic framework for relative quantification, presented in \ref{chap:model} can be passed any peptide level dataset and provide estimates of the uncertainty behind traditional \ac{log2FC} estimates and nuisance effects. It can be customised to expand its currently implemented model. The lack of success in the attempt to model the peptide bias using the aminoacidic sequence reveals the complexity of the competitive ionization problem. Recently developed tools like RawQuant could be applied in future work to extract from RAW files a feature-rich representation of the collected spectra that could be used to model this phenomenon with a Deep Learning approach. The results from chapter \ref{chap:benchmark} manifests that \ac{NZ} can at the same time decrease computational costs and access the state of the art in proteomics research by making use of the latest open-source software, and it is encouraged to continue on that line.
+
+
+
+\label{chap:conclusion}
+
+
+
+\bibliographystyle{unsrt_etal}
+\footnotesize{\bibliography{bibliography}}
+
+\end{document}
+%%  ==================================================================
+%%  End document
+
