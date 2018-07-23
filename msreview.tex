@@ -1,10 +1,8 @@
-\chapter{Review on mass spectrometry and shotgun proteomics}
+\chapter{Review on mass spectrometry (\ac{MS}) and shotgun proteomics}
 \label{chap:mass_spec}
 
-Life systems consist of complex systems, meaning their behaviour cannot be easily explained by analyzing the individual elements alone. Moreover, they present multiple layers of complexity, given by the nature of the elements that make it up. The layer provided by proteins is one of them, and its study is called proteomics. It is a complex layer because thousands of different proteins can be present in a single cell at any time, and their exact composition and quantities constantly change, responding to the stimuli of the surrounding environment. The study of the protein-specific complexity is called proteomics. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts.
 
-%CITE 1.6.1 COMPUTATIONAL METHODS.
-The existing approaches are divided into two types of paradigms: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm (see figure \ref{fig:proteomics_overview}), the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are called peptides. \cite{Barsnes2008}  Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as explained in \ref{subsec:the_detector}. This review will focus on the data-dependent approach within bottom-up proteomics, which currently is the most frequent workflow in proteomics \cite{Sinitcyn2018}.
+The main source of data in proteomics is \ac{MS}. However, different approaches to how these technique is used make two paradigms in proteomics analysis: top-down and bottom-up. In the top-down paradigm, intact proteins are directly used for the analysis. In the bottom-up paradigm (see figure \ref{fig:proteomics_overview}), the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are peptides \cite{Barsnes2008}, consisting of around 10 chained aminoacids.  Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as illustrated in section \ref{subsec:the_detector}. This review will focus on the data-dependent approach within bottom-up proteomics, which currently is the most frequent workflow in proteomics \cite{Sinitcyn2018}. In this approach, the equipment is configured for the analysis of one peptide at a time, with the drawback of being biased for the most abundant peptides.
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{proteomics_skema_book}
@@ -12,7 +10,7 @@ The existing approaches are divided into two types of paradigms: top-down and bo
 \label{fig:proteomics_overview}
 \end{figure}
 
-MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for plenty of sample components. A detailed explanation of the sample processing required prior to MS is given in section \ref{sec:sample_processing}, while an overview on mass spectrometers is given in section \ref{sec:the_mass_spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \ref{sec:inference}. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \ref{sec:quantification}.
+MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for eventually thousands of sample components. A detailed explanation of the sample processing required prior to MS is given in section \ref{sec:sample_processing}, while an overview on mass spectrometers is given in section \ref{sec:the_mass_spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \ref{sec:inference}. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \ref{sec:quantification}.
 
 A summary of the bottom-up approach MS analytical pipeline is provided in the rest of the chapter. It can be divided into two main steps:
 
@@ -24,11 +22,10 @@ A summary of the bottom-up approach MS analytical pipeline is provided in the re
 
 \end{enumerate}
 
-\LARGE
-\textbf{MS analysis and data generation}
-\normalsize
-
 \section{Sample processing}
+
+Prior to its introduction in the mass spectrometer for shotgun proteomics studies, a protein sample (I) is cleaved into peptides and (II) these peptides are separated by means of some physicochemical properties. This way, the analytical equipment works with one peptide at a time.
+
 \label{sec:sample_processing}
 
 \begin{figure}[!h]
@@ -40,9 +37,9 @@ A summary of the bottom-up approach MS analytical pipeline is provided in the re
 \subsection{Protein digestion}
 \label{subsec:protein_digestion}
 
-An \ac{MS} experiment starts with the generation of a protein sample from the biological system of interest. Proteins are then denaturalized  so as to remove bias due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific enzymes, which cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used for this task. It cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Since roughly 1/10 residues are either R or K, the average peptide length is 10 residues. As explained in \ref{subsec:the_detector}, this length distribution is fitted to the resolution of the MS analyzer. Moreover, since R and K are positively charged aminoacids, the resulting peptide is guaranteed in most cases to be able to capture at least one charge, thus making it visible in the spectrometer. All of these properties combined, together with its low prize, makes Trypsin the enzyme of choice in this step for most cases.
+An \ac{MS} experiment starts with the generation of a protein sample from the biological system of interest. Proteins are then denaturalized  so as to remove bias due to the divergent properties acquired by folded proteins. Then, proteins are subjected to digestion with specific proteases i.e protein-cutting molecules, which cut the aminoacidic chains following a predictable pattern. Trypsin is the most frequently used protease. It cuts peptidic bonds whenever a positively charged residue, either Lysine (K) or Arginine (R), lies on the carboxyl side of the peptidic bond. Since roughly 1/10 residues are either R or K, the average peptide length is 10 residues, as mentioned before. As demonstrated in \ref{subsec:the_detector}, this length distribution is fitted to the resolution of the MS analyzer. Moreover, in as much R and K are positively charged aminoacids (see figure \ref{fig:aminoacids}), the resulting peptide is guaranteed in most cases to be able to capture at least one charge, which is key in the \ac{MS} workflow as described in section \ref{sec:the_mass_spectrometer}. All of these properties combined, together with its low prize, makes Trypsin the protease of choice in this step for most cases.
 
-Even though enzymes are very specific, the cleaving process is far from perfect, as there could be: \cite{Barsnes2008}
+Even though proteases are very specific, the cleaving process is far from perfect, as there could be: \cite{Barsnes2008}
 %COMPUTATIONAL METHODS 3.2
 
 \begin{enumerate}
@@ -57,24 +54,22 @@ Even though enzymes are very specific, the cleaving process is far from perfect,
 
 \end{enumerate}
 
-%\Cref{item:missed_cleavages}
-
-Missed cleavages can happen due to steric impediments or the presence of specific aminoacids that can weaken the enzyme\textquotesingle s function. This is the case of Trypsin whenever the residue on the other side of the peptidic bond is Proline. Altogether, a variability is created in the cleavage process that, though limited, needs to be taken care of in downstream analysis, as it could introduce biases in peptide observability. 
+Missed cleavages can happen due to steric impediments or the presence of specific aminoacids that can weaken the enzyme\textquotesingle s function. This is the case of Trypsin whenever the residue on the other side of the peptidic bond is Proline. Altogether, a variability is created in the cleavage process that, though limited, needs to be taken care of in downstream analysis, as it could introduce biases in peptide observability.
 
 The result of this process is a complex mix of peptides, made up by hundreds or thousands of different molecules, following a length distribution given by the cleavage sites frequency and each protein\textquotesingle s aminoacidic composition. A peptide separation step is required before introducing the sample in the spectrometer.
 
 \subsection{Peptide separation}
 \label{subsec:peptide_separation}
 
-If presented with the problem of analyzing a mixture of peptides, the capacities of mass spectrometers are easily overwhelmed by a too complex mixture, resulting in the analysis of only a minor part of the total protein of the sample. This can be surmounted by independently analyzing different fractions of the sample over time. The required sample separation is achieved by High-Performance Liquid Cromatography (\ac{HPLC}) methods, like reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point) \cite{Barsnes2008}.
+If presented with the problem of analyzing a mixture of peptides, the capacities of mass spectrometers are easily overwhelmed by a too complex mixture, resulting in the analysis of only a minor part of the total protein of the sample. This can be surmounted by analyzing one peptide in the sample at a time. The required sample separation is achieved by High-Performance Liquid Cromatography (\ac{HPLC}) methods, like reverse phase chromatography (separating on hydrophobicity) and strong cation exchange chromatography (separating on isoelectric point) \cite{Barsnes2008}.
 
 %CITE 4.2 computational methods.
-During \ac{HPLC}, the peptide mix loaded into a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times (\ac{RT}) i.e the amount of time passed before the peptide is observed in the mass spectrometer. Therefore, the input to the machine will consist of a simplified mix of peptides at a time.
+During \ac{HPLC}, the peptide mix is loaded into a column containing a stationary and a solid phase. These phases create an environment where peptides interact differently based on their physico-chemical properties, set by the nature of the phases. The output of the column, called elute, will consist of subsets or fractions of peptides leaving the column at different retention times (\ac{RT}) i.e the amount of time passed before the peptide is observed in the mass spectrometer. Therefore, the input to the spectrometer will consist of one peptide at any given time.
 
 \section{The mass spectrometer}
 \label{sec:the_mass_spectrometer}
 
-The mass spectrometer is the ensemble of pieces of equipment analyzing a peptide mix such as those generated following the workflow enunciated in sections \ref{sec:sample_processing} and \ref{subsec:peptide_separation}. It consists of three main parts: an ion source, a mass analyzer, and a detector (see figure \ref{fig:mass_spectrometer}).
+The mass spectrometer is the ensemble of pieces of equipment analyzing a peptide like as those generated following the workflow enunciated in sections \ref{sec:sample_processing} and \ref{subsec:peptide_separation}. It consists of three main parts: an ion source, a mass analyzer, and a detector (see figure \ref{fig:mass_spectrometer}).
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{mass_spectrometer}
@@ -92,7 +87,7 @@ All mass spectrometers exploit the physical properties of mass and electric char
 
 %CITE 5.1 COMPUTATIONAL METHODS
 
-This step is performed in the ion source \cite{Barsnes2008}. The most frequent ionization methods in proteomics are Matrix-Assisted Laser Desorption-Ionization (\ac{MALDI}) and Electro Spray Ionization (\ac{ESI}) \cite{Mirzaei2016}. Most peptides ionized by MALDI will acquire a single charge, whereas ESI can provide multiple charges (+2, +3, etc) too. Thus, the charge exhibited by an ion is not obvious when produced via ESI. Moreover, ESI can be run online with the right robotic equipment, while MALDI demands waiting time for vacuum generation. Finally, due to the chemical nature of the matrix components, MALDI ionizes more easily peptides containing aminoacids featuring aromatic rings (PYW), thus introducing a bias. Bias in ESI is less predictable. This is known as the competitive ionization problem \cite{Tang2004}.
+This step is performed in the ion source \cite{Barsnes2008}. The most frequent ionization methods in proteomics are Matrix-Assisted Laser Desorption-Ionization (\ac{MALDI}) and Electro Spray Ionization (\ac{ESI}) \cite{Mirzaei2016}. Most peptides ionized by MALDI will acquire a single charge, whereas ESI can provide multiple charges (+2, +3, etc) too. Thus, the charge exhibited by an ion is not obvious when produced via ESI. Moreover, ESI can be run online with the right robotic equipment, while MALDI demands waiting time for vacuum generation. Finally, due to the chemical nature of the matrix components, MALDI ionizes more easily peptides containing aminoacids featuring aromatic rings (PYW), thus introducing a bias. Bias in ESI is less predictable. All the sources of bias introduced during ionization are grouped into the competitive ionization problem \cite{Tang2004}.
 
 The acquired charge yields a mass/charge (\ac{m/z}) ratio, a property that is applied in the downstream component separation and measurement steps.
 
@@ -128,7 +123,7 @@ It is up to the \ac{MS} technician to decide on the best pieces of equipment acc
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{tandem_ms}
-\caption[MS/MS schema]{Illustration of the tandem MS workflow. The first spectrometer acts as an ion selector, that lets through ions with a given \ac{m/z} ratio. The second spectrometer does not perform mass analysis, but instead provides the medium where peptide fragmentation occurs. Finally the third spectrometer records fragment mass spectra. Taken from \footnotemark{}.}
+\caption[MS/MS schema]{Illustration of the tandem MS workflow. The first spectrometer acts as an ion selector, that not only registers spectra, but also lets through ions with a given \ac{m/z} ratio. The second spectrometer does not perform mass analysis, but instead provides the medium where peptide fragmentation (see section \ref{subsec:fragmentation}) occurs. Finally the third spectrometer records fragment mass spectra. Taken from \footnotemark{}.}
 \label{fig:tandem_ms}
 \end{figure}
 
@@ -167,7 +162,7 @@ The information that can be extracted from \ac{MS1} scans consists of the \ac{m/
 \end{figure}
 
 
-Fortunately, the peptide sequence of the ion can be inferred if fragmentation is performed. During peptide fragmentation, bonds along the peptidic chain are broken, turning the peptide into smaller fragments. These fragments will consist of truncated versions of the original peptide at different positions, thus making it possible to read an \ac{m/z} ratio difference between any pair of fragment ions. The difference can be exploited to deduce which aminoacid makes up for that difference. If this process is repeated for enough pairs of contiguous fragments, with the right software, a sequence can be read from the \ac{MS2} spectrum.  explained in \ref{sec:search_engines}.
+Fortunately, the peptide sequence of the ion can be inferred if fragmentation is performed. During peptide fragmentation, bonds along the peptidic chain are broken, turning the peptide into smaller fragments. These fragments will consist of truncated versions of the original peptide at different positions, thus making it possible to read an \ac{m/z} ratio difference between any pair of fragment ions. The difference can be exploited to deduce which aminoacid makes up for that difference. If this process is repeated for enough pairs of contiguous fragments, with the right software, a sequence can be read from the \ac{MS2} spectrum, as  explained in section \ref{sec:search_engines}.
 
 %A given bond will be more likely to break the less stable it is. This makes (I) the \ce{C_$\alpha$}-\ce{CO}, (II) the peptidic \ce{CO}-\ce{NH}, and (III) the \ce{C_$\alpha$}-\ce{NH} bonds the most likely to break (see figure \ref{fig:abcxyz}). A nomenclature REF was introduced to name these fragments:
 
@@ -180,11 +175,6 @@ Fortunately, the peptide sequence of the ion can be inferred if fragmentation is
 %
 %EID is produced by the hits against the molecule, which tend to occur on the areas of the peptide more positively charged. Thus, the fragmentation process is not ergodic and returns TYPE ions. More importantly, chemical modifications are not lost in the process.
  
- 
-\LARGE
-\textbf{Computational analysis}
-\normalsize
-
 \section{Spectra processing: search engines}
 \label{sec:search_engines}
 
@@ -203,7 +193,7 @@ Computational analysis of MS data starts with the matching of the spectra to a r
 %\label{fig:PSM}
 %\end{figure}
 
-Given the stochastic nature of the protein cleavage and spectra recording processes, the resulting spectra exhibit variability manifested in missing peaks or spurious ones. Furthermore, random (wrong) matches can be returned by the PSM process when running against a sufficiently big database. This translates to the generation of multiple matches, of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked by goodness-of-fit. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems. Assuming the correct protein is present in the database, a good scoring system should give the best score to the right peptide. Under this circumstances, if repeated for several peptides, enough evidence for the presence of individual proteins can be collected.
+Given the stochastic nature of the protein cleavage and spectra recording processes, the resulting data exhibit variability manifested in both missing and spurious peaks. Furthermore, random (wrong) matches can be returned by the PSM process when running against a sufficiently big database. This translates to the generation of multiple matches, of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked by goodness-of-fit. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems. Assuming the correct protein is present in the database, a good scoring system should give the best score to the right peptide. Under this circumstances, if repeated for several peptides, enough evidence for the presence of individual proteins can be collected.
 
 Multiple search engines exist that implement different matching and scoring algorithms. The most modern ones include MS-GF+, MS-Amanda, Comet, X!Tandem or Andromeda. Notably, the results of each individual search engine can be combined to gather their strengths, at the expense of an increased computational cost and time \cite{Shteynberg2013}.
 
@@ -281,7 +271,7 @@ In the label-free quantification approach, peptides from different samples are n
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.9\linewidth]{mbr_workflow}
-\caption[Match Between Runs]{Illustration of the \ac{MBR} step. \textbf{A} the information gathered from matches in replicate runs is put to use during a reanalysis of the spectra. Modified from supplementary information in \cite{Argentini2016}.}
+\caption[Match Between Runs module]{Illustration of the \ac{MBR} step. \textbf{A} the information gathered from matches in replicate runs is put to use during a reanalysis of the spectra. Modified from supplementary information in \cite{Argentini2016}.}
 \label{figure:moff_mbr}
 \end{figure}
 
@@ -316,7 +306,7 @@ For a more robust XIC based quantification, a feature extraction step is usually
 \caption*{B}
 \includegraphics[width=0.7\linewidth]{apex_intensity}
 \end{subfigure}
-\caption[Apex MS1 intensity]{Illustration of the apex intensity extraction step.\textbf{A} Visualization of a 3D peak cluster on the RT / m/z plane. An ion current at the same m/z ratio, thus corresponding to the same precursor ion, is detected with varying degrees of intensity over a more or less narrow time window, spreading the signal over time. Taken from \cite{Smith2014}. \textbf{B} A refinement analysis of these data attempts to fit a mathematical model of the signal over time and extract a representative measurement, such as the highest (apex) \ac{MS1} intensity. Modified from supplementary information in \cite{Argentini2016}.}
+\caption[Apex MS1 intensity module]{Illustration of the apex intensity extraction step.\textbf{A} Visualization of a 3D peak cluster on the RT / m/z plane. An ion current at the same m/z ratio, thus corresponding to the same precursor ion, is detected with varying degrees of intensity over a more or less narrow time window, spreading the signal over time. Taken from \cite{Smith2014}. \textbf{B} A refinement analysis of these data attempts to fit a mathematical model of the signal over time and extract a representative measurement, such as the highest (apex) \ac{MS1} intensity. Modified from supplementary information in \cite{Argentini2016}.}
 \label{figure:moff_apex}
 \end{figure}
 

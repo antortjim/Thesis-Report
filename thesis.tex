@@ -111,30 +111,12 @@
 \captionsetup{font={small},skip=0.25\baselineskip}
 \captionsetup[subfigure]{font={bf, footnotesize}, skip=1pt, singlelinecheck=false}
 \graphicspath{{./plots/}{./figures/}}
-
-%\fancypagestyle{title}{%
-%  \setlength{\headheight}{120pt}%
-%  \fancyhf{}% No header/footer
-%  \renewcommand{\headrulewidth}{0pt}% No header rule
-%  \renewcommand{\footrulewidth}{0pt}% No footer rule
-%  %\fancyhead[L]{\small\begin{tabular}{@{}l}\includegraphics[width=0.15\textwidth]{ku}\end{tabular}}
-%   % \fancyhead[C]{\small\begin{tabular}{@{}l}\includegraphics[width=0.6\textwidth]{PROSCION}\end{tabular}}
-%  %\fancyhead[R]{\small\begin{tabular}{@{}r}\includegraphics[width=0.15\textwidth]{naturvidenskab}\end{tabular}}
-%}%
-
-
-%\usepackage[format=plain]{caption}
 \usepackage{subcaption}
 \usepackage{float} % force float
 \usepackage[nottoc]{tocbibind}
-%\usepackage[margin=-50pt]{caption}
-%\usepackage[colorinlistoftodos]{todonotes}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{cleveref} % for enumerate/itemize item referencing
 
-%\setlength{\parindent}{4em}
-%\setlength{\parskip}{1em}
-%\usepackage{mathpazo} % Use the Palatino font
+\usepackage[colorlinks=false, hidelinks]{hyperref}
+\usepackage{cleveref} % for enumerate/itemize item referencing
 \usepackage{parskip}% http://ctan.org/pkg/parskip
 \usepackage{xspace}
 \usepackage{wrapfig}
@@ -201,8 +183,6 @@
 
 \usepackage{setspace}
 \doublespacing 
-
-%\pagestyle{plain} % default for report
 
 \usepackage{etoolbox}
 \makeatletter
@@ -283,12 +263,7 @@
 \input{pipeline}
 \input{modelling}
 \input{thp1}
-
-
-\chapter*{Conclusion of the Thesis}
-\label{chap:conclusion}
-
-The pipelines presented in chapter \ref{chap:pipeline} and the MaxQuant suite offered the easiest to deploy and most output rich of all the cost-free pieces of software available for the proteomics community. All of them have pros and cons, and their combined usage was found to provide the best results, underlining the importance of the development of programs implementing open data formats exchangeable across tools. More functionalities can be added, including \textit{de novo} and \ac{PTM} search, and missing data management. BayesQuant, the probabilistic framework for relative quantification, presented in \ref{chap:model} can be passed any peptide level dataset and provide estimates of the uncertainty behind traditional \ac{log2FC} estimates and nuisance effects. It can be customised to expand its currently implemented model. The lack of success in the attempt to model the peptide bias using the aminoacidic sequence reveals the complexity of the competitive ionization problem. Recently developed tools like RawQuant could be applied in future work to extract from RAW files a feature-rich representation of the collected spectra that could be used to model this phenomenon with a Deep Learning approach. The results from chapter \ref{chap:benchmark} manifests that \ac{NZ} can at the same time decrease computational costs and access the state of the art in proteomics research by making use of the latest open-source software, and it is encouraged to continue on that line.
+\input{conclusion}
 
 
 

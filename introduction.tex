@@ -1,56 +1,71 @@
-\chapter*{Introduction}
+\chapter{Introduction}
 \label{chap:introduction}
 
-\section{Aminoacids and proteins}
 
-Proteins represent the last link in the central dogma of biology, where information encoded in DNA, is transcribed to RNA for posterior translation into proteins at the ribosome.
 
-Proteins are made up of 20 basic units, called aminoacids. All aminoacids share a common chemical structure, where a carbon atom ($C_\alpha$) is covalently bonded to a hydrogen atom, a carboxyl group, an amino group, and last but not least, a radical, also called side chain of the aminoacid. The side chain differs between aminaocids and generates them from each other. A slight deviation from this pattern exists in proline, where the radical is bound to the nitrogen atom, making it an iminoacid. Even though the side chains are all different, they can be classified into four different groups: aliphatic, polar, positively charged and negatively charged (see figure \ref{fig:aminoacids}).
+\section{Novozymes and biotechnology}
 
-%\textfig{aminoacids2.png}{body}{0.75\textwidth}
-%    {The 20 aminoacids.}{CAPTION AND REFERENCE}
-    
+
+Novozymes A/S \ac{NZ} is a company whose line of business consists of the development of products performing chemical transformations in economically relevant processes. The application of these products, instead of conventional solutions, has the advantage of requiring less chemical substances, potentially simplifying industrial processes, reducing their costs and their environmental impact. Notorious examples of such applications include waste-water treatment, household care or fermentation. For example, a product called Fermax was recently released to prevent foam development during the sugarcane ethanol production (see figure \ref{fig:ethanol}).
+
+\begin{figure}[!h]
+\centering
+  \includegraphics[width=\textwidth]{fermax}
+\caption[Example of bioprocess optimised by Novozymes]{Schematic representation of a bioindustrial process optimised with a Novozymes product, marked as a green circle. Taken from Novozymes intranet.}
+\label{fig:ethanol}
+\end{figure}
+
+The company\textquotesingle s name is inspired by the molecular agents that power these transformations, \textbf{enzymes}. Enzymes consist of a extremely diverse family of molecules catalyzing a plethora of biochemical reactions happening in living beings, from bacteria to humans. 
+
+\ac{NZ} takes advantage of these molecules by matching processes where a chemical transformation takes place, with an enzyme that could improve its efficiency, defined in terms of resource consumption, speed or waste subproduction. Moreover, \ac{NZ} thrives to improve the performance of the selected enzymes in the target process by modifying its Wild Type (WT) form. Proteomics plays a key role on the research process required, thus \ac{NZ} has a keen interested in being at the vanguard of research and tool development in this field.
+
+\section{Bioinformatics and proteomics}
+
+The majority of enzymes consist of proteins. But what are proteins? Proteins are molecules made up of 20 basic units, called aminoacids. All aminoacids share a common chemical structure, where a carbon atom ($C_\alpha$) is covalently bonded to a hydrogen atom, a carboxyl group (\ce{COOH}), an amino group (\ce{NH_2}), and last but not least, a radical, also called side chain of the aminoacid. A slight deviation from this pattern exists in proline, where the radical is bound to the nitrogen atom, making it an iminoacid. The side chain differs between aminaocids and creates the aminoacidic diversity   (see figure \ref{fig:aminoacids}).
+
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{aminoacids2.png}
-  \caption[The 20 aminoacids]{Molecular structure of the 20 aminoacids, organized by chemical properties.}
+  \caption[The 20 aminoacids]{Molecular structure of the 20 aminoacids, organized by chemical properties into five groups. Taken from \footnote{\href{https://cnx.org/contents/vxf032Bc@4/Proteins}{https://cnx.org/contents/vxf032Bc@4/Proteins}}.}
   \label{fig:aminoacids}
 \end{figure}
 
-Two aminoacids are joined together through the formation of a peptidic (covalent) bond between them. Such a linkage is formed by removal of the elements of water (dehydration) from the $\alpha$-carboxyl group of one amino acid and the $\alpha$-amino group of another \cite{Nelson2008}. The remaining $\alpha$-amino and $\alpha$-carboxyl groups are available for linkage to other aminoacids, and in this way peptidic chains or peptides can be created.
+The carboxyl group and amino group of different aminoacids can undergo a dehydration that generates a covalent bond, called peptidic bond, subsequently joining two aminoacids (see figure \ref{fig:peptidic_bond}). The remaining amino and carboxyl groups can in turn be joined to new aminoacids, giving way for the formation of a biopolymer, where each subunit is an aminoacid. A peptide consists of a small chain of aminoacids joined this way. If made long enough, it acquires complex structures and becomes a protein proper \cite{Nelson2008}.
 
-While there are 20 basic units that constitute the majority of naturally observable proteins, their side chains can be modified both by physiological processes and by experimental procedures cite. One frequent instance of such modifications is the oxidation of methionine.
-
-
-\section{The protein-focused biotechnology industry}
-
-
-Proteins carry out most of the cell\textquotesingle s molecular functions, they work as molecular agents that can perform an extremely wide range of tasks. The advent of biotechnology has sought to take advantage of this power, either by using proteins as present in natural conditions (wild type) or engineered by humans. This potential economic activity is carried out by several biotech companies, including Novozymes A/S (NZ).
-
-\ac{NZ} is a company whose line of business consists of the development of enzymatic products performing chemical transformations in different industrial processes. The application of these products, instead of conventional chemical-based solutions, has the advantage that they require less chemical substances, potentially simplifying industrial processes, reducing their costs and their environmental impact. Notorious examples of such applications include waste-water treatment, household care and the baking industry.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\textwidth]{peptidic_bond.png}
+  \caption[The peptidic bond]{The peptidic bond brings together different aminoacids into a single protein. Taken from \cite{Nelson2008}.}
+  \label{fig:peptidic_bond}
+\end{figure}
 
 
-The advancement of the way \ac{NZ} does protein research is thus key to place the organization ahead of its competitors. The refinement of the currently used tools and the development of new ones could be of great significance for the company. 
+Proteomics is the branch of bioinformatics whose purpose is the application of algorithms and data analysis to biological studies dealing with proteins. With proteomics, one endeavors to infer the protein composition of a sample, and eventually quantify its protein amounts. 
 
-Protein research can be approached from different angles. This thesis exploited the combination of mass spectrometry (\ac{MS}) and proteomics workflows (see chapter \ref{chap:mass_spec}) for the qualitative and quantitative characterization of protein samples.
+More concretely, proteomics studies how proteins are capable of coordinating their functions by means of complex systems of regulation.  Proteomics aims at unraveling the complexity, understanding how its powerful properties emerge from its individual components CITE NETWORK THEORY. For instance, the interplay of proteomics and biotechnology helps researchers learn which proteins are key in the onset of a frequent disturbance of these regulations: cancer \cite{Saraon2012}. The application of proteomics to biological problems is not restricted to medical problems like that, but also biotechnological processes like those mentioned above.
+
+
 
 
 
 \section{Objectives of the Thesis}
 \label{sec:objectives}
 
-In line with the goal of making \ac{NZ} more competitive, this project aimed at the following objectives:
+In line with the goal of advancing \ac{NZ} capabilities in proteomics research, with the final ambition of speeding the research turnover in the company, this project aimed at the following:
 
 \begin{enumerate}
 
-\item Develop an open-source, Linux based and easily deployable pipeline for the analysis of \ac{MS} data, starting at the raw high-throughput data files and ending in the  biological interpretation of the results.
+\item Develop an open-source, Linux based and easily deployable pipeline for the analysis of proteomics data, starting at the raw high-throughput data files and ending in the  biological interpretation of the results.
 
-\item Evaluate this pipeline with a benchmark dataset to assess if the pipeline is able to reflect the biological phenomena captured in the data.
+\item Propose a label-free quantification probabilistic model that provides relative abundance estimates and a measurement of their uncertainty based on the available data.
 
-\item Establish a label-free quantification probabilistic model that provides relative abundance estimates and a measurement of their uncertainty based on the available data.
+
+\item Evaluate the tools with benchmark datasets to assess their performance and check they convey the biological phenomena captured in the data.
+
+
 
 \end{enumerate}
 
 \section{Structure of the Thesis}
 
-An overview over the \ac{MS} and following computational data analysis steps is presented in \ref{chap:mass_spec}. The pipeline development and its benchmark are explained in chapters \ref{chap:pipeline} and \ref{chap:benchmark}, while the modelling problem is introduced in chapter \ref{chap:model}. Finally, a conclusion of the work is given in chapter \ref{chap:conclusion}.
+An overview over the main data collection technique used in proteomics, Mass Spectrometry (\ac{MS}), and the ensuing computational data analysis steps is presented in chapter \ref{chap:mass_spec}. An inspection of the developed pipeline is provided in chapter \ref{chap:pipeline}, while the probabilistic model is introduced in chapter \ref{chap:model}. A benchmark of both tools on a \ac{NZ} dataset is given in chapter \ref{chap:benchmark}. Finally, a conclusion of the work is given in chapter \ref{chap:conclusion}.

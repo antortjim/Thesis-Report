@@ -145,7 +145,7 @@ After preprocessing and missing-data handling, a dataset of 1641 peptides was in
 \begin{figure}[H]
 \centering
 \includegraphics[width=\linewidth]{bq_comb_bq}
-\caption[Compomics+BayesQuant results on the THP-1 dataset]{\textbf{BayesQuant results}. \textbf{A} Histogram of the mean of the posterior distributions. \textbf{B} Dumbbell plot, representing the 95\% \ac{HPDI} for all proteins. Black dots represent the mean, and intervals not overlapping the \ac{ROPE} are shown red. \textbf{C} Histogram of the 95\% \ac{HPDI} width. \textbf{D} Scatter plot of the 95\% \ac{HPDI} width and the  posterior \ac{log2FC} mean.}
+\caption[Compomics+BayesQuant results on the THP-1 dataset]{\textbf{BayesQuant results}. \textbf{A} Histogram of the mean of the posterior distributions. \textbf{B} Dumbbell plot, representing the 95\% \ac{HPDI} for all proteins. Black dots represent the mean, and intervals not overlapping the \ac{ROPE} are shown red. \textbf{C} Histogram of the 95\% \ac{HPDI} width, which can be used as proxy for the overall uncertainty in the quantified data. \textbf{D} Scatter plot of the 95\% \ac{HPDI} width and the  posterior \ac{log2FC} mean.}
 \label{fig:compomics_bq}
 \end{figure}
 
@@ -198,7 +198,7 @@ On the one hand, nine terms (1, 2, 3, 4, 6, 8, 9, 10 and 17) were cell compartme
 
 \subsection{Pathway analysis}
 
-The UniprotKB to Gene name mapping of the whole set of \ac{DAP}s (including multiprotein groups) returned by MSqRob returned a list of 51 entities. The list was supplied to the ComPath Pathway Enrichment tool to highlight which cellular pathways were overrepresented compared to the human background. In agreement with the \ac{GSEA} results, a handful of pathways linked to the immune response were found to be significantly enriched: (I) Immune System, (II) Innate Immune System, (III) Necroptosis (IV) Programmed Cell Death, (V) Regulation of Apoptosis, (VI) Leukocyte transedothelial migration. Moreover, the finding of several RNA related pathways exposes the presence of potential cell reprogramming, essential in any change in protein profile.
+The UniprotKB to Gene name mapping of the set of 49 \ac{DAP}s (including multiprotein groups) returned by MSqRob returned a list of 51 entities. The list was supplied to the ComPath Pathway Enrichment tool to highlight which cellular pathways were overrepresented compared to the human background. 50 entities were mapped to the database (only \textit{C12orf42} was unmapped). In agreement with the \ac{GSEA} results, a handful of pathways linked to the immune response were found to be significantly enriched (see table \ref{tab:pathway_enrichment}) (I) Immune System, (II) Innate Immune System, (III) Necroptosis (IV) Programmed Cell Death, (V) Regulation of Apoptosis, (VI) Leukocyte transedothelial migration. Moreover, the finding of several RNA related pathways exposes the presence of potential cell reprogramming, essential in any change in protein profile.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 19:49:28 2018
@@ -230,13 +230,13 @@ The UniprotKB to Gene name mapping of the whole set of \ac{DAP}s (including mult
   20 & Leukocyte transendothelial migration & 2.96e-02 &   2 & 112 & kegg \\ 
    \hline
 \end{tabular}
-\caption{Pathway Enrichment results. The 10 most significant pathways found in Reactome and Kegg are shown arranged by decreasing significance. }
+\caption{Pathway Enrichment results. 50 proteins were mapped to pathway databses and an enrichment was performed. The 10 most significant pathways found in Reactome and Kegg are shown arranged by decreasing significance. The columns \textit{Ov} and \textit{Size} indicate the number of proteins shared between pathway and query, and the number of proteins included in the pathway, respectively. The input was always 49 set to protein groups.}
 \label{tab:pathway_enrichment}
 \end{table}
 
 \subsection{Protein interaction analysis}
 
-The same list supplied to ComPath was searched in the STRING database \cite{Szklarczyk2017} to screen for protein-protein interactions in the list. The database returns a protein association network (see figure \ref{fig:STRING}), that helps interpreting the information contained in gene sets. 49/51 terms were mapped to the resource and 15 of them were found to be included in the "immune system process" set, placing the biological process as the third most enriched with an FDR of 0.0387. 27 genes belonged to the "cellular nitrogen compound metabolic process" (FDR 0.0128).
+The same list supplied to ComPath was searched in the STRING database \cite{Szklarczyk2017} to screen for protein-protein interactions in the list. The database returns a protein association network (see figure \ref{fig:STRING}), that helps interpreting the information contained in gene sets. 49/51 terms were mapped to the resource and 15 of them were found to be included in the "immune system process" set, placing this biological process as the third most enriched with an FDR of 0.0387. 27 genes belonged to the "cellular nitrogen compound metabolic process" (FDR 0.0128).
 
 \begin{figure}[!h]
 \centering
@@ -251,13 +251,16 @@ The same list supplied to ComPath was searched in the STRING database \cite{Szkl
 
 \section{Discussion}
 
+A discussion over the major issues and strenghts detected while obtaining these results follows.
+
+
 \subsection{Increasing the experiment data-throughput}
 
-6 samples organized in two different treatments of 3 biological replicates without sample prefractionation each were analyzed. The resulting data throughput allowed for the performance of biological inference, as it successfully captured the undergoing biological processes. Nevertheless, a more in-depth results report would have been possible with (I) sample prefractionation, which improves peptide separation and allows for the collection and identification of more spectra \cite{Righetti2005}, and (II) the inclusion of technical replicates to differentiate the biological variability from experimental noise.
+Six samples organized in two different treatments of three biological replicates without sample prefractionation each were analyzed. The resulting data throughput allowed for the performance of biological inference, as it successfully captured the undergoing biological processes. Nevertheless, more in-depth results would have been possible with (I) sample prefractionation, which improves peptide separation and allows for the collection and identification of more spectra \cite{Righetti2005}, and (II) the inclusion of technical replicates to differentiate the biological variability from experimental noise.
 
 \subsection{Missing data handling}
 
-One of the most frequent issues found when analyzing proteomics datasets is the handling of missing values \cite{Lazar2016}. The presence of missing data in many of the rows in the input moFF file led to the dropping of 4803 out of 6443 peptides, producing a peptide dataset of only 1641 data points that accounted for 350 protein groups. Thanks to the missing data handling implemented in MSqRob quantified 1433 proteins, enough to continue the analysis (see table \ref{tab:balance}). The fact that the number of observed groups was 2787 implies that the management of missing values could be improved in both tools, and particularly in BayesQuant.
+One of the most frequent issues found when analyzing proteomics datasets is the handling of missing values \cite{Lazar2016}. The presence of missing data in many of the rows in the data passed to BayesQuant led to the dropping of 4803 out of 6443 peptides, producing a peptide dataset of only 1641 data points that accounted for 350 protein groups. Thanks to the missing data handling implemented in MSqRob, this tool quantified 1433 proteins, enough to continue the analysis (see table \ref{tab:balance}). However, the fact that the number of observed groups was 2787 implies that the management of missing values could potentially be improved in both tools, and particularly in BayesQuant.
 
 \begin{table}[!h]
 \centering
@@ -298,4 +301,4 @@ Missing data should be imputed at the peptide level. The implementation of a mod
 
 
 \section{Conclusion}
-The results presented in this work demonstrated the usability of the tools presented in the previous chapters in an actual \ac{NZ} setting. Moreover, a walk-through over the functional analyses that can be performed with this output clearly showed they can be used to perform computational analyses and biological inference on protein samples with open-source software with no cost for the company. However, the absence of proper missng data handling developed into the inability to quantify hundreds of proteins, signaling what are the next steps to improve the tools.
+A fine biological interpretation of the results depends on the original question that motivated the study, and thus the work on this chapter did not focus on that, but instead showed how it can be started with the outputsability of the tools presented in the previous chapters. The results indicated that these tools can be deployed to perform computational analyses and biological inference on protein samples with open-source software with no cost for \ac{NZ}. However, the absence of proper missing data handling developed into the inability to quantify hundreds of proteins, signaling what are the next steps to improve the tools. 

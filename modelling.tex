@@ -46,9 +46,9 @@ It can be applied to the quantification problem, where $\theta$ turns into the l
 
 \subsection{Inference methods: \ac{MCMC} and \ac{VI}}
 
-The posterior distribution can be approximated (inferred) by means of \ac{MCMC} and \ac{VI} methods. On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2018}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. This heuristic guarantees convergence of the empirical estimate with the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018} \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}. The first sampling algorithms, like Metropolis-Hastings \cite{Chib1995} \footnote{A very nice tutorial on how Metropolis-Hastings works \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} have given way to the much more efficient sampler \ac{NUTS} \cite{Hoffman2011}.
+The posterior distribution can be approximated (inferred) by means of \ac{MCMC} and \ac{VI} methods. On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2017}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. This heuristic guarantees convergence of the empirical estimate with the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018} \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}. The first sampling algorithms, like Metropolis-Hastings \cite{Chib1995} \footnote{A very nice tutorial on how Metropolis-Hastings works \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} have given way to the much more efficient sampler \ac{NUTS} \cite{Hoffman2011}.
 
-On the other hand, \ac{VI} methods, very recently developed and introduced in PyMC3, provide a fast alternative to \ac{MCMC} methods, yet they are not guaranteed to asymptotically approximate the true posterior. In \ac{VI}, optimization, instead of sampling, is employed as way to approximate the posterior \cite{Blei2018}. More concretely, a family of densities $Q$ over the parameters $\theta$ is defined. The goal of \ac{VI} is to find the single density $q$ within the family $Q$ that best approximates $p(\theta|y)$. This approximate density should be complex enough to reach a good approximation, and at the same time simple enough to be computationally easy to work with. The best candidate is defined as the one minimising the Kullback-Leibler (\ac{KL}) divergence (see equation \ref{eq:KL}).
+On the other hand, \ac{VI} methods, very recently developed and introduced in PyMC3, provide a fast alternative to \ac{MCMC} methods, yet they are not guaranteed to asymptotically approximate the true posterior. In \ac{VI}, optimization, instead of sampling, is employed as way to approximate the posterior \cite{Blei2017}. More concretely, a family of densities $Q$ over the parameters $\theta$ is defined. The goal of \ac{VI} is to find the single density $q$ within the family $Q$ that best approximates $p(\theta|y)$. This approximate density should be complex enough to reach a good approximation, and at the same time simple enough to be computationally easy to work with. The best candidate is defined as the one minimising the Kullback-Leibler (\ac{KL}) divergence (see equation \ref{eq:KL}).
 
 \begin{gather}\label{eq:KL}
 q^*(\theta) = \argmin \infdiv*{q(\theta)}{p(\theta|x)}
@@ -60,7 +60,7 @@ From \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{ht
 
 
 One of the terms yielded by the decomposition of the conditional density embodied by the posterior is the evidence of the data $p(x)$.  $p(x)$ is computationally intractable, thus making the computation of the exact \ac{KL} divergence impossible. A lower bound up to an additive constant can however be computed thanks to Jensen\textquotesingle s inequality \cite{jensen1906fonctions} \. This approximate amount is the Variational or Evidence Lower BOund (\ac{ELBO}). \textit{The \ac{ELBO} is the negative \ac{KL} divergence of plus $logp(x)$, which is a constant with respect to $q(z)$. Thus maximizing
-the \ac{ELBO} is equivalent to minimizing the \ac{KL} divergence} \cite{Blei2018}.
+the \ac{ELBO} is equivalent to minimizing the \ac{KL} divergence} \cite{Blei2017}.
 
 Finally, several density approximation families are available. The mean-field family of densities is one of the most simple, as it ignores all dependencies between latent variables, and treats them as independent. From \href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html} the mean-field approximations works by \textit{pretending that the variables are just behaving that way "on their own." The mean-field method throws away all of the interactions}. A generic mean-field family member is shown in equation \ref{eq:mean_field}.
 
@@ -365,7 +365,7 @@ The \texttt{bayesquant.fit()} function carries out two tasks:
 \item Sample from the approximate posterior, returning a collection of samples called trace.
 \end{itemize}
 
-The values stored in the trace obtained via VI will follow an approximation to the true posterior, and contain the results of the modelling process. Once it\textquotesingle obtained, the inference is complete and model checking ought to be performed to validate the results as explained in section \ref{subsec:model_checking}. It is run with
+The values stored in the trace obtained via VI will follow an approximation to the true posterior, and contain the results of the modelling process. Once it is obtained, the inference is complete and model checking ought to be performed to validate the results as explained in section \ref{subsec:model_checking}. It is run with:
 
 \begin{minted}[mathescape,
                linenos,
@@ -374,9 +374,11 @@ The values stored in the trace obtained via VI will follow an approximation to t
                frame=lines,
                firstnumber=last,
                framesep=2mm]{python}
+# Run Posterior Predictive Checks
 bayesquant.ppc()
 \end{minted}
 
+A step by step exposition of the plots and results produced by the program when ran on the proteins  P0A818 (\textit{E. coli}) and A6NDG6 (\textit{Homo sapiens}) will follow.
 
 \subsection{VI optimisation evaluation}
 
@@ -398,14 +400,14 @@ bayesquant.ppc()
 \label{fig:ELBO}
 \end{figure}
 
-Even though the ELBO took extremely low (negative) values at start (see figure \ref{fig:ELBO}), it was maximised fast to values around 0, indicating that the mean-field approximation was acceptably good.
+After the \texttt{.fit()} method is run, a plot of the maximisation of the \ac{ELBO} is produced automatically. Even though the ELBO took extremely low (negative) values at start (see figure \ref{fig:ELBO}), it was maximised fast to values around 0, indicating that the mean-field approximation was acceptably good.
 
-\subsection{Basic model}
+
+\subsection{Sampling from the approximation to the posterior}
 \label{subsec:basic_model}
 
-A protein from each proteome was used to test BayesQuant\textquotesingle s performance P0A818 (\textit{E. coli}) and A6NDG6 (\textit{Homo sapiens}).
 
-The traces produced by BayesQuant using \ac{VI} exhibited a clear random walk behaviour, which decreases the posibility that the approximation was wrong. Moreover, the  effects caused by the different peptides and runs were estimated and separated from the overall observed noise, allowing for a better estimation of the \ac{log2FC} (see figure \ref{fig:traceplots}).
+The 10k traces produced by BayesQuant from the \ac{VI} approximation function exhibited a clear random walk behaviour, which decreases the posibility that the approximation was wrong. Moreover, the  effects caused by the different peptides and runs were estimated and separated from the overall observed noise, allowing for a better estimation of the \ac{log2FC} (see figure \ref{fig:traceplots}).
 
 \begin{figure}[!h]
 %\begin{adjustbox}{varwidth=\textwidth,fbox,center}
@@ -425,11 +427,10 @@ The traces produced by BayesQuant using \ac{VI} exhibited a clear random walk be
 \label{fig:traceplots}
 \end{figure}
 
-This way, a different posterior distribution was computed for the impact of each peptide and run in all the measurements collected for each protein.
+This way, a different posterior distribution was computed for the impact of each "peptide" and "run" in all the measurements collected for each protein.
 
 
-
-The study of the \ac{log2FC} posterior probability distribution reveals what are the most likely parameter values and allows for the fulfillment of Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentually the same as the null value \cite{Kruschke}. In the present application, the null value was set to 0, and the interval was given a width of 0.4 on each side.
+The study of the \ac{log2FC} posterior probability distribution (see figure \ref{fig:posteriors}) shows the most likely parameter values and empowers Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentually the same as the null value \cite{Kruschke}. In this and all future applications in the thesis, the null value is set to 0, and the interval is given a width of 0.4 on each side.
 
 \begin{figure}[!h]
 \centering
@@ -446,7 +447,7 @@ The study of the \ac{log2FC} posterior probability distribution reveals what are
 \label{fig:posteriors}
 \end{figure}
 
-The test analysis indicated that P0Q8I8 most likely has a \ac{log2FC} between 1.4 and 1.7, and it\textquotesingle significantly different from 0, as no overlap was observed between \ac{HPDI} and \ac{ROPE}. On the other hand, the human protein was found to acquire a \ac{log2FC} most likely between -0.1 and 0.192. This range is fully contained within the \ac{ROPE}, which indicates that the \ac{log2FC} was practically 0 (see figure \ref{fig:posteriors}).
+The analysis indicated that P0Q8I8 (\textit{E. coli}) most likely has a \ac{log2FC} between 1.4 and 1.7, and it\textquotesingle significantly different from 0, as no overlap was observed between \ac{HPDI} and \ac{ROPE}. On the other hand, the human protein was found to acquire a \ac{log2FC} most likely between -0.1 and 0.192. This range is fully contained within the \ac{ROPE}, which indicates that the \ac{log2FC} was practically 0 (see figure \ref{fig:posteriors}).
 
 
 The posterior predictive checks on both proteins pinpoints that the fitted models captured a data generation process approximating what was observed (see figure \ref{fig:ppc}). The three observed peptides were found to be undistinguishable from the 500 simulated ones.
@@ -467,7 +468,7 @@ The posterior predictive checks on both proteins pinpoints that the fitted model
 \end{figure}
 
 
-In order to further validate BayesQuant\textquotesingle s performance, it was tested on pairs of groups of 5 proteins from each proteome. Each pair was made by proteins with a different number of observed peptides (2, 3, 4, 6, 7, 10) (see figure \ref{fig:dumbbell}). The more peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed.
+In order to further validate BayesQuant\textquotesingle s performance, it was tested on groups of 5 proteins, one group from each proteome. Each pair of groups was made by proteins with a different number of observed peptides (2, 3, 4, 6, 7, 10) (see figure \ref{fig:dumbbell}). The more peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed (see figure \ref{fig:dumbbell}).
 
 \begin{figure}[!h]
 \centering
