@@ -13,9 +13,13 @@
 \usepackage{amsmath}
 \DeclareMathOperator*{\argmax}{arg\!\max}
 \DeclareMathOperator*{\argmin}{arg\!\min}
-\usepackage[backend=bibtex,style=numeric]{biblatex}  %backend=biber is 'better'  
+\usepackage[backend=bibtex,style=numeric,doi=false, url=false]{biblatex}  %backend=biber is 'better' 
+\AtBeginBibliography{\small} 
 %\bibliographystyle{unsrt_etal}
 \addbibresource{bibliography.bib}
+\usepackage{setspace}
+\onehalfspacing
+
 %\usepackage{unicode-math}
 \usepackage{mathtools}
 \usepackage{fontspec}
@@ -217,6 +221,7 @@
 %%  Begin document
 %%  ==================================================================
 	\begin{document}
+%\singlespacing\blindtext
 
 %%  Begin title page
 %%  ==================================================================
@@ -260,18 +265,17 @@
 \newpage
 %\setcounter{page}{1}
 
-%% https://tex.stackexchange.com/questions/93859/condense-the-space-between-bibliographic-entries
-%\let\oldthebibliography\thebibliography
-%\let\endoldthebibliography\endthebibliography
-%\renewenvironment{thebibliography}[1]{
-%  \begin{oldthebibliography}{#1}
-%    \setlength{\itemsep}{0em}
-%    \setlength{\parskip}{0em}
-%}
-%{
-%  \end{oldthebibliography}
-%}
-
+% https://tex.stackexchange.com/questions/93859/condense-the-space-between-bibliographic-entries
+\let\oldthebibliography\thebibliography
+\let\endoldthebibliography\endthebibliography
+\renewenvironment{thebibliography}[1]{
+  \begin{oldthebibliography}{#1}
+    \setlength{\itemsep}{0em}
+    \setlength{\parskip}{0em}
+}
+{
+  \end{oldthebibliography}
+}
 
 \input{preface}
 \input{introduction}
@@ -292,6 +296,7 @@ The pipelines presented in chapter \ref{chap:pipeline} and the MaxQuant suite of
 
 
 \printbibliography
+
 
 \end{document}
 %%  ==================================================================
