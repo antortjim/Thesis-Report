@@ -25,7 +25,7 @@ The Bayesian statistical framework provides an alternative point of view by revo
 P(\theta | y) = \cfrac{P(y | \theta) P(\theta)}{P(y)}
 \end{equation}
 
-The Bayes theorem is an extremely versatile tool taking a role analogous to that of statistics like T, F, or $\chi^2$. Unlike them, which are tailored to specific scenarios, it can be used compute the probability distribution of almost any parameter in any model. 4 terms can be distinguished in its expression
+The Bayes theorem is an extremely versatile tool taking a role analogous to that of statistics like T, F, or $\chi^2$. Unlike them, which are tailored to specific scenarios, it can be used to compute the probability distribution of almost any parameter in any model. 4 terms can be distinguished in its expression
 
 \begin{enumerate}
 
@@ -40,7 +40,7 @@ The Bayes theorem is an extremely versatile tool taking a role analogous to that
 \end{enumerate}
 
 
-The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterir probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the likelihood divided by a constant}.
+The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterior probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the likelihood divided by a constant}.
 
 It can be applied to the quantification problem, where $\theta$ turns into the log2FC parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Unfortunately, this is tractable analytically for simple models only. However, Markov Chain-Monte Carlo (\ac{MCMC}) and Variational Inference (\ac{VI}) methods can be used to approximate this posterior. Both of which are now possible to run thanks to the advent of modern computing.
 
@@ -306,6 +306,12 @@ and is read as \textit{the observed data is modelled by a normal distribution wi
 
 
 \section{Results}
+
+\begin{figure}[!h]
+ \centering 
+ \includepdf[pages=-]{hierarch_diagram.pdf}
+\end{figure}
+
 
 \subsection{Running BayesQuant}
 

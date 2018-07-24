@@ -7,7 +7,7 @@ A benchmark dataset was run through the programmes presented in chapters \ref{ch
 
 \section{Introduction}
 
-The protein ratios across conditions are not known in ordinary datasets In order to judge the resolving power of the mass spectrometry and shotgun proteomics workflows presented in this work, an in-house dataset attempting to capture an immunological response was generated. Therefore, even though true protein ratios were not known \textit{a priori}, the analysis should find proteins related to the immunological response to be significantly differentially abundant. 
+The protein ratios across conditions are not known in ordinary datasets. In order to judge the resolving power of the mass spectrometry and shotgun proteomics workflows presented in this work, an in-house dataset attempting to capture an immunological response was generated. Therefore, even though true protein ratios were not known \textit{a priori}, the analysis should find proteins related to the immunological response to be significantly differentially abundant. 
 
 Moreover, a function inference step from the estimated protein \ac{log2FC} values is required to arrive to biological interpretations like that. These kind of analysis is common to all omics (genomics, transcriptomics, ...) and can be completed with Gene Set Enrichment Analysis \ac{GSEA} and Pathway Analysis, among others.
 
@@ -121,7 +121,7 @@ Data on 6444 peptides, as collected in the peptide summary file from moFF, was p
 
 \subsection{Compomics+BayesQuant}
 
-After preprocessing and missing-data handling, a dataset of 1641 peptides was input to BayesQuant, and 269 proteins were quantified. A histogram of the mean of the inferred posterior distributions manifests the centrality of its distribution, with most values within the predefined \ac{ROPE} of [-0.4, 0.4]. In line with what was observed in the results above, the distribution was found to be skewed toward negative values (see figure \ref{fig:compomics_bq}A). Only four proteins were assigned a 95\% \ac{HPDI} not touching the \ac{ROPE} (see figure \ref{fig:compomics_bq}B and table \ref{tab:thp1_bq_results}). The distribution of the \ac{HPDI} width summarises the overall uncertainty in the estimation process. Most proteins had a very narrow HPDI, as shown in figure \ref{fig:compomics_bq}C. As expected, the width of the interval exhibited some degree of correlation with   the mean of the posterior, as shown in \ref{fig:compomics_bq}D.
+After preprocessing and missing-data handling, a dataset of 1641 peptides was input to BayesQuant, and 269 proteins were quantified. A histogram of the mean of the inferred posterior distributions manifests the centrality of its distribution, with most values within the predefined \ac{ROPE} of [-0.4, 0.4]. In line with what was observed in the results above, the distribution was found to be skewed toward negative values (see figure \ref{fig:compomics_bq}A). Only four proteins were assigned a 95\% \ac{HPDI} not touching the \ac{ROPE} (see figure \ref{fig:compomics_bq}B and table \ref{tab:thp1_bq_results}). The distribution of the \ac{HPDI} width summarises the overall uncertainty in the estimation process. Most proteins had a very narrow HPDI, as shown in figure \ref{fig:compomics_bq}C. As expected, the width of the interval exhibited some degree of correlation with the mean of the posterior, as shown in figure \ref{fig:compomics_bq}D.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 18:02:39 2018
