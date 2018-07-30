@@ -13,3 +13,5 @@ ku-forside.zip
 _minted*
 distribution_diagrams/*
 *bcf
+plots/posteriors/*
+plots/traceplots/*
