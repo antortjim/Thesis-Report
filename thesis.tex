@@ -1,14 +1,17 @@
 \documentclass[11pt, a4paper]{report}
+\usepackage{fontspec}
 % FOR COLORFUL TABLES
 \usepackage{booktabs}
 \usepackage[table]{xcolor}
 \usepackage[english]{babel}
-\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}
 %\usepackage[utf8]{inputenc}
 \usepackage{pdfpages}
 \usepackage{array} % to make table column italic
 \usepackage{textcomp} % to support the trademark symbol
+%\usepackage[cache=false]{minted}
 \usepackage{minted}
+
 \usemintedstyle{autumn}
 \usepackage{amsmath}
 \DeclareMathOperator*{\argmax}{arg\!\max}
@@ -22,7 +25,6 @@
 
 %\usepackage{unicode-math}
 \usepackage{mathtools}
-\usepackage{fontspec}
 \usepackage{csquotes}
 \DeclarePairedDelimiterX{\infdivx}[2]{(}{)}{%
   #1\;\delimsize\|\;#2%
