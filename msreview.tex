@@ -2,7 +2,7 @@
 \label{chap:mass_spec}
 
 
-The main source of data in proteomics is \ac{MS}. However, different approaches to how this technique is used make for two paradigms in proteomics analysis: top-down and bottom-up \cite{Joshi2017}. In the top-down paradigm, intact proteins are directly used for the analysis \cite{Sinitcyn2018}. In the bottom-up paradigm (see figure \ref{fig:proteomics_overview}), the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are peptides \cite{Barsnes2008}, consisting of around 10 chained aminoacids. Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as illustrated in section \ref{subsec:the_detector}. This review will focus on the Data-Dependent Aquisition (\ac{DDA} approach within bottom-up proteomics, which currently is the most frequent workflow in proteomics \cite{Sinitcyn2018}. In this approach, the equipment is configured for the analysis of one peptide at a time, with the drawback of being biased for the most abundant peptides.
+The main source of data in proteomics is \ac{MS}. However, different approaches to how this technique is used make for two paradigms in proteomics analysis: top-down and bottom-up \cite{Joshi2016}. In the top-down paradigm, intact proteins are directly used for the analysis \cite{Sinitcyn2018}. In the bottom-up paradigm (see figure \ref{fig:proteomics_overview}), the proteins are first cleaved into smaller parts, and these parts are then used for identification, characterization, and quantification. These smaller parts are peptides \cite{Barsnes2008}, consisting of around 10 chained aminoacids. Such peptides acquire physicochemical properties fitting the requirements of the downstream analytical methods, mainly the mass spectrometer (MS), which performs the data acquisition. The bottom-up paradigm is most often used because peptides are much more suitable to analysis by mass spectrometry, as illustrated in section \ref{subsec:the_detector}. This review will focus on the Data-Dependent Aquisition (\ac{DDA} approach within bottom-up proteomics, which currently is the most frequent workflow in proteomics \cite{Sinitcyn2018}. In this approach, the equipment is configured for the analysis of one peptide at a time, with the drawback of being biased for the most abundant peptides.
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{proteomics_skema_book}
@@ -10,7 +10,7 @@ The main source of data in proteomics is \ac{MS}. However, different approaches 
 \label{fig:proteomics_overview}
 \end{figure}
 
-MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for eventually thousands of sample components. A detailed explanation of the sample processing required prior to MS is given in section \ref{sec:sample_processing}, while an overview on mass spectrometers is given in section \ref{sec:the_mass_spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \ref{sec:inference}. A third computational problem needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \ref{sec:quantification}.
+MS is performed by means of a mass spectrometer, an ensemble of pieces of equipment that can acquire mass measurements for eventually thousands of sample components. A detailed explanation of the sample processing required prior to MS is given in section \ref{sec:sample_processing}, while an overview on mass spectrometers is given in section \ref{sec:the_mass_spectrometer}. The result of the MS analysis is a dataset that, with adequate computational analysis tools, is enough to perform the inference steps required to gather knowledge about the original protein sample. These inference steps can be condensed to the peptide and protein inference problems, explained in section \ref{sec:inference}. A third computational challenge needs to be solved if quantitative, and not just qualitative information, is to be gained from the experiment. This is the quantification problem, explained in section \ref{sec:quantification}.
 
 A summary of the bottom-up approach MS analytical pipeline is provided in the rest of the chapter. It can be divided into two main steps:
 
@@ -129,11 +129,11 @@ It is up to the \ac{MS} technician to decide on the best pieces of equipment acc
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{tandem_ms}
-\caption[MS/MS schema]{Illustration of the tandem MS workflow. The first spectrometer acts as an ion selector, that not only registers spectra, but also lets through ions with a given \ac{m/z} ratio. The second spectrometer does not perform mass analysis, but instead provides the medium where peptide fragmentation (see section \ref{subsec:fragmentation}) occurs. Finally the third spectrometer records fragment mass spectra. Taken from \footnotemark{}.}
+\caption[MS/MS schema]{Illustration of the tandem MS workflow. The first spectrometer acts as an ion selector, that not only registers spectra, but also lets through ions with a given \ac{m/z} ratio. The second spectrometer does not perform mass analysis, but instead provides the medium where peptide fragmentation (see section \ref{subsec:fragmentation}) occurs. Finally the third spectrometer records fragment mass spectra. Taken from \href{https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation}{https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation}.}
 \label{fig:tandem_ms}
 \end{figure}
 
-\footnotetext{\href{https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation}{https://www.slideshare.net/joachimjacob/bits-introduction-to-mass-spec-data-generation}}
+
 \stepcounter{footnote}
 
 Shotgun proteomics analyses make use of two or more mass spectrometers connected in series, giving rise to the so-called Tandem MS (\ac{MS/MS}) workflow. In this setting, each mass spectrometer collects a different type of spectra and thus different information (see figure \ref{fig:shotgun}). An extra spectrometer, usually a quadrupole, is introduced in between.
@@ -163,12 +163,12 @@ Fragmentation occurs in the second spectrometer. But what is it, and why is it d
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.8\textwidth]{abcxyz}
-\caption[Fragment ions nomenclature]{The common fragments and their relation to the peptide sequence can be organized into 2 groups of 3 series each. The abc fragments keep the N-terminal residue, while xyz keep the C-terminal one. Specific fragmentation techniques make fragments belonging to one series more likely than others. Other fragments are possible but much less likely. The fragment nomenclature was introduced in \cite{Roepstorff1984}.}
+\caption[Fragment ions nomenclature]{\textbf{Fragment ions nomenclature}. The common fragments and their relation to the peptide sequence can be organized into 2 groups of 3 series each. The abc fragments keep the N-terminal residue, while xyz keep the C-terminal one. Specific fragmentation techniques make fragments belonging to one series more likely than others. Other fragments are possible but much less likely. The fragment nomenclature was introduced in \cite{Roepstorff1984}.}
 \label{fig:abcxyz}
 \end{figure}
 
 
-During peptide fragmentation, bonds along the peptidic chain are broken, turning the peptide into smaller fragments. These fragments will consist of truncated versions of the original peptide at different positions, thus making it possible to read an \ac{m/z} ratio difference between any pair of fragment ions. The difference can be exploited to deduce which aminoacid makes up for that difference. If this process is repeated for enough pairs of contiguous fragments, with the right software, a sequence can be read from the \ac{MS/MS} spectrum, as  explained in section \ref{sec:search_engines}.
+During peptide fragmentation, bonds along the peptidic chain are broken, turning the peptide into smaller fragments. These fragments will consist of truncated versions of the original peptide at different positions, thus making it possible to read an \ac{m/z} ratio difference between any pair of fragment ions \cite{Barsnes2008}. The difference can be exploited to deduce which aminoacid makes up for that difference. If this process is repeated for enough pairs of contiguous fragments, with the right software, a sequence can be read from the \ac{MS/MS} spectrum, as  explained in section \ref{sec:search_engines}.
 
 %A given bond will be more likely to break the less stable it is. This makes (I) the \ce{C_$\alpha$}-\ce{CO}, (II) the peptidic \ce{CO}-\ce{NH}, and (III) the \ce{C_$\alpha$}-\ce{NH} bonds the most likely to break (see figure \ref{fig:abcxyz}). A nomenclature REF was introduced to name these fragments:
 
@@ -184,7 +184,7 @@ During peptide fragmentation, bonds along the peptidic chain are broken, turning
 \section{Spectra processing: search engines}
 \label{sec:search_engines}
 
-Computational analysis of MS data starts with the matching of the spectra to a referene proteome (see figure \ref{fig:computational_analysis}). \ac{MS} search engines are capable of performing the crucial step of peptide to spectrum matching (PSM). During this step, search engines perform (I) \textit{in silico} prediction of the peptides produced in the protein digestion step and (II) their expected spectrum.
+Computational analysis of MS data starts with the matching of the spectra to a reference proteome (see figure \ref{fig:computational_analysis}). \ac{MS} search engines are capable of performing the crucial step of peptide to spectrum matching (PSM). During this step, search engines attempt to match each observed spectrum to theoretical spectra based on the reference proteome. Theoretical spectra are obtained via (I) \textit{in silico} simulation of the spectra produced by the peptides contained in the proteome, in turn obtained by performing a virtual cleaveage of the sequences in the proteome, or (II) spectral libraries, consisting of annotated observed spectra \cite{Li2012}.
 
 
 \begin{figure}[!h]
@@ -199,7 +199,7 @@ Computational analysis of MS data starts with the matching of the spectra to a r
 %\label{fig:PSM}
 %\end{figure}
 
-Given the stochastic nature of the protein cleavage and spectra recording processes, the resulting data exhibit variability manifested in both missing and spurious peaks \cite{Stein1999}. Furthermore, random (wrong) matches can be returned by the PSM process when running against a sufficiently big database. This translates to the generation of multiple matches, of which one, if any, will be correct. Therefore, the lists of matches need to be somehow ranked by goodness-of-fit. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems. Assuming the correct protein is present in the database, a good scoring system should give the best score to the right peptide. Under this circumstances, if repeated for several peptides, enough evidence for the presence of individual proteins can be collected.
+Given the stochastic nature of the protein cleavage and spectra recording processes, the resulting data exhibit variability manifested in both missing and spurious peaks \cite{Stein1999}. Furthermore, random (wrong) matches can be returned by the PSM process when running against a sufficiently big database. This translates to the generation of multiple matches for a single spectrum, of which one, if any, will be correct. Therefore, the lists of matches needs to be somehow ranked by goodness-of-fit. The issue is addressed by search engines through the deployment of statistical models that provide scoring systems. Assuming the correct protein is present in the database, a good scoring system should give the best score to the right peptide. Under this circumstances, if repeated for several peptides, enough evidence for the presence of individual proteins can be collected.
 
 Multiple search engines exist that implement different matching and scoring algorithms. The most modern ones include MS-GF+ \cite{Kim2014}, MS-Amanda \cite{Dorfer2014}, Comet \cite{Eng2013} and Andromeda \cite{Cox2011}. Notably, the results of each individual search engine can be combined to gather their strengths, at the expense of an increased computational cost and time \cite{Shteynberg2013}.
 
@@ -212,15 +212,15 @@ The scoring systems implemented in search engines provide the best matches, but 
 
 A common filter is the false discovery rate (FDR), usually set to 1\%, indicating that after its application, only one out of a hundred filtered matches are expected to be false positives (wrong matches).
 
-The most commonly used method to compute the \ac{FDR} of a list of matches is the target-decoy search. Using this method, the search engine replicates the matching process, using the same spectra, but instead against a decoy database i.e it simulates random matches. The decoy database is generated by reversing or more generally applying a randomization technique upon the sequences present in the original database (target) \cite{Elias2010}. 
+The most commonly used method to compute the \ac{FDR} of a list of matches is the target-decoy search. Using this method, the search engine replicates the matching process, using the same spectra, but instead against a decoy database i.e it simulates random matches. The decoy database is generated by reversing or more generally applying a randomization technique upon the sequences present in the original (target) database \cite{Elias2010}. 
 
-All matches to the decoy are by definition wrong. Since the basic properties of the decoy (size, composition, etc) remain identical to those of the target the amount of matches to the decoy exhibiting more than a given score $s$ can be regarded as an estimate of the number of false identifications ($\hat{n}_{fp}$) in the list of target results exhibiting at least the same score. This is because the existence of shared properties entails that random matches are equally likely to happen in both databases \cite{Elias2010}. Together with the number of PSMs passing a given score in the target ($n_{tp} + n_{tp}$), the FDR can be computed using equation \ref{eq:fdr}.
+All matches to the decoy are by definition wrong. Since the basic properties of the decoy (size, composition, etc) remain identical to those of the target, the amount of matches to the decoy exhibiting more than a given score $s$ can be regarded as an estimate of the number of false identifications ($\hat{n}_{fp}$) in the list of target results exhibiting at least the same score. This is because the existence of shared properties entails that random matches are equally likely to happen in both databases \cite{Elias2010}. Together with the number of PSMs passing a given score in the target ($n_{tp} + n_{tp}$), the FDR can be computed using equation \ref{eq:fdr}.
 
 \begin{equation}\label{eq:fdr}
 FDR = \frac{\hat{n}_{fp}}{n_{fp} + n_{tp}}
 \end{equation}
 
-The equation tells us that we can compute the FDR at any score by counting how many decoy hits have a greater score ($\hat{n}_{fp}$), and dividing by the length of our target hits list. Thus, the score that makes the FDR equal to a predefined value, frequently 0.01 or 1 \%, can be computed and used as threshold for the target hits.
+The equation tells us that the FDR at any score $s$ can be computed by counting how many decoy hits have a score greater than $s$ ($\hat{n}_{fp}$), and dividing by the length of our target hits list. Thus, the score that makes the FDR equal to a predefined value, frequently 0.01 or 1 \%, can be computed and used as threshold for the target hits.
 
 \begin{figure}[!h]
 \centering
@@ -245,10 +245,10 @@ Two steps in protein identification can be distinguished:
 \begin{enumerate}
 
 \item \textbf{Peptide inference}: infer the peptides present in the sample.
-\item \textbf{Protein inferece \textit{proper}}: based on the inferred peptides, infer what proteins generated them. This is not trivial as peptides are degenerate and frequently map to more than one protein.
+\item \textbf{Protein inferece \textit{proper}}: based on the inferred peptides, infer what proteins generated them. This is not trivial as peptides are degenerate and frequently map to more than one protein \cite{Li2012}.
 \end{enumerate}
 
-The result of the PSM step returns the inferred list of peptides. The ensemble of proteins most likely to have generated the list of peptides stemming from the filtered PSMs can be inferred using different algorithms. The degenerate nature of peptides is dealt with the Occam\textquotesingle s razor principle, which states that the most likely solution is the simplest one. Thus, protein inference algorithms aim at explaining the maximum amount of peptides using the least amount of proteins.
+The result of the PSM step returns an inferred list of peptides. The ensemble of proteins most likely to have generated the list of peptides stemming from the filtered PSMs can be identified using different algorithms \cite{Li2012} \cite{Huang2012}. Protein inference algorithms aim at explaining the maximum amount of peptides using the least amount of proteins.
 
 \section{Protein quantification}
 \label{sec:quantification}
@@ -271,13 +271,13 @@ Protein quantification pipelines can be classified based on whether isobaric lab
 
 Two paradigms exist in protein quantification: label-based and label-free. In label-based quantification, originally identical peptides from a number of different samples are made distinguishable by their masses via the incorporation of a label. All label-based methods simultaneously analyze several samples in each experiment, removing the difficulties associated with between-run variability \cite{Barsnes2008}. The finite number of "plexes" available for a given label sets the limit to how many samples can be differentially quantified \cite{Cox2014}. Different techniques, like Stable Isotope Labeling by Amino acids in Cell culture (SILAC) or Isotope-Coded Affinity Tags (ICAT), differ in the nature of the label and the way it is introduced. Most of them have potential limitations \cite{Patel2009}. This, together with the limited amount of samples that can be compared makes a case for label-free quantification.
 
-In the label-free quantification approach, peptides from different samples are not labelled differently and are thus distinguished by their presence in different, independent \ac{MS} runs. In order to account for the introduced inter-run variability in peptide identifications and \ac{RT}, a match-between-runs (MBR) processing step can be carried out (see figure \ref{figure:moff_mbr}). 
+In the label-free quantification approach, peptides from different samples are not labelled differently and are thus distinguished by their presence in different, independent \ac{MS} runs \cite{Barsnes2008}. In order to account for the introduced inter-run variability in peptide identifications and \ac{RT}, a match-between-runs (MBR) processing step can be carried out (see figure \ref{figure:moff_mbr}). 
 
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.9\linewidth]{mbr_workflow}
-\caption[Match Between Runs module]{Illustration of the \ac{MBR} step. \textbf{A} the information gathered from matches in replicate runs is put to use during a reanalysis of the spectra. Modified from supplementary information in \cite{Argentini2016}.}
+\caption[Match Between Runs module]{\textbf{\ac{MBR} step}. The information gathered from matches in replicate runs is put to use during a reanalysis of the spectra. Modified from supplementary information in \cite{Argentini2016}.}
 \label{figure:moff_mbr}
 \end{figure}
 
@@ -288,16 +288,16 @@ This way, extra identifications are attained through a reanalysis of the spectra
 \label{subsec:scvsxic}
 
 
-Quantification can be \ac{SC} or \ac{XIC} based.
+Quantification can be spectrum counting (\ac{SC}) or extractde ion currents (\ac{XIC}) based.
 
-On the one hand, spectrum counting based quantification is the simplest method in proteomics. The number of peptides a peptide is detected in the spectrometer is detected as proxy for its abundance. It relies on the rationale that highly abundant peptides will have a higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. These methods have the advantage that they are very simple to implement and don't require any further data processing \cite{Barsnes2008}.
+On the one hand, spectrum counting based quantification is the simplest method in proteomics. The number of times a peptide is detected in the spectrometer is used as proxy for its abundance. It relies on the rationale that highly abundant peptides will have an accordingly higher intensity and are thus more likely to trigger the acquisition of MS/MS spectra. These methods have the advantage that they are very simple to implement and don\textquotesingle t require any further data processing \cite{Barsnes2008}.
 
 On the other hand, \ac{XIC} based methods rely on intensity measurements at any level of the \ac{MS} workflow as proxies for protein abundance. A wide range of algorithms are available to process these data and output estimates of protein abundance. All of them require an intensive preprocessing step, usually including (I) taking the $log_2$ intensity to make the distributions symmetrical and thus fit for diverse parametric tests, and (II) quantile normalization to address between-runs variability in the intensity measurements. They can be classified in the bases of which MS level is used as proxy for the protein abundances and on whether or not a summarization step is performed to aggregate peptide-level data into protein-level data, or not. 
 
 
 As stated in \cite{Cox2014}, \textit{although the abundance of proteins and the probability of their peptides being selected for \ac{MS/MS} sequencing are correlated to some extent, \ac{XIC}-based methods should clearly be superior to \ac{SC} given sufficient resolution and optimal algorithms. These advantages are most prominent for low-intensity protein/peptide species, for which a continuous intensity readout is more information-rich than discrete counts of spectra}. For this reason, only the \ac{XIC} approach will be regarded in the rest of the manuscript.  
 
-For a more robust XIC based quantification, a feature extraction step is usually executed to extract consistent descriptors of identified peak clusters in the RT-m/z plance, as shown in figure \ref{figure:moff_apex}.
+For a more robust XIC based quantification, a feature extraction step is usually executed to extract consistent descriptors of identified peak clusters in the RT-m/z plane, as shown in figure \ref{figure:moff_apex}.
 
 \begin{figure}[!h]
 \centering
@@ -312,7 +312,7 @@ For a more robust XIC based quantification, a feature extraction step is usually
 \caption*{B}
 \includegraphics[width=0.7\linewidth]{apex_intensity}
 \end{subfigure}
-\caption[Apex MS1 intensity module]{Illustration of the apex intensity extraction step.\textbf{A} Visualization of a 3D peak cluster on the RT / m/z plane. An ion current at the same m/z ratio, thus corresponding to the same precursor ion, is detected with varying degrees of intensity over a more or less narrow time window, spreading the signal over time. Taken from \cite{Smith2014}. \textbf{B} A refinement analysis of these data attempts to fit a mathematical model of the signal over time and extract a representative measurement, such as the highest (apex) \ac{MS1} intensity. Modified from supplementary information in \cite{Argentini2016}.}
+\caption[Apex MS1 intensity module]{\textbf{The apex intensity extraction step}. \textbf{A} Visualization of a 3D peak cluster on the RT / m/z plane. Ion currents are detected with varying degrees of intensity over a more or less narrow time window, spreading the signal over time. Taken from \cite{Smith2014}. \textbf{B} A refinement analysis of these data attempts to fit a mathematical model of the signal over time and extract a representative measurement, such as the highest (apex) \ac{MS1} intensity. Modified from supplementary information in \cite{Argentini2016}.}
 \label{figure:moff_apex}
 \end{figure}
 

@@ -5,8 +5,8 @@
 
 \documentclass[12pt]{article}
 
-\usepackage[T1]{fontenc} 
-\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc} 
+%\usepackage[utf8]{inputenc}
 
 \usepackage[margin = 20mm, nohead, nofoot]{geometry} 
 
@@ -127,7 +127,7 @@
     	
    	\node [boxFramed, above = of final,  xshift =  \bigX cm, yshift = \smallY cm] (proEpsilon) {\halfnormalGreek{S} } ;
     	
-   	\node [boxFramedRound, above = of selectPar, yshift=.2cm, xshift = -\bigX-2.4 cm]   (proIntercept)   {\normalGreek{\mu_0, \sigma_0} };
+   	\node [boxFramedRound, above = of selectPar, yshift=.2cm, xshift = -\bigX-2.4 cm]   (proIntercept)   {\normalGreek{M_0, S_0} };
    	\node [boxFramedRound, above = of selectPar, yshift=\smallY cm, xshift = \smallX cm]   (proBeta)    {\normalGreek{\mu_j, \sigma_j} } ;
    	 
    	
@@ -147,7 +147,7 @@
     
     \draw[arrSnake] (proIntercept.south) -- node[left, labArrow] {$\ \ i$} ($(linMod)+(-1,0)$);       	 	
     \draw[arrSnake] (proBeta.south) --  node[left,  labArrow] {$j=p\quad $} ($(selectPar)+(-1,.8)$);
-    \draw[arrSnake] (proBeta.south) --  node[below,  labArrow] {$j=t\quad $} ($(selectPar)+(1,.8)$); 
+    \draw[arrSnake] (proBeta.south) --  node[xshift=0cm,  labArrow] {$j=t\quad $} ($(selectPar)+(1,.8)$); 
     \draw[arrSnake] (proBeta.south) --  node[right,  labArrow] {$j=r\quad $} ($(selectPar)+(2.5,.8)$); 
 
             	
@@ -172,7 +172,9 @@
 			 & stochastic \\[-0.4ex]
 			 & relation \\ %[1ex]
 			 
-			\multicolumn{2}{l}{$i, j = 1, 2, 3, \dots $} \\
+			\multicolumn{2}{l}{$i = 1, \dots, N$} \\
+			\multicolumn{2}{l}{$j \in$ peptide, treatment, run} \\
+			
    		\end{tabular}
    	};
    				
