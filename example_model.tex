@@ -1,0 +1,169 @@
+% Hierarchical diagrams, DBDA
+% ---------------------------------
+% Tinu Schneider, October 2013
+
+
+\documentclass[12pt]{article}
+
+%\usepackage[T1]{fontenc} 
+%\usepackage[utf8]{inputenc}
+
+\usepackage[margin = 20mm, nohead, nofoot]{geometry} 
+
+\usepackage{tikz}
+    \usetikzlibrary{positioning, arrows, backgrounds, decorations, 
+    				decorations.pathmorphing, decorations.markings, calc}
+  
+\graphicspath{{./distribution_diagrams/svg_without_names}}
+    
+\pagestyle{empty}
+
+\usepackage{tgheros} 
+\renewcommand*\familydefault{\sfdefault} 
+	
+
+% Macros for the distributions
+% greek
+\newcommand{\normalGreek}[1]{\greek{#1}{normal} } 
+\newcommand{\gammaGreek}[1]{\greek{#1}{gamma} }
+\newcommand{\halfnormalGreek}[1]{\greek{#1}{halfnormal} }   
+
+
+\newcommand{\greek}[2]{\large$#1$\\ \includegraphics*[scale = 0.25]{distribution_diagrams/png_with_params/#2.png} }				 	 
+   			
+% letters (constants)  
+\newcommand{\normalLetters}[1]{\letters{#1}{normal}} 
+\newcommand{\gammaLetters} [1]{\letters{#1}{gamma}}   
+\newcommand{\halfnormalLetters} [1]{\letters{#1}{halfnormal}}   
+
+
+
+\newcommand{\letters}[2]{$#1$\\ \includegraphics*[scale = 0.25]{distribution_diagrams/png/#2.png} }
+
+\usepackage{stackengine, scalerel}
+\newcommand\Tunderbrace[3][]{%
+  \def\tmp{#2}%
+  \setbox0=\hbox{\tmp}%
+  \stackunder[1pt]{%
+    \stackunder[0pt]{\tmp}{\rotatebox{90}{\scaleto[2ex]{#1\{}{\wd0}}}%
+  }{%
+    \scriptsize #3%
+  }%
+}
+\newcommand\Toverbrace[3][]{%
+  \def\tmp{#2}%
+  \setbox0=\hbox{\tmp}%
+  \stackon[1pt]{%
+    \stackon[0pt]{\tmp}{\rotatebox{90}{\scaleto[2ex]{#1\}}{\wd0}}}%
+  }{%
+    \scriptsize #3%
+  }%
+}
+
+  						 	
+   						 	
+   						 	  						 	 
+\begin{document} % ------------------------------ %
+
+% distances
+\def\smallY{0.25}
+\def\midY{2.25}
+\def\bigY{4.5}
+
+
+\def\smallX{1.2}
+\def\midX{1.5}
+\def\bigX{2.7}
+
+
+\begin{tikzpicture}[ framed, on grid,
+   	node distance = \midY cm, 
+   	inner frame xsep = 2.5ex,
+   	inner frame ysep = 3.0ex,
+    	box/.style = { rectangle,
+	       		color = lightgray, 
+	       		text = black,  
+	       		text width = 2.0cm, 
+	       		align = center},
+	    boxFramed/.style = {box, 
+	    		% draw, % uncomment this line, if you want the frames
+	    		inner sep = 0pt},
+	    boxFramedRound/.style = {boxFramed, rounded corners = 8pt},
+	    boxFormula/.style = {box, inner sep = 1pt},
+       	boxLegend/.style = {align = left, 
+       			text width = 4cm, 
+       			xshift = 2.2cm, 
+       			yshift = 1.2cm,  
+       			font = \scriptsize, 
+       			color = black!70},
+    	allArrows/.style = {font = \footnotesize, 
+    			color = black!80, text = black},
+    	arrSnake/.style = {allArrows, 
+    			>=stealth', 
+    			->, 
+    			shorten >= 2pt, 
+    			line join = round, 
+    			decorate, 
+  				decoration={snake, segment length = 10, 
+  							amplitude = 1.2, post = lineto, 
+  							post length = 4pt} },
+     	implies/.style  = {allArrows, -implies, double, 
+     			double equal sign distance, shorten >= 1pt}, 
+     	labArrow/.style = {pos = 0.39},
+     	labArrowLegend/.style = {labArrow, above, font = \tiny, inner sep = 3pt}
+  	] 		   		
+   		
+   	% nodes for the distributions and equation(s)
+   	% starting at the bottom				
+	\node [box, xshift = 2cm] (yi) {\Large $y$};
+
+   	\node [boxFramedRound, above = of yi, yshift = -.2cm] (final) {\normalGreek{\mu, \sigma} } ;
+   		   	
+   	\node [boxFormula, above = of final, xshift=-\bigX cm] (proM)   
+   			{ M } ;
+   			
+
+   	\node [boxFramed, above = of final,  xshift =  \bigX cm, yshift = \smallY cm] (proS) {\halfnormalGreek{S} } ;
+    	
+    	
+   		    	
+   	% Arrows	    	
+   	\draw[arrSnake] (final.south) --  node[right, labArrow] {} (yi);
+  	
+    \draw[implies]  ($(proM.south)+(0,-.15)$) -- node[right, labArrow] {} (final.125);
+    \draw[arrSnake] (proS.south) -- (final.55);   
+   	
+   	
+   	
+  	% Legend; needs improvement...
+   	\node [boxLegend] at ( $(current bounding box.south west)-(1,0)$) (legendTitle) 
+   		{%
+   		\begin{tabular}{ll}
+   			$A, \dots, Z$  & Constants \\
+   			$a, \dots, z$ & Variables \\
+   			$\alpha, \dots, \epsilon$ & Parameters \\ %[1ex]
+   			
+			 & deterministic \\[-0.4ex]
+			 & relation \\ %[1ex]
+			 
+			 & stochastic \\[-0.4ex]
+			 & relation \\ %[1ex]
+			 
+			\multicolumn{2}{l}{$i = 1, \dots, N$} \\
+			\multicolumn{2}{l}{$j \in$ peptide, treatment, run} \\
+			
+   		\end{tabular}
+   	};
+   				
+   	\def\xLegendArrowLeft{-2.5}
+   	\def\xLegendArrowRight{-1.2}  
+   	 	
+   	\def\yLegendDouble{0.83}
+   	\def\yLegendSnake{0.25}
+   	
+   	\draw[implies, black!70]  (\xLegendArrowLeft, \yLegendDouble) -- (\xLegendArrowRight, \yLegendDouble);    	   	
+    \draw[arrSnake, black!70] (\xLegendArrowLeft, \yLegendSnake) -- (\xLegendArrowRight, \yLegendSnake);    	
+
+\end{tikzpicture}
+
+\end{document} % ------------------------------ %
