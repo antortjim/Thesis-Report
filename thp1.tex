@@ -121,7 +121,7 @@ Data on 6444 peptides, as collected in the peptide summary file from moFF, was p
 
 \subsection{Compomics+BayesQuant}
 
-After preprocessing and missing-data handling, a dataset of 1641 peptides was input to BayesQuant, and 269 proteins were quantified. A histogram of the mean of the inferred posterior distributions manifests the centrality of its distribution, with most values within the predefined \ac{ROPE} of [-0.4, 0.4]. In line with what was observed in the results above, the distribution was found to be skewed toward negative values (see figure \ref{fig:compomics_bq}A). Only four proteins were assigned a 95\% \ac{HPDI} not touching the \ac{ROPE} (see figure \ref{fig:compomics_bq}B and table \ref{tab:thp1_bq_results}). The distribution of the \ac{HPDI} width summarises the overall uncertainty in the estimation process. Most proteins had a very narrow HPDI, as shown in figure \ref{fig:compomics_bq}C. As expected, the width of the interval exhibited some degree of correlation with the mean of the posterior, as shown in figure \ref{fig:compomics_bq}D.
+After preprocessing and missing-data handling, a dataset of 1641 peptides was passed to BayesQuant, and 269 proteins were quantified. A histogram of the mean of the inferred posterior distributions manifests its centrality, with most values within the predefined \ac{ROPE} of [-0.4, 0.4]. In line with what was observed in the results above, the distribution was found to be skewed toward negative values (see figure \ref{fig:compomics_bq}A). Only four proteins were assigned a 95\% \ac{HPDI} not touching the \ac{ROPE} (see figure \ref{fig:compomics_bq}B and table \ref{tab:thp1_bq_results}). The distribution of the \ac{HPDI} width summarises the overall uncertainty in the estimation process. Most proteins had a very narrow HPDI, as shown in figure \ref{fig:compomics_bq}C. As expected, the width of the interval exhibited some degree of correlation with the mean of the posterior, as shown in figure \ref{fig:compomics_bq}D.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 18:02:39 2018
@@ -137,7 +137,7 @@ After preprocessing and missing-data handling, a dataset of 1641 peptides was in
    & P04406 & -1.09 & -1.45 & -0.77 & 4 \\ 
    \hline
 \end{tabular}
-\caption{\ac{DAP} declared by the Compomics+BayesQuant pipeline.}
+\caption{\ac{DAP}s declared by the Compomics+BayesQuant pipeline.}
 \label{tab:thp1_bq_results}
 \end{table}
 
@@ -194,12 +194,13 @@ A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSq
 \end{table}
 \normalsize
 
-On the one hand, nine terms (1, 2, 3, 4, 6, 8, 9, 10 and 17) were cell compartment terms associated with cellular secretion and the extracelullar space. On the other hand, five terms (5, 7, 14, 15, 19) were related to the immunological response. The remaining terms were connected to RNA functions and the nervous system.
+On the one hand, nine terms (1, 2, 3, 4, 6, 8, 9, 10 and 17) were cell compartment terms associated with cellular secretion and the extracelullar space. On the other hand, five terms (5, 7, 14, 15, 19) were related to the immunological response. The remaining terms were connected to RNA functions.
 
-These results can be better visualized by making use of a treemap like the one shown in figure \ref{fig:treemap}.
+These results can be better visualized by making use of a treemap (see figure \ref{fig:treemap}), which makes the interpretation of table \ref{tab:gsea} more straightforward.
 
-\begin{figure}
-\caption{Treemap produced by REVIGO}
+\begin{figure}[!h]
+\includegraphics[width=\textwidth]{revigo_treemap.png}
+\caption[REVIGO treemap]{\textbf{REVIGO treemap}. A top-level representation of the enriched GO-terms. Each top-level term is mapped to an area whose size is proportional to the significance of the term. This way, a big area indicates more enrichment \cite{Supek2011}.}
 \label{fig:treemap}
 \end{figure}
 
@@ -308,4 +309,4 @@ Missing data should be imputed at the peptide level. The implementation of a mod
 
 
 \section{Conclusion}
-A fine biological interpretation of the results depends on the original question that motivated the study, and thus the work on this chapter did not focus on that, but instead showed how it can be started with the outputsability of the tools presented in the previous chapters. The results indicated that these tools can be deployed to perform computational analyses and biological inference on protein samples with open-source software with no cost for \ac{NZ}. However, the absence of proper missing data handling developed into the inability to quantify hundreds of proteins, signaling what are the next steps to improve the tools. 
+A fine biological interpretation of the results depends on the original question that motivated the study, and thus this chapter did not focus on that, but instead showed how it can be started with the output of the tools presented in the previous chapters. The results indicated the tools can be deployed to perform computational analyses and biological inference on protein samples with open-source software with no cost for \ac{NZ}. However, the absence of proper missing data handling developed into the inability to quantify hundreds of proteins, signaling what are the next steps to improve the tools. 
