@@ -112,7 +112,7 @@
 \usepackage{subcaption}
 \captionsetup{font={small},skip=0.25\baselineskip}
 \captionsetup[subfigure]{font={bf, footnotesize}, skip=1pt, singlelinecheck=false}
-\graphicspath{{./plots/}{./figures/}}
+\graphicspath{{./plots/}{./figures/}{./distribution_diagrams/svg_without_names}}
 \usepackage{subcaption}
 \usepackage{float} % force float
 \usepackage[nottoc]{tocbibind}
@@ -200,6 +200,60 @@
 
 \newcommand{\mycaption}[2]{\caption[#1]{\textbar\, \textbf{#1.} #2}}
 
+
+\usepackage{tikz}
+    \usetikzlibrary{positioning, arrows, backgrounds, decorations, 
+    				decorations.pathmorphing, decorations.markings, calc}
+  
+%\graphicspath{}
+    
+\pagestyle{empty}
+
+\usepackage{tgheros} 
+\renewcommand*\familydefault{\sfdefault} 
+	
+
+% Macros for the distributions
+% greek
+\newcommand{\normalGreek}[1]{\greek{#1}{normal} } 
+\newcommand{\gammaGreek}[1]{\greek{#1}{gamma} }
+\newcommand{\halfnormalGreek}[1]{\greek{#1}{halfnormal} }   
+
+
+\newcommand{\greek}[2]{\large$#1$\\ \includegraphics*[scale = 0.25]{distribution_diagrams/png_with_params/#2.png} }				 	 
+   			
+% letters (constants)  
+\newcommand{\normalLetters}[1]{\letters{#1}{normal}} 
+\newcommand{\gammaLetters} [1]{\letters{#1}{gamma}}   
+\newcommand{\halfnormalLetters} [1]{\letters{#1}{halfnormal}}   
+
+
+
+\newcommand{\letters}[2]{$#1$\\ \includegraphics*[scale = 0.25]{distribution_diagrams/png/#2.png} }
+
+\usepackage{stackengine, scalerel}
+\newcommand\Tunderbrace[3][]{%
+  \def\tmp{#2}%
+  \setbox0=\hbox{\tmp}%
+  \stackunder[1pt]{%
+    \stackunder[0pt]{\tmp}{\rotatebox{90}{\scaleto[2ex]{#1\{}{\wd0}}}%
+  }{%
+    \scriptsize #3%
+  }%
+}
+\newcommand\Toverbrace[3][]{%
+  \def\tmp{#2}%
+  \setbox0=\hbox{\tmp}%
+  \stackon[1pt]{%
+    \stackon[0pt]{\tmp}{\rotatebox{90}{\scaleto[2ex]{#1\}}{\wd0}}}%
+  }{%
+    \scriptsize #3%
+  }%
+}
+
+  		
+  		
+  		
 %%  Begin document
 %%  ==================================================================
 	\begin{document}

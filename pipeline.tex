@@ -198,7 +198,7 @@ The result of the process was the successful quantification of 5307 protein grou
 \label{tab:quantification_table}
 \end{table}
 
-The performance of the quantification can be evaluated thanks to the experimental design of the dataset. Since the \textit{E. coli} proteome was mixed on a 3:1 ratio in condition H, a \ac{log2FC} of $log2(3)=1.58$ is expected for proteins coming from this organism. Likewise, human proteins should have a \ac{log2FC} of 0. As such, the evaluation can be reformulated as a classification task were the quantification algorithm tries to distinguish between proteins coming from one or the other organism.
+The performance of the quantification can be evaluated thanks to the experimental design of the dataset. Since the \textit{E. coli} proteome was mixed on a 3:1 ratio in condition H, a \ac{log2FC} of $log_2(3)=1.58$ is expected for proteins coming from this organism. Likewise, human proteins should have a \ac{log2FC} of 0. As such, the evaluation can be reformulated as a classification task were the quantification algorithm tries to distinguish between proteins coming from one or the other organism.
 
 
 \begin{figure}[H]
@@ -230,7 +230,7 @@ The result of this analysis is shown in figure \ref{fig:roc_curves}. Remarkably,
 \caption*{B}
 \includegraphics[width=.95\textwidth]{correlation_plot}
 \end{subfigure}
-\caption[Pipeline agreement plots]{Agreement between the different pipelines. \textbf{A} The Venn diagram displays the number of \textit{E. coli} proteins found to be differentially abundant by each pipeline. \textbf{B} The log2FC estimated in all three pipelines for the 121 shared proteins is plotted by pairs to evaluate their correlation.}
+\caption[Pipeline agreement plots]{Agreement between the different pipelines. \textbf{A} The Venn diagram displays the number of \textit{E. coli} proteins found to be differentially abundant by each pipeline. \textbf{B} The \ac{log2FC} estimated in all three pipelines for the 121 shared proteins is plotted by pairs to evaluate their correlation.}
 \label{fig:venn_cor}
 \end{figure}
 
