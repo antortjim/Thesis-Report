@@ -3,7 +3,7 @@
 
 \section*{Summary}
 
-A benchmark dataset was run through the programmes presented in chapters \ref{chap:pipeline} and \ref{chap:model} to showcase their performance. The experimental desgin attempted to capture a protein profile change reflecting a known biological process. Thus, a successful computational analysis of the dataset should also reflect the phenomenon. The results confirmed that the computational analysis successfully captured this response. It was concluded that the software can be used in future experiments where the biological phenomena underlying the data are not known.
+A second benchmark dataset was run through the programmes presented in chapters \ref{chap:pipeline} and \ref{chap:model} to showcase their performance. The experimental design attempted to capture a protein profile change reflecting a known biological process. Thus, a successful computational analysis of the dataset should reflect the same phenomenon. The results confirmed that the computational analysis successfully captured this response. It was concluded that the software can be used in future experiments where the biological phenomena underlying the data are not known.
 
 \section{Introduction}
 
@@ -28,24 +28,24 @@ Moreover, a function inference step from the estimated protein \ac{log2FC} value
 
 \subsection{Sample preparation}
 
-THP-1 cells were grown in RPMI1640 (Sigma) supplemented with 10\% FBS (SeraLab) and 1\% pen/strep (Gibco). Stimulation of THP-1 cells was done in 48-well plates (Gibco) with 2x106 cells/well. Cells were exposed to 500 ng/mL LPS (E. coli O111:B4) (positive control condition, \textit{PC}) or nothing (negative control condition, \textit{NC}) for 48 hours in 37 degrees, 5\% \ce{{CO}_2}. After stimulation supernatants were collected and cell pellets were washed in PBS (Gibco). Both supernatants and pellets were frozen (-20 degrees). Only the pellet samples were considered for the analysis. EGWS, Esben Gjerløff Wedebye Schmidt.
+THP-1 cells were grown in RPMI1640 (Sigma) supplemented with 10\% FBS (SeraLab) and 1\% pen/strep (Gibco). Stimulation of THP-1 cells was done in 48-well plates (Gibco) with 2x106 cells/well. Cells were exposed to 500 ng/mL LPS (E. coli O111:B4) (+LPS) or nothing (-LPS) for 48 hours in 37 degrees, 5\% \ce{{CO}_2}. After stimulation supernatants were collected and cell pellets were washed in PBS (Gibco). Both supernatants and pellets were frozen (-20 degrees). This work was carried out by Esben G. W. Schmidt. Only the pellet samples were considered for the analysis. 
  
-\subsection{Mass Spectrometry analysis}
+%\subsection{Mass Spectrometry analysis}
 
-AEGI
+
 
 \subsection{Computational analysis}
 
-The resulting .RAW files were processed with the two different pipelines fully developed in the present work. (I) Compomics+MSqRob and (II) Compomics+BQ (Compomics and BayesQuant). The search settings were identical to those used in chapter \ref{chap:pipeline}, except for the proteome databases employed, which consisted of \textit{Homo sapiens} only. The validation filters, \ac{MBR}, MS1 Apex intensity, and MSqRob preprocessing parameters were also set to those used previously, for simplicity. The two pipelines used thus diverged only in the quantification engine, being identical in all previous steps.
+ deveThe resulting .RAW files were processed with the two different pipelines introduced in the present work. (I) Compomics+MSqRob and (II) Compomics+BQ (Compomics and BayesQuant). The search settings were identical to those used in chapter \ref{chap:pipeline}, except for the proteome databases employed, which consisted of \textit{Homo sapiens} only. The validation filters, \ac{MBR}, MS1 Apex intensity, and MSqRob preprocessing parameters were also set to those used previously, for simplicity. The two pipelines used thus diverged only in the quantification engine, being identical in all previous steps.
 
 In the Compomics+MSqRob pipeline, a protein was declared to be differentially abundant (\ac{DAP}) between the 2 conditions assayed if the result of the student\textquotesingle s-T test implemented in MSqRob returned a q-value less than 0.05. The criteria in the Compomics+BayesQuant pipeline was the absence of overlap between the \ac{ROPE} [-0.4, 0.4] and the 95\% \ac{HPDI}.
 
 
 \subsection{Biological inference}
 
-The gProfiler R package \cite{Boyd2010} was used to run automatic \ac{GSEA} and provide a biological interpretation of the results.
+The gProfiler R package \cite{Boyd2010} was used to perform \ac{GSEA}, and its results were visualized with the REVIGO tool \cite{Supek2011}.
 
-Pathways analysis was executed by calling the ComPath Webserver \cite{Domingo2018}. UniprotKB IDs were transformed to "Gene name" IDs, as required by the tool using the Retrieve/ID mapping tool from Uniprot. The KEGG \cite{Kanehisa2000} and Reactome \cite{Croft2014} databases were used as source.
+Pathways analysis was executed with the ComPath Webserver \cite{Domingo2018}. UniprotKB IDs were transformed to "Gene name" IDs, as required by the tool, using the Retrieve/ID mapping tool from Uniprot. The KEGG \cite{Kanehisa2000} and Reactome \cite{Croft2014} databases were used as source.
 
 Protein interactions were explored by querying the STRING database \cite{Szklarczyk2017} with the list of \ac{DAP}s produced by MSqRob.
  
@@ -53,7 +53,7 @@ Protein interactions were explored by querying the STRING database \cite{Szklarc
 
 \subsection{Compomics+MSqRob}
 
-Data on 6444 peptides, as collected in the peptide summary file from moFF, was passed to MSqRob, resulting in the quantification of 1433 proteins. A histogram of the \ac{log2FC} reveals that in most cases, not enough evidence was collected to declare the \ac{log2FC} different from 0 (see figure \ref{fig:compomics_rob} A). Remarkably, the distribution was shifted toward negative values, depicting that most of the proteins for which an non-null estimate was provided were more abundant in the \textit{PC} condition. A volcano plot (see figure \ref{fig:compomics_rob} B), reveals that the majority of the 49 protein groups passing the significance criteria ($qval < 0.05$), displayed an absolute value of the \ac{log2FC} less than 1. However, all were considered differentially abundant. The 32 protein groups composed by a single protein (single protein \ac{DAP}s) are shown in table \ref{tab:thp1_rob_results}.
+Data on 6444 peptides, as collected in the peptide summary file from moFF, was passed to MSqRob, resulting in the quantification of 1433 proteins. A histogram of the \ac{log2FC} reveals that in most cases, not enough evidence was collected to declare the \ac{log2FC} different from 0 (see figure \ref{fig:compomics_rob} A). Remarkably, the distribution was shifted toward negative values, depicting that most of the proteins for which a non-null estimate was provided were more abundant in the +LPS condition. A volcano plot (see figure \ref{fig:compomics_rob} B), reveals that the majority of the 49 protein groups passing the significance criteria ($q-value < 0.05$), displayed an absolute value of the \ac{log2FC} less than 1. However, all were considered differentially abundant. The 32 protein groups composed by a single protein (single protein \ac{DAP}s) are shown in table \ref{tab:thp1_rob_results}.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 16:02:33 2018
@@ -154,7 +154,7 @@ Given the scarcity of the results, it was decided to continue the analyses with 
 
 \subsection{Functional analysis}
 
-A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSqRob (see table \ref{tab:thp1_rob_results}) illustrates the most overrepresented biological processes, cellular compartments and molecular functions, compared to the human background. The 20 most significant terms found in the dataset are displayed in table \ref{tab:gsea}.
+A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSqRob (see table \ref{tab:thp1_rob_results}) illustrates the most over-represented biological processes, cellular compartments and molecular functions, compared to the human background. The 20 most significant terms found in the dataset are displayed in table \ref{tab:gsea}.
 
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
@@ -206,7 +206,7 @@ These results can be better visualized by making use of a treemap (see figure \r
 
 \subsection{Pathway analysis}
 
-The UniprotKB to Gene name mapping of the set of 49 \ac{DAP}s (including multiprotein groups) returned by MSqRob returned a list of 51 entities. The list was supplied to the ComPath Pathway Enrichment tool to highlight which cellular pathways were overrepresented compared to the human background. 50 entities were mapped to the database (only \textit{C12orf42} was unmapped). In agreement with the \ac{GSEA} results, a handful of pathways linked to the immune response were found to be significantly enriched (see table \ref{tab:pathway_enrichment}) (I) Immune System, (II) Innate Immune System, (III) Necroptosis (IV) Programmed Cell Death, (V) Regulation of Apoptosis, (VI) Leukocyte transedothelial migration. Moreover, the finding of several RNA related pathways exposes the presence of potential cell reprogramming, essential in any change in protein profile.
+The UniprotKB to Gene name mapping of the set of 49 \ac{DAP}s (including multi-protein groups) returned by MSqRob produced a list of 51 entities. The list was supplied to the ComPath Pathway Enrichment tool to highlight which cellular pathways were over-represented compared to the human background. 50 entities were mapped to the database. In agreement with the \ac{GSEA} results, a handful of pathways linked to the immune response were found to be significantly enriched (see table \ref{tab:pathway_enrichment}) (I) Immune System, (II) Innate Immune System, (III) Necroptosis (IV) Programmed Cell Death, (V) Regulation of Apoptosis, (VI) Leukocyte transedothelial migration. Moreover, the finding of several RNA related pathways exposed the presence of potential cell reprogramming, essential in any change in protein profile.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 19:49:28 2018
@@ -238,7 +238,7 @@ The UniprotKB to Gene name mapping of the set of 49 \ac{DAP}s (including multipr
   20 & Leukocyte transendothelial migration & 2.96e-02 &   2 & 112 & kegg \\ 
    \hline
 \end{tabular}
-\caption{Pathway Enrichment results. 50 proteins were mapped to pathway databses and an enrichment was performed. The 10 most significant pathways found in Reactome and Kegg are shown arranged by decreasing significance. The columns \textit{Ov} and \textit{Size} indicate the number of proteins shared between pathway and query, and the number of proteins included in the pathway, respectively. The input was always 49 set to protein groups.}
+\caption{Pathway Enrichment results. 50 proteins were mapped to pathway databases and an enrichment was performed. The 10 most significant pathways found in Reactome and Kegg are shown arranged by decreasing significance. The columns \textit{Ov} and \textit{Size} indicate the number of proteins shared between pathway and query, and the number of proteins included in the pathway, respectively. The input was always 49 set to protein groups.}
 \label{tab:pathway_enrichment}
 \end{table}
 
@@ -259,7 +259,7 @@ The same list supplied to ComPath was searched in the STRING database \cite{Szkl
 
 \section{Discussion}
 
-A discussion over the major issues and strenghts detected while obtaining these results follows.
+A discussion over the major issues and strengths detected while obtaining these results follows.
 
 
 \subsection{Increasing the experiment data-throughput}
@@ -268,7 +268,7 @@ Six samples organized in two different treatments of three biological replicates
 
 \subsection{Missing data handling}
 
-One of the most frequent issues found when analyzing proteomics datasets is the handling of missing values \cite{Lazar2016}. The presence of missing data in many of the rows in the data passed to BayesQuant led to the dropping of 4803 out of 6443 peptides, producing a peptide dataset of only 1641 data points that accounted for 350 protein groups. Thanks to the missing data handling implemented in MSqRob, this tool quantified 1433 proteins, enough to continue the analysis (see table \ref{tab:balance}). However, the fact that the number of observed groups was 2787 implies that the management of missing values could potentially be improved in both tools, and particularly in BayesQuant.
+One of the most frequent issues found when analyzing proteomics datasets is the handling of missing values \cite{Lazar2016}. The presence of missing data in many of the rows in the data passed to BayesQuant led to the dropping of 4803 out of 6443 peptides, producing a peptide dataset of only 1641 data points that accounted for 350 protein groups. Thanks to the missing data handling implemented in MSqRob, this tool quantified 1433 proteins, enough to continue the quantitative analysis (see table \ref{tab:balance}). However, the fact that the number of observed groups was 2787 implies that the management of missing values could potentially be improved in both tools, and particularly in BayesQuant.
 
 \begin{table}[!h]
 \centering
@@ -289,15 +289,15 @@ Three different types of missing values have been defined \cite{Wei2018}:
 
 \begin{enumerate}
 
-\item Missing Completely At Random (MCAR): Unpredictable, caused by random errors in the data acquistion step and affecting the whole dataset.
+\item Missing Completely At Random (MCAR): Unpredictable, caused by random errors in the data acquisition step and affecting the whole dataset.
 
-\item Missing At Random (MAR): Caused by other observed variables. Citing \cite{Wei2018}: \textit{ Inaccurate peak detection and deconvolution of co-eluting compounds can be called MAR}.
+\item Missing At Random (MAR): Caused by other observed variables. \textit{ Inaccurate peak detection and deconvolution of co-eluting compounds can be called MAR} \cite{Wei2018}.
 
 \item Missing Not At Random (\ac{MNAR}): Caused by signals under the limit of detection (\ac{LOD}) of the spectrometer.
 
 \end{enumerate}
 
-While all three are relevant, \ac{MNAR} is particularly important because it introduces a bias in the dataset, where proteins are more likely to be quantified if their abundance is high enough in all samples for their peptide signals to be above the \ac{LOD}. Thus, proteins exhibiting abundances below the \ac{LOD} due to the experimental treatment are bound to generate peptide data featuring missing values that, if not handled properly, are discarded. Subsequently, \ac{DAP}s or in general proteins with variant abundance become less likely to be quantified, difficulting the extraction of protein sets.
+While all three are relevant, \ac{MNAR} is particularly important because it introduces a bias in the dataset, where proteins are more likely to be quantified if their abundance is high enough in all samples for their peptide signals to be above the \ac{LOD}. Thus, proteins exhibiting abundances below the \ac{LOD} due to the experimental treatment are bound to generate peptide data featuring missing values that, if not handled properly, are discarded. Subsequently, \ac{DAP}s or in general proteins with variant abundance become less likely to be quantified, complicating the extraction of relevant protein sets.
 
 Missing data should be imputed at the peptide level. The implementation of a module performing this task prior to quantification would  improve the accuracy and throughput of the quantification process. Several approaches have been proposed, some within a probabilistic framework \cite{Lazar2016}. For example, in cases of clear \ac{MNAR}, imputation could be based on an inferred global \ac{LOD}, so that missing values are replaced with it. Work on this line could potentially boost the performance of BayesQuant.
 

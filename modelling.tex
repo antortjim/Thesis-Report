@@ -19,7 +19,7 @@ H_1: & \log_2(FC) \neq 0 \nonumber
 
 The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a p-value, which measures the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, p-values do not say anything about the probability of hypotheses outside $H_0$ and $H_1$.
 
-The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and comes equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes\textquotesingle s theorem.
+The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and come equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes\textquotesingle s theorem.
 
 \begin{equation}
 P(\theta | y) = \cfrac{P(y | \theta) P(\theta)}{P(y)}
@@ -93,7 +93,7 @@ where $y_{ijkl}$ stands for the $\log_2$-transformed intensity registered in tre
 
 For example, the measurement $y_{P,A,p,1}$ corresponds to a measurement mapped to protein $P$. The measurement is impacted by a fixed effect, produced by treatment $A$, but also the peptide effect in peptide $p$ and the run effect in run $1$. An intercept term was also added to account for the background protein intensity value.
 
-The data is thus said to be affected by different effects acting independently, and in order to model them properly, multilevels need to be defined. It can be done via three approaches: pooled, unpooled, and hierarchically (see figure \ref{fig:multilevel}). Hierarchical modelling is used when the sampling variance is not the only source of variation among the parameters, but they still share a dependency. The intercept and the three effects were modelled as independent hierarchies.
+The data is thus said to be affected by different effects acting independently, and in order to model them properly, multi-levels need to be defined. It can be done via three approaches: pooled, unpooled, and hierarchically (see figure \ref{fig:multilevel}). Hierarchical modelling is used when the sampling variance is not the only source of variation among the parameters, but they still share a dependency. The intercept and the three effects were modelled as independent hierarchies.
 
 \begin{figure}[!h]
 \centering
@@ -132,7 +132,7 @@ This way, independent and identically distributed (\ac{IID}) priors were set for
 \subsection{Model checking}
 \label{subsec:model_checking}
 
-However the posterior distribution is obtained, a proper Bayesian analysis is not finished without a model checking step that looks at potential problems happenning in the fitting step, and confirms the goodness of fit of the model to the data.
+However the posterior distribution is obtained, a proper Bayesian analysis is not finished without a model checking step that looks at potential problems happening in the fitting step, and confirms the goodness of fit of the model to the data.
 
 \begin{itemize}
 
@@ -154,7 +154,7 @@ The management of uncertainty in statistics is done by means of probability dist
 
 %The fit of the model to the data entails the computation of the posterior probability distribution, which is tallied using algorithms provided with the probabilistic programming tool.
 
-PyMC3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (ADVI) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilisitc estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
+PyMC3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (ADVI) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilistic estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
 
 
 \subsection{Goals}
@@ -259,7 +259,7 @@ Which is equivalent to the following statistical notation:
 and can be read as \textit{the prior probability distribution of the random effect follows a normal distribution with mean 0 and standard deviation $\sigma$. In turn, $\sigma$\textquotesingle s prior probability distribution follows a half normal distribution with standard deviation 1}. 1 and 0 act as hyperparameters of the model, and introduce the state of beliefs or knowledge on the system prior to seeing the data.
 
 
-The hierarchical structure of the model is set by the definition of a parameter distribution from which the value for each element (peptide) being modelled is sampled. This can be done by defining a new normal distribution where its $\mu$ and $\sigma$ are set to the random variables defined above. Im PyMC3 code,
+The hierarchical structure of the model is set by the definition of a parameter distribution from which the value for each element (peptide) being modelled is sampled. This can be done by defining a new normal distribution where its $\mu$ and $\sigma$ are set to the random variables defined above. In PyMC3 code,
 
 \begin{minted}[mathescape,
                linenos,
@@ -358,7 +358,7 @@ The snippet above loads the program, reads in the data, selects a specific prote
                frame=lines,
                firstnumber=last,
                framesep=2mm]{python}
-# VI approximation: much faster and pretty accurate
+# VI approximation: much faster and accurate
 trace_advi = bayesquant.fit(model_name=p, n_draws=40000)
 \end{minted}
 
@@ -392,7 +392,7 @@ A step by step exposition of the plots and results produced by the program when 
 %\end{figure}
 \begin{figure}[!h]
 \input{hierarch_diagram}
-\caption{Kruschke-like diagram of the Bayesian model}
+\caption[BayesQuant Kruschke-like diagram]{\textbf{BayesQuant Kruschke-like diagram}. Extends figure \ref{fig:daft_model} to give more detail into the model. Prior probability distributions are indicated with "distrograms", and the dependencies between them via arrows. The hyperparameters are represented by latin capital letters.}
 \label{fig:dbda}
 \end{figure}
 
@@ -423,7 +423,7 @@ A plot of the maximisation of the \ac{ELBO} is automatically produced when the t
 \label{subsec:basic_model}
 
 
-The 10k traces produced by BayesQuant from the \ac{VI} approximation function exhibited a clear random walk behaviour, which decreases the posibility that the approximation was wrong. Moreover, the  effects caused by the different peptides and runs were estimated and separated from the overall observed noise, allowing for a better estimation of the \ac{log2FC} (see figure \ref{fig:traceplots}).
+The 10k traces produced by BayesQuant from the \ac{VI} approximation function exhibited a clear random walk behaviour, which decreases the possibility that the approximation was wrong. Moreover, the  effects caused by the different peptides and runs were estimated and separated from the overall observed noise, allowing for a better estimation of the \ac{log2FC} (see figure \ref{fig:traceplots}).
 
 \begin{figure}[!h]
 %\begin{adjustbox}{varwidth=\textwidth,fbox,center}
@@ -446,7 +446,7 @@ The 10k traces produced by BayesQuant from the \ac{VI} approximation function ex
 This way, a different posterior distribution was computed for the impact of each "peptide" and "run" in all the measurements collected for each protein.
 
 
-The study of the \ac{log2FC} posterior probability distribution (see figure \ref{fig:posteriors}) shows the most likely parameter values and empowers Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentually the same as the null value \cite{Kruschke}. In this and all future applications in the thesis, the null value is set to 0, and the \ac{ROPE} is arbitrality set to $[-0.4, 0.4]$ based on the data.
+The study of the \ac{log2FC} posterior probability distribution (see figure \ref{fig:posteriors}) shows the most likely parameter values and empowers Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentially the same as the null value \cite{Kruschke}. In this and all future applications in the thesis, the null value is set to 0, and the \ac{ROPE} is arbitrarily set to $[-0.4, 0.4]$ based on the data.
 
 \begin{figure}[!h]
 \centering
@@ -466,7 +466,7 @@ The study of the \ac{log2FC} posterior probability distribution (see figure \ref
 The analysis indicated that P0Q8I8 (\textit{E. coli}) most likely has a \ac{log2FC} between 1.4 and 1.7, and was found to be significantly different from 0, as no overlap was observed between the \ac{HPDI} and the\ac{ROPE}. On the other hand, the human protein was found to acquire a \ac{log2FC} most likely between -0.1 and 0.2. This range is fully contained within the \ac{ROPE}, which indicates that the \ac{log2FC} was practically 0 (see figure \ref{fig:posteriors}).
 
 
-The posterior predictive checks on both proteins pinpoints that the fitted models captured a data generation process approximating what was observed (see figure \ref{fig:ppc}). The three observed peptides were found to be undistinguishable from the 500 simulated ones.
+The posterior predictive checks on both proteins pinpoint that the fitted models captured a data generation process approximating what was observed (see figure \ref{fig:ppc}). The three observed peptides were found to be indistinguishable from the 500 simulated ones.
 
 \begin{figure}[!h]
 \centering
@@ -496,12 +496,12 @@ In order to further validate BayesQuant\textquotesingle s performance, it was te
 
 Indeed, a general trend of width reduction was observed as the amount of peptides increased. For example, the widest intervals are observed on proteins with just two observed peptides, and the narrowest on proteins with ten. Moreover, the \ac{HPDI}s tended to align more strongly around an agreement value as well. 
 
-The consistent observation that \textit{Homo sapiens} proteins got a \ac{log2FC} estimate around 0, and \textit{E. coli} proteins got an estimate which overlapped the predefinned \ac{ROPE} in only three cases (two of which on proteins with two peptides), confirmed the validity of the quantification framework.
+The consistent observation that \textit{Homo sapiens} proteins got a \ac{log2FC} estimate around 0, and \textit{E. coli} proteins got an estimate which overlapped the predefined \ac{ROPE} in only three cases (two of which on proteins with two peptides), confirmed the validity of the quantification framework.
 
 \subsection{Extended model: peptide effect with sequence features}
 \label{subsec:extended_model}
 
-Given the open-source nature of the program, it is possible to build upon it and extend its functionality. The possibility of making use of the peptide sequences to model the peptide effect using a linear model was considered and put to practice. The code was thus extended with the following snippets of code:
+The possibility of making use of the peptide sequences to model the peptide effect using a linear model was considered and put to practice. The code was thus extended with the following snippets of code:
 
 \begin{minted}[mathescape,
                linenos,
@@ -548,7 +548,7 @@ which means that if the peptide effect is modelled as a function of the sequence
 \nonumber \theta_k \sim \mathcal{N}(0, \sigma^{\theta})
 \end{equation}
 \begin{equation}
-\nonumber \mu^p \sim \mathcal{N}(\sum_{k=0}^{k=K}{x_k \theta_k}, \sigma^p)
+\nonumber \mu^p \sim \mathcal{N}(\sum_{k=1}^{k=K}{x_k \theta_k}, \sigma^p)
 \end{equation}
 
 where $\theta_k$ is the weight of the $k^{th}$ feature, and $x_k$ is the numerical value of the $k^{th}$ feature. $\sigma^{\theta}$ is the prior for the standard deviation of the distribution all feature weights are sampled from.
@@ -575,18 +575,20 @@ The same workflow as in section \ref{subsec:basic_model} was ran with the extend
 
 \section{Discussion}
 
+A list of points to address to improve how BayesQuant works is discussed in this section.
+
 \subsection{Improving usability: parallelization}
 
 While BayesQuant performed well on the majority of proteins, it took around 30 seconds to approximate each protein\textquotesingle s posterior distributions using \ac{VI}, and more than two minutes with \ac{MCMC} methods. This translates to a dataset of 1k proteins taking 500 minutes (>8h) to be processed. However, the average modern computer comes with several processors that could support the parallelization of the program in several threads, decreasing the total computing time.
 
 \subsection{Further robustness and validation checks}
 
-A solid way of checking the results are not flawed is the specification of alternative priors. Unless precise prior knowledge is available, the selection of one prior over another prior to model the beliefs about the system should not have any impact on the results. It is for that reason that models built upon different priors could be run to further validate the program.
+A solid way of checking the results are not flawed is the specification of alternative priors. Unless precise prior knowledge is available, the selection of one prior over another to model the beliefs about the system should not have great impact on the results. It is for that reason that models built upon different priors could be run to further validate the program. Moreover, a formal posterior validation beyond visual inspection of simulated data could be implemented.
 
 
 \subsection{Advanced model comparison}
 
-Besides the predefinition of a \ac{ROPE} and the check of overlap with the 95 \% \ac{HPDI}, more advanced model comparison methods making use of the Bayes factor are available. The Bayes factor is defined as the ratio of the posterior probability of the models given the data \cite{Kruschke}. It could be used to measure how much more likely a model taking into account a treatment effect is compared to another one where the treatment effect is considered null i.e the \ac{log2FC} is set to 0. The result would provide an alternative criterion for the declaration of a protein being differentially abundant.
+Likewise, a formal way of establishing the \ac{ROPE} in the quantification context could be enacted depending on the data. On the other hand, a more advanced model comparison method could be built upon the Bayes factor. The Bayes factor is defined as the ratio of the posterior probability of two models given the data \cite{Kruschke}. It could be used to measure how much more likely a model taking into account a treatment effect is compared to another one where the treatment effect is considered null i.e the \ac{log2FC} is set to 0. The result would provide an alternative criterion for the declaration of a protein being differentially abundant.
 
 \subsection{Sequence-based modelling of the peptide effect}
 
@@ -602,11 +604,12 @@ Unfortunately, during the development of the project, it was acknowledged that t
 
 \item The mobile proton model \cite{Boyd2010}, which states that the peptide\textquotesingle s fragmentation pattern changes drastically depending on the number of charges and its distribution on the sequence. The charge distribution is hypothesised to be in turn determined by the position of positive residues that can allocate the charges. This phenomenon implies that the \ac{PSM} step is more difficult as a different spectrum is expected for molecules with the same peptide sequence but different charges. The decreased identifications and quality of the peaks worsen the performance of feature extraction algorithms like the Apex module in moFF. In turn, this results in the injection of more noise in the quantification data.
 
-\item The characterization of powerful sequence properties that specifically capture differential ionization efficiency is undone work, as most feature extractors are designed to solve different problems, like protein sructure prediction.
+\item The characterization of powerful sequence properties that specifically capture differential ionization efficiency is undone work, as most feature extractors are designed to solve different problems, like protein structure prediction.
 
 \end{itemize}
 
-Modelling such a complex phenomenon will require accordingly complex predictive architectures and the introduction of proper neural networks, capable of deciphering the intricate pattern mapping sequence to noise in the spectrometer\textquotesingle s measurements.
+Modelling such a complex phenomenon will require accordingly complex predictive architectures and the introduction of proper neural networks, capable of deciphering the intricate pattern mapping sequence to noise in the spectrometer\textquotesingle s measurements. The development of very new RAW spectra-files parsing-tools like RawQuant \cite{Kovalchik2018} could be used in a future implementation to provide the required feature-rich data.
+
 
 \subsection{Posterior assessment of the effects}
 
@@ -616,4 +619,4 @@ Moreover, the estimation of the different run effects could be used to help \ac{
 
 \section{Conclusion}
 
-A Bayesian framework for the relative quantification of protein abundance rations (Fold-Change, FC) using \ac{MS1} intensity was presented in this chapter. Unlike the currently prevailing methods in the field, it gives uncertainty estimates that provide a direct interpretation about the accuracy of the quantification. Moreover, preliminary results on the sequence modelling of the peptide bias revealed that more complex architectures and sequnce features are required to model noise with peptide sequences. Finally, the method can be used to investigate the presence of batch effects in \ac{MS} experiments for their minimisation in future experiments. While the software can be integrated in any pipeline producing peptide-level data, further testing and improvements are probably required for optimal performance.
+A Bayesian framework for the relative quantification of protein abundance ratios (Fold-Change, FC) using \ac{MS1} intensity was presented in this chapter. Unlike the currently prevailing methods in the field, it gives uncertainty estimates that provide a direct interpretation about the accuracy of the quantification. Moreover, preliminary results on the sequence modelling of the peptide bias revealed that more complex architectures and sequence features are required to model noise with peptide sequences. Finally, the method can be used to investigate the presence of batch effects in \ac{MS} experiments for their minimisation in future experiments. While the software can be integrated in any pipeline producing peptide-level data, further testing and improvements are probably required for optimal performance.

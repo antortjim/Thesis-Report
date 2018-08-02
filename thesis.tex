@@ -175,6 +175,9 @@
 \doublespacing 
 
 \usepackage{etoolbox}
+\newbool{firstbib}
+\booltrue{firstbib}
+%\preto{\bibitem}{\ifbool{firstbib}{\thispagestyle{fancy}\setbool{firstbib}{false}}{}}
 \makeatletter
 \patchcmd{\@makechapterhead}{50\p@}{0pt}{}{}
 \patchcmd{\@makeschapterhead}{50\p@}{0pt}{}{}
@@ -301,17 +304,13 @@
   \end{oldthebibliography}
 }
 
-\input{preface}
+\input{acknowledgements}
 \input{introduction}
 \input{msreview}
 \input{pipeline}
 \input{modelling}
 \input{thp1}
 \input{conclusion}
-
-
-
-
 
 
 \printbibliography

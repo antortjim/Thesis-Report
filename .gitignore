@@ -15,3 +15,5 @@ distribution_diagrams/*
 *bcf
 plots/posteriors/*
 plots/traceplots/*
+plots/PPC/*
+plots/ELBO/*
