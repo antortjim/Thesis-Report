@@ -61,7 +61,7 @@ Protein interactions were explored by querying the STRING database \cite{Szklarc
 
 \subsection{Compomics+MSqRob}
 
-Data on 6444 peptides, as collected in the peptide summary file from moFF, was passed to MSqRob, resulting in the quantification of 1433 proteins. A histogram of the \ac{log2FC} reveals that in most cases, not enough evidence was collected to declare the \ac{log2FC} different from 0 (see figure \ref{fig:compomics_rob} A). Remarkably, the distribution was shifted toward negative values, depicting that most of the proteins for which a non-null estimate was provided were more abundant in the +LPS condition. A volcano plot (see figure \ref{fig:compomics_rob} B), reveals that the majority of the 49 protein groups passing the significance criteria ($q-value < 0.05$), displayed an absolute value of the \ac{log2FC} less than 1. However, all were considered differentially abundant. The 32 protein groups composed by a single protein (single protein \ac{DAP}s) are shown in table \ref{tab:thp1_rob_results}.
+Data on 6444 peptides, as collected in the peptide summary file from moFF, was passed to MSqRob, resulting in the quantification of 1433 proteins. A histogram of the \ac{log2FC} reveals that in most cases, not enough evidence was collected to declare the \ac{log2FC} different from 0 (see figure \ref{fig:compomics_rob} A). Remarkably, the distribution was shifted toward negative values, depicting that most of the proteins for which a non-null estimate was provided were more abundant in the +LPS condition. A volcano plot (see figure \ref{fig:compomics_rob} B), reveals that the majority of the 49 protein groups passing the significance criteria (\textit{q-value} $< 0.05$), displayed an absolute value of the \ac{log2FC} less than 1. However, all were considered differentially abundant. The 32 protein groups composed by a single protein (single protein \ac{DAP}s) are shown in table \ref{tab:thp1_rob_results}.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 16:02:33 2018
@@ -162,7 +162,7 @@ Given the scarcity of the results, it was decided to continue the analyses with 
 
 \subsection{Functional analysis}
 
-A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSqRob (see table \ref{tab:thp1_rob_results}) illustrates the most over-represented biological processes, cellular compartments and molecular functions, compared to the human background. The 20 most significant terms found in the dataset are displayed in table \ref{tab:gsea}.
+A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSqRob (see table \ref{tab:thp1_rob_results}) with the gProfileR \cite{gprofiler} illustrates the most over-represented biological processes, cellular compartments and molecular functions, compared to the human background. The 20 most significant terms found in the dataset are displayed in table \ref{tab:gsea}.
 
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
@@ -204,7 +204,7 @@ A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSq
 
 On the one hand, nine terms (1, 2, 3, 4, 6, 8, 9, 10 and 17) were cell compartment terms associated with cellular secretion and the extracelullar space. On the other hand, five terms (5, 7, 14, 15, 19) were related to the immunological response. The remaining terms were connected to RNA functions.
 
-These results can be better visualized by making use of a treemap (see figure \ref{fig:treemap}), which makes the interpretation of table \ref{tab:gsea} more straightforward.
+A Revigo \cite{Supek2011} treemap (see figure \ref{fig:treemap}) makes the interpretation of table \ref{tab:gsea} more straightforward.
 
 \begin{figure}[!h]
 \includegraphics[width=\textwidth]{revigo_treemap.png}
@@ -214,7 +214,7 @@ These results can be better visualized by making use of a treemap (see figure \r
 
 \subsection{Pathway analysis}
 
-The UniprotKB to Gene name mapping of the set of 49 \ac{DAP}s (including multi-protein groups) returned by MSqRob produced a list of 51 entities. The list was supplied to the ComPath Pathway Enrichment tool to highlight which cellular pathways were over-represented compared to the human background. 50 entities were mapped to the database. In agreement with the \ac{GSEA} results, a handful of pathways linked to the immune response were found to be significantly enriched (see table \ref{tab:pathway_enrichment}) (I) Immune System, (II) Innate Immune System, (III) Necroptosis (IV) Programmed Cell Death, (V) Regulation of Apoptosis, (VI) Leukocyte transedothelial migration. Moreover, the finding of several RNA related pathways exposed the presence of potential cell reprogramming, essential in any change in protein profile.
+The UniprotKB to Gene name mapping of the set of 49 \ac{DAP}s (including multi-protein groups) returned by MSqRob produced a list of 51 entities. The list was supplied to the ComPath Pathway Enrichment tool \cite{Domingo2018} to highlight which cellular pathways were over-represented compared to the human background. 50 entities were mapped to the database. In agreement with the \ac{GSEA} results, a handful of pathways linked to the immune response were found to be significantly enriched (see table \ref{tab:pathway_enrichment}) (I) Immune System, (II) Innate Immune System, (III) Necroptosis (IV) Programmed Cell Death, (V) Regulation of Apoptosis, (VI) Leukocyte transedothelial migration. Moreover, the finding of several RNA related pathways exposed the presence of potential cell reprogramming, essential in any change in protein profile.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 19:49:28 2018
@@ -256,8 +256,8 @@ The same list supplied to ComPath was searched in the STRING database \cite{Szkl
 
 \begin{figure}[!h]
 \centering
-\includegraphics[width=\linewidth]{string_normal_image}
-\caption[Protein interaction network]{\textbf{STRING interaction network}. Every node represents a protein in the list, and an edge between any pair represents evidence for some kind of association or interaction between them. Evidence is either experimentally determined or predicted using diverse methods. Red colored nodes are included in the "immune system process" set.}
+\includegraphics[width=\linewidth]{string_normal_image_confidence}
+\caption[Protein interaction network]{\textbf{STRING interaction network}. Every node represents a protein in the list, and an edge between any pair represents evidence for some kind of association or interaction between them. Evidence is either experimentally determined or predicted using diverse methods. The thickness of the edges represents the level of confidence in that interaction. Red colored nodes are included in the "immune system process" set.}
 \label{fig:STRING}
 \end{figure}
 
@@ -276,7 +276,7 @@ Six samples organized in two different treatments of three biological replicates
 
 \subsection{Missing data handling}
 
-One of the most frequent issues found when analyzing proteomics datasets is the handling of missing values \cite{Lazar2016}. The presence of missing data in many of the rows in the data passed to BayesQuant led to the dropping of 4803 out of 6443 peptides, producing a peptide dataset of only 1641 data points that accounted for 350 protein groups. Thanks to the missing data handling implemented in MSqRob, this tool quantified 1433 proteins, enough to continue the quantitative analysis (see table \ref{tab:balance}). However, the fact that the number of observed groups was 2787 implies that the management of missing values could potentially be improved in both tools, and particularly in BayesQuant.
+One of the most frequent issues found when analyzing proteomics datasets is the handling of missing values \cite{Lazar2016}. The presence of missing datapoints led BayesQuant to drop 4803 out of 6443 peptides, producing a peptide dataset of only 1641 rows that accounted for 350 protein groups. Thanks to the missing data handling implemented in MSqRob, the latter quantified 1433 proteins, enough to continue the quantitative analysis (see table \ref{tab:balance}). However, the fact that the number of observed groups in the original dataset was 2787 implies that the management of missing values could potentially be improved in both tools, and particularly in BayesQuant.
 
 \begin{table}[!h]
 \centering
@@ -307,7 +307,7 @@ Three different types of missing values have been defined \cite{Wei2018}:
 
 While all three are relevant, \ac{MNAR} is particularly important because it introduces a bias in the dataset, where proteins are more likely to be quantified if their abundance is high enough in all samples for their peptide signals to be above the \ac{LOD}. Thus, proteins exhibiting abundances below the \ac{LOD} due to the experimental treatment are bound to generate peptide data featuring missing values that, if not handled properly, are discarded. Subsequently, \ac{DAP}s or in general proteins with variant abundance become less likely to be quantified, complicating the extraction of relevant protein sets.
 
-Missing data should be imputed at the peptide level. The implementation of a module performing this task prior to quantification would  improve the accuracy and throughput of the quantification process. Several approaches have been proposed, some within a probabilistic framework \cite{Lazar2016}. For example, in cases of clear \ac{MNAR}, imputation could be based on an inferred global \ac{LOD}, so that missing values are replaced with it. Work on this line could potentially boost the performance of BayesQuant.
+Missing data should be imputed at the peptide level. Several approaches have been proposed, some within a probabilistic framework \cite{Lazar2016}. For example, in cases of clear \ac{MNAR}, imputation could be based on an inferred global \ac{LOD}, so that missing values are replaced with it. Work on this line could potentially boost the performance of BayesQuant.
 
 
 \subsection{Applicability for Novozymes data}

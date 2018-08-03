@@ -3,7 +3,7 @@
 
 \section*{Summary}
 
-The current label-free quantification methods, presented in chapter \ref{chap:pipeline}, rely on frequentist statistics, which return point estimates of model parameters such as the abundance ratio (fold change) across conditions. However, a Bayesian  approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, a statistical model, named BayesQuant, was written in the probabilistic programming framework PyMC3 and tested on the proteome benchmark dataset. The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability, its strengths and its weaknesses.
+The current label-free quantification methods, presented in chapter \ref{chap:pipeline}, rely on frequentist statistics, which return point estimates of model parameters such as the abundance ratio (fold change) across conditions. However, a Bayesian approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, the thesis focused on writing a statistical model, named BayesQuant, in the probabilistic programming framework PyMC3 and testing it on the proteome benchmark dataset. The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability, its strengths and its weaknesses.
 
 \section{Introduction}
 
@@ -17,7 +17,7 @@ H_0: & \log_2(FC) = 0 \nonumber \\
 H_1: & \log_2(FC) \neq 0 \nonumber
 \end{align}
 
-The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a \textit{p-value}, which measures the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, \textit{p-values} do not say anything about the probability of hypotheses outside $H_0$ and $H_1$.
+The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a \textit{p-value}, which measures the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, \textit{p-values} do not say anything about the probability of hypotheses outside $H_0$ and $H_1$. Is there a framework that reports results for a particular hypothesis, based just on the seen data and our prior knowledge?
 
 The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats data as random and parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided, fixed data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only. Unlike \ac{NHST}, it does not depend of the data collection process. The equation that mathematically formalizes how to introduce the observed data and the prior in a valid way is the so called Bayes\textquotesingle s theorem.
 
@@ -42,7 +42,7 @@ The Bayes theorem is an extremely versatile tool taking a role analogous to that
 
 The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterior probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the \textbf{likelihood} divided by a constant \textbf{(evidence)}}.
 
-It can be applied to the quantification problem, where $\theta$ turns into the \ac{log2FC} parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Unfortunately, this is tractable analytically for simple models only. However, Markov Chain-Monte Carlo (\ac{MCMC}) and Variational Inference (\ac{VI}) methods can be used to approximate this posterior. Both of which are now possible to run thanks to the advent of modern computing.
+It can be applied to the quantification problem, where $\theta$ turns into the \ac{log2FC} parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Even though, this is tractable analytically for simple models only, fortunately Markov Chain-Monte Carlo (\ac{MCMC}) and Variational Inference (\ac{VI}) methods can be used to approximate this posterior when the analytical derivation is not possible. Both \ac{MCMC} and \ac{VI} are now possible to run thanks to the advent of modern computing.
 
 \subsection{Inference methods: \ac{MCMC} and \ac{VI}}
 
@@ -443,7 +443,7 @@ The 10k traces produced by BayesQuant from the \ac{VI} approximation function ex
 This way, a different posterior distribution was computed for the impact of each "peptide" and "run" in all the measurements collected for each protein.
 
 
-The study of the \ac{log2FC} posterior probability distribution (see figure \ref{fig:posteriors}) shows the most likely parameter values and empowers Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentially the same as the null value \cite{Kruschke}. In this and all future applications in the thesis, the null value is set to 0, and the \ac{ROPE} is arbitrarily set to $[-0.4, 0.4]$ based on the data.
+The study of the \ac{log2FC} posterior probability distribution (see figure \ref{fig:posteriors}) shows the most likely parameter values and empowers Bayesian Null Hypothesis Testing. The 95\% High Probability Density Interval (\ac{HPDI}), which is the narrowest interval containing 95\% of the total probability, indicates the most likely true values of the parameter. Presence or absence of overlap between the 95\% \ac{HPDI} and the Region Of Practical Equivalence (\ac{ROPE}) provides a formal way of discarding a point value of the parameter. The \ac{ROPE} is a small interval considered to be essentially the same as the null value \cite{Kruschke}. In this and all future applications of the thesis, the null value is set to 0, and the \ac{ROPE} is arbitrarily set to $[-0.4, 0.4]$ based on the data.
 
 \begin{figure}[!h]
 \centering
@@ -481,7 +481,7 @@ The posterior predictive checks on both proteins pinpoint that the fitted models
 \end{figure}
 
 
-In order to further validate BayesQuant\textquotesingle s performance, it was tested on groups of 5 proteins, one group from each proteome. Each pair of groups was made by proteins with a different number of observed peptides (2, 3, 4, 6, 7, 10) (see figure \ref{fig:dumbbell}). The more observed peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed (see figure \ref{fig:dumbbell}).
+Could these results be extended to other proteins in the dataset and validate the tool? Six groups of 5 proteins, with a different number of observed peptides (2, 3, 4, 6, 7, 10) were organized in each proteome and employed to test BayesQuant (see figure \ref{fig:dumbbell}). The more observed peptides, the more accurate the estimation is expected to be as more data for the same protein becomes available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width is thus expected to be observed (see figure \ref{fig:dumbbell}).
 
 \begin{figure}[!h]
 \centering
