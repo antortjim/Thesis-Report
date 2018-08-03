@@ -3,7 +3,7 @@
 
 \section*{Summary}
 
-The current label-free quantification methods, reviewed in section \ref{sec:quantification}, rely on frequentist statistics, which return point estimates of model parameters such as the abundance ratio (fold change) across conditions. However, a Bayesian  approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, a statistical model, named BayesQuant, was written in the probabilistic programming framework PyMC3 and tested on the same benchmark dataset from chapter \ref{chap:pipeline}). The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability, its strengths and its weaknesses.
+The current label-free quantification methods, presented in chapter \ref{chap:pipeline}, rely on frequentist statistics, which return point estimates of model parameters such as the abundance ratio (fold change) across conditions. However, a Bayesian  approach to this problem, that we know of, is lacking in the literature. As a response to this shortcoming, a statistical model, named BayesQuant, was written in the probabilistic programming framework PyMC3 and tested on the proteome benchmark dataset. The execution of the three steps required when doing Bayesian modelling, mainly (I) model implementation, (II) computation of posterior probabilities and (III) model checking, will be described for this particular problem in the present chapter, together with a discussion on its usability, its strengths and its weaknesses.
 
 \section{Introduction}
 
@@ -17,9 +17,9 @@ H_0: & \log_2(FC) = 0 \nonumber \\
 H_1: & \log_2(FC) \neq 0 \nonumber
 \end{align}
 
-The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a p-value, which measures the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, p-values do not say anything about the probability of hypotheses outside $H_0$ and $H_1$.
+The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a \textit{p-value}, which measures the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, \textit{p-values} do not say anything about the probability of hypotheses outside $H_0$ and $H_1$.
 
-The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats the data as random and the parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only, and come equipped with an equation that mathematically formalizes how to introduce these two dependencies in a valid way. This is the so called Bayes\textquotesingle s theorem.
+The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats data as random and parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided, fixed data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only. Unlike \ac{NHST}, it does not depend of the data collection process. The equation that mathematically formalizes how to introduce the observed data and the prior in a valid way is the so called Bayes\textquotesingle s theorem.
 
 \begin{equation}
 P(\theta | y) = \cfrac{P(y | \theta) P(\theta)}{P(y)}
@@ -40,13 +40,13 @@ The Bayes theorem is an extremely versatile tool taking a role analogous to that
 \end{enumerate}
 
 
-The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterior probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the likelihood divided by a constant}.
+The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterior probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the \textbf{likelihood} divided by a constant \textbf{(evidence)}}.
 
 It can be applied to the quantification problem, where $\theta$ turns into the \ac{log2FC} parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Unfortunately, this is tractable analytically for simple models only. However, Markov Chain-Monte Carlo (\ac{MCMC}) and Variational Inference (\ac{VI}) methods can be used to approximate this posterior. Both of which are now possible to run thanks to the advent of modern computing.
 
 \subsection{Inference methods: \ac{MCMC} and \ac{VI}}
 
-The posterior distribution can be approximated (inferred) by means of \ac{MCMC} and \ac{VI} methods. On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2017}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. The heuristics guarantee convergence of the empirical estimate on the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018} \footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}. The first sampling algorithms, like Metropolis-Hastings \cite{Chib1995} \footnote{A very nice tutorial on the Metropolis-Hastings algorithm \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} have given way to the much more efficient sampler \ac{NUTS} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} \cite{Hoffman2011}.
+The posterior distribution can be approximated (inferred) by means of \ac{MCMC} and \ac{VI} methods. On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic \footnote{Explanation of ergodic processes \href{https://dsp.stackexchange.com/questions/34976/what-is-a-good-example-of-an-ergodic-process}{https://dsp.stackexchange.com/questions/34976/what-is-a-good-example-of-an-ergodic-process}} Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2017}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. The heuristics guarantee convergence of the empirical estimate on the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018}. The first sampling algorithms, like Metropolis-Hastings \footnote{A very nice tutorial on the Metropolis-Hastings algorithm \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} \cite{Chib1995} have given way to the much more efficient sampler \ac{NUTS} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} \cite{Hoffman2011}.
 
 On the other hand, \ac{VI} methods, very recently developed and introduced in PyMC3, provide a fast alternative to \ac{MCMC} methods, yet they are not guaranteed to asymptotically approximate the true posterior. In \ac{VI}, optimization, instead of sampling, is employed as the way to approximate the posterior \cite{Blei2017}. More concretely, a family of densities $Q$ over the parameters $\theta$ is defined. The goal of \ac{VI} is to find the single density $q$ within the family $Q$ that best approximates $p(\theta|y)$. This approximate density should be complex enough to reach a good approximation, and at the same time simple enough to be computationally easy to work with. The best candidate is defined as the one minimising the Kullback-Leibler (\ac{KL}) divergence (see equation \ref{eq:KL}).
 
@@ -56,13 +56,12 @@ q^*(\theta) = \argmin \infdiv*{q(\theta)}{p(\theta|x)}
 
 where $q(\theta)$ stands for the whole family of densities, $p(\theta|x)$ stands for the true posterior and $KL$ stands for the \ac{KL} divergence. $q^*(\theta)$ is the best candidate density.
 
-\textit{The term variational is used because the best $q$ in $Q$ is picked. The term derives from the "calculus of variations," which deals with optimization problems that pick} [...] \textit{a particular $q$ in $Q$, specified by setting some variational parameters i.e the knobs on $Q$ that need to be turned to get a good approximation}\footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}.
+\textit{The term variational is used because the best $q$ in $Q$ is picked. The term derives from the "calculus of variations," which deals with optimization problems that pick} [...] \textit{a particular $q$ in $Q$, specified by setting some variational parameters i.e the knobs on $Q$ that need to be turned to get a good approximation}  \footnote{A high level explanation of \ac{VI} \href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}\label{fn:vi}}.
 
-
-One of the terms yielded by the decomposition of the conditional density embodied by the posterior is the evidence of the data $p(x)$.  $p(x)$ is computationally intractable, thus making the computation of the exact \ac{KL} divergence impossible. A lower bound up to an additive constant can however be computed thanks to Jensen\textquotesingle s inequality \cite{jensen1906fonctions} \. This approximate amount is the Variational or Evidence Lower BOund (\ac{ELBO}). \textit{The \ac{ELBO} is the negative \ac{KL} divergence of plus $logp(x)$, which is a constant with respect to $q(z)$. Thus maximizing
+One of the terms yielded by the decomposition of the conditional density embodied by the posterior is the evidence of the data $p(x)$.  $p(x)$ is computationally intractable, thus making the computation of the exact \ac{KL} divergence impossible. A lower bound up to an additive constant can however be computed thanks to Jensen\textquotesingle s inequality \cite{jensen1906fonctions}. This approximate amount is the Variational or Evidence Lower BOund (\ac{ELBO}). \textit{The \ac{ELBO} is the negative \ac{KL} divergence of plus $logp(x)$, which is a constant with respect to $q(z)$. Thus maximizing
 the \ac{ELBO} is equivalent to minimizing the \ac{KL} divergence} \cite{Blei2017}.
 
-Finally, several density approximation families are available. The mean-field family of densities is one of the most simple, as it ignores all dependencies between latent variables, and treats them as independent. The mean-field approximation works by \textit{pretending that the variables are just behaving that way "on their own." The mean-field method throws away all of the interactions}\footnote{\href{http://www.cs.jhu.edu/~jason/tutorials/variational.html}{http://www.cs.jhu.edu/~jason/tutorials/variational.html}}. A generic mean-field family member is shown in equation \ref{eq:mean_field}.
+Finally, several density approximation families are available. The mean-field family of densities is one of the most simple, as it ignores all dependencies between latent variables, and treats them as independent. The mean-field approximation works by \textit{pretending that the variables are just behaving that way "on their own." The mean-field method throws away all of the interactions}\footnoteref{fn:vi}. A generic mean-field family member is shown in equation \ref{eq:mean_field}.
 
 \begin{equation}\label{eq:mean_field}
 q(\theta_1, ..., \theta_m) = \prod_{j=1}^{m}{q(\theta_j)}
@@ -83,17 +82,17 @@ The data recorded in this particular problem consist of \ac{MS1} intensities. Th
 \end{enumerate}
 
 
-A mass spectrometry-proteomics workflow aims at providing estimates of the treatment effect, upon which the biological interpretation of the results is done, while minimising the remaining unwanted effects. A mathematical modelling of these effects (see equation \ref{eq:model}), similar to the one used by MSqRob, can be deployed to attempt to minimise the noise:
+A successful mass spectrometry-proteomics workflow  provides estimates of the treatment effect, upon which the biological interpretation of the results is done, while minimising the remaining unwanted effects. A mathematical modelling of these effects (see equation \ref{eq:model}), similar to the one used by MSqRob, can be deployed to attempt to minimise the noise:
 
 \begin{equation}\label{eq:model}
 y_{ijkl} = \beta_{i}^{0} + \beta_{ij}^{treatment} + \beta_{ik}^{peptide} + \beta_{il}^{run} + \epsilon_{i}
 \end{equation}
 
-where $y_{ijkl}$ stands for the $\log_2$-transformed intensity registered in treatment $j$, peptide $k$ and run $l$. This way, separate treatment, peptide and run effects are distinguished. $i$ stands for the protein index, which is evidently the same for all measurements belonging to peptides mapped to the same protein. $\epsilon$ models the noise that cannot be explained with the three effects aforementioned, and is the same for all measurements associated to the same protein.
+where $y_{ijkl}$ stands for the $\log_2$-transformed intensity registered in treatment $j$, peptide $k$ and run $l$. This way, separate treatment, peptide and run effects are distinguished. $i$ stands for the protein index, which is the same for all measurements belonging to peptides mapped to the same protein. $\epsilon$ models the noise that cannot be explained with the three effects aforementioned, and is the same for all measurements associated to the same protein.
 
-For example, the measurement $y_{P,A,p,1}$ corresponds to a measurement mapped to protein $P$. The measurement is impacted by a fixed effect, produced by treatment $A$, but also the peptide effect in peptide $p$ and the run effect in run $1$. An intercept term was also added to account for the background protein intensity value.
+For example, the measurement $y_{P,A,p,1}$ corresponds to an observation of protein $P$. The measurement is impacted by a fixed effect, produced by treatment $A$, but also the peptide effect in peptide $p$ and the run effect in run $1$. An intercept term was also added to account for the background protein intensity value.
 
-The data is thus said to be affected by different effects acting independently, and in order to model them properly, multi-levels need to be defined. It can be done via three approaches: pooled, unpooled, and hierarchically (see figure \ref{fig:multilevel}). Hierarchical modelling is used when the sampling variance is not the only source of variation among the parameters, but they still share a dependency. The intercept and the three effects were modelled as independent hierarchies.
+The data is thus said to be affected by different effects acting independently, and in order to model them properly, multi-levels need to be defined. It can be done via three approaches: pooled, unpooled, and hierarchically (see figure \ref{fig:multilevel}). Hierarchical modelling is used when the sampling variance is not the only source of variation among the parameters, but they still share a dependency. The three effects were modelled as independent hierarchies.
 
 \begin{figure}[!h]
 \centering
@@ -117,10 +116,11 @@ The data is thus said to be affected by different effects acting independently, 
 \caption[]{Alternative multilevel modelling approaches. A pooled model assumes that the parameter distribution is the same for all the datapoints.  The unpooled model represents the opposite case, every datapoint is modelled by a different probability distribution. Finally, a hierarchical model settles for a middle ground where the parameters will not be exactly the same but not completely different either. This is achieved by generating a global distribution from which the parameter for each datapoint is sampled \footnotemark{}.}
 \label{fig:multilevel}
 \end{figure}
-\footnotetext{\href{https://docs.pymc.io/notebooks/multilevel\_modeling.html}{https://docs.pymc.io/notebooks/multilevel\_modeling.html}}
+
+\footnotetext{Introduction to multilevel modelling \href{https://docs.pymc.io/notebooks/multilevel\_modeling.html}{https://docs.pymc.io/notebooks/multilevel\_modeling.html}}
 
 
-This way, independent and identically distributed (\ac{IID}) priors were set for the intercept, treatment, peptide and run effects. The particular effect observed on each peptide was then modelled as a value sampled from the corresponding \ac{IID} prior. A diagram of the resulting model is displayed in figure \ref{fig:daft_model}.
+This way, independent and identically distributed (\ac{IID}) priors were set for the intercept ($\beta^0$), treatment, peptide and run effects ($\beta$), and $\epsilon$. The particular effect observed on each peptide was then modelled as a value sampled from the corresponding \ac{IID} priors. A diagram of the resulting model is displayed in figure \ref{fig:daft_model}.
 
 \begin{figure}[!h]
 \centering
@@ -138,7 +138,7 @@ However the posterior distribution is obtained, a proper Bayesian analysis is no
 
 \item Evidence for non-convergence must be collected. Albeit lack of evidence of non-convergence does not guarantee convergence, the existence of evidence definitely proofs it \cite{Kruschke}.
 
-\item Neither reaching convergence nor the best \ac{VI} approximation guarantee that the fitted model actually captures the data generation process. Therefore, the true posterior could be a bad reflection of the natural process being modelled and the best approximation will not fix it. Posterior Predictive Checks are carried out to measure how well the model captured the data properties \cite{Kruschke}.
+\item Neither reaching convergence nor the best \ac{VI} approximation guarantee that the fitted model actually captures the data generation process. Therefore, the true posterior could be a bad reflection of the natural process being modelled and the best approximation will not fix it. Posterior Predictive Checks are carried out to measure how well the model captured the data properties \cite{Kruschke} and reveal the presence of epistemic error.
 
 \end{itemize}
 
@@ -154,7 +154,7 @@ The management of uncertainty in statistics is done by means of probability dist
 
 %The fit of the model to the data entails the computation of the posterior probability distribution, which is tallied using algorithms provided with the probabilistic programming tool.
 
-PyMC3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (ADVI) \footnote{\href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilistic estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
+PyMC3 is a mature Python module dedicated to support probabilistic programming. It features   intuitive model specification syntax, modern and powerful \ac{MCMC} sampling algorithms like the No-U-Turn-Sampler (\ac{NUTS}) as well as Automatic Differentiation Variational Inference (ADVI) \footnote{Presentation of PyMC3 \href{https://github.com/pymc-devs/pymc3}{https://github.com/pymc-devs/pymc3}}. Therefore, it provides the tools required to build a Bayesian model for the probabilistic estimation of protein \ac{log2FC} in proteomics datasets, that is, together with an estimate of its uncertainty.
 
 
 \subsection{Goals}
@@ -172,9 +172,9 @@ PyMC3 is a mature Python module dedicated to support probabilistic programming. 
 \subsection{Data input}
 \label{subsec:data_input}
 
-The peptides.txt and proteinGroups.txt files produced by MaxQuant \cite{Cox2008} after the analysis of the dataset published in \cite{Cox2014} were used as input for the modelling algorithm when running without sequence modelling, and processed using the \texttt{preprocess\_MaxQuant()} and \texttt{MSnSet2protdata()} functions in the MSqRob \cite{Goeminne2016} package, similar to what was done in section \ref{subsec:database_preparation}.
+The peptides.txt and proteinGroups.txt files produced by MaxQuant \cite{Cox2008} after the analysis of the proteome benchmark dataset \cite{Cox2014} were used as input for the modelling algorithm when running without sequence modelling, and processed using the \texttt{preprocess\_MaxQuant()} and \texttt{MSnSet2protdata()} functions in the MSqRob \cite{Goeminne2016} package, similar to what was done in section \ref{subsec:database_preparation}.
 
-Peptides missing in any of the samples available were dropped from the analysis.
+The sample fractionation present in the dataset was aggregated to yield one column for each of the six samples. Peptides missing in any of the resulting six columns were dropped from the analysis.
 
 The final state of the data is shown in table \ref{tab:data_model} for two different proteins.
 
@@ -205,7 +205,7 @@ Features to model the peptide effect based on sequence were extracted using the 
 
 \subsection{Prior probability distribution specification}
 
-Both because of the little knowledge on the value of the parameters governing the data generation process and to provide a prior that everyone can agree upon, non informative priors were provided to the model. This was condensed in the specification of Normal and Half Normal distributions for all the random stochastic variables in the model. The hyperparameters were selected to be as non informative as possible.
+Both because of the little knowledge on the value of the parameters governing the data generation process and to provide a prior that everyone can agree upon, non informative priors were provided to the model. This was condensed in the specification of Normal and Half Normal distributions for all the random stochastic variables in the model. The hyperparameters were selected to be non-informative.
 
 \subsection{Posterior probability distribution computation}
 \label{subsec:posterior_compute}
@@ -303,10 +303,7 @@ m = \sum_{i=1} \beta_i \,. \\
 \nonumber y \sim \mathcal{N}(m, \epsilon)
 \end{align}
 
-and is read as \textit{the observed data is modelled by a normal distribution with mean $m$ and standard deviation $\epsilon$. $m$ is a random deterministic variable resulting from the sum the effects defined above. $\epsilon$ follows a new half normal distribution with standard deviation 1}. A deterministic variable is a random variable that acquires a fixed value if all random variables it has a dependency on take a fixed value too, i.e its stochasticity disappears if its parameters are fixed.
-
-
-
+and is read as \textit{the observed data is modelled by a normal distribution with mean $m$ and standard deviation $\epsilon$. $m$ is a random deterministic variable resulting from the sum of the effects defined above. $i$ indexes every effect. $\epsilon$ follows a new half normal distribution with standard deviation 1}. A deterministic variable is a random variable that acquires a fixed value if all random variables it has a dependency on take a fixed value too, i.e its stochasticity disappears if its parameters are fixed.
 
 \section{Results}
 
@@ -392,7 +389,7 @@ A step by step exposition of the plots and results produced by the program when 
 %\end{figure}
 \begin{figure}[!h]
 \input{hierarch_diagram}
-\caption[BayesQuant Kruschke-like diagram]{\textbf{BayesQuant Kruschke-like diagram}. Extends figure \ref{fig:daft_model} to give more detail into the model. Prior probability distributions are indicated with "distrograms", and the dependencies between them via arrows. The hyperparameters are represented by latin capital letters.}
+\caption[BayesQuant Kruschke-like diagram]{\textbf{BayesQuant Kruschke-like diagram}. Extends figure \ref{fig:daft_model} to give more detail into the model. Prior probability distributions are indicated with "distrograms", and the dependencies between them via arrows. The hyperparameters are represented by latin capital letters. Each $\beta$ will consist of a vector of dimensions $1 \times n$ where $n$ is the number of different factors in the category (i.e 2 for treatment, 6 for run, etc). The corresponding $x$ variable is a matrix of dimensions equal to $n \times n_peptides$ where the $i,j$ cell indicates if the $jth$ peptide is affected by the $ith$ factor (1) or not (0).}
 \label{fig:dbda}
 \end{figure}
 
@@ -416,7 +413,7 @@ A step by step exposition of the plots and results produced by the program when 
 \label{fig:ELBO}
 \end{figure}
 
-A plot of the maximisation of the \ac{ELBO} is automatically produced when the texttt{.fit()} method is run. Even though the ELBO took extremely low (negative) values at start (see figure \ref{fig:ELBO}), it was maximised fast to values around 0, indicating that the mean-field approximation was acceptably good.
+A plot of the maximisation of the \ac{ELBO} is automatically produced when the \texttt{.fit()} method is run. Even though the ELBO took extremely low (negative) values at start (see figure \ref{fig:ELBO}), it was maximised fast to values around 0, indicating that the mean-field approximation was acceptably good.
 
 
 \subsection{Sampling from the approximation to the posterior}
@@ -459,7 +456,7 @@ The study of the \ac{log2FC} posterior probability distribution (see figure \ref
 \caption*{B}
 \includegraphics[width=\linewidth]{posteriors/A6NDG6}
 \end{subfigure}
-\caption[Posteriors for 2 proteins]{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% \ac{HPDI} is marked with a black line. The \ac{ROPE} defined as a 0.4 window around 0 is shown in red. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)=1.58$).}
+\caption[Posteriors for 2 proteins]{Annotated posterior probability distribution for the \ac{log2FC} estimate for proteins P0A818 (\textit{E. coli}, \textbf{A}) and A6NDG6 (\textit{Homo sapiens}, \textbf{B}). The bar height is mapped to the probability mass in the corresponding interval. The 95\% \ac{HPDI} is marked with a black line. The \ac{ROPE}, defined as a 0.4 window around 0, is shown in red. A green vertical line marks the expected \ac{log2FC} estimate for \textit{E. coli} proteins ($\log_2(3)=1.58$).}
 \label{fig:posteriors}
 \end{figure}
 
@@ -484,12 +481,12 @@ The posterior predictive checks on both proteins pinpoint that the fitted models
 \end{figure}
 
 
-In order to further validate BayesQuant\textquotesingle s performance, it was tested on groups of 5 proteins, one group from each proteome. Each pair of groups was made by proteins with a different number of observed peptides (2, 3, 4, 6, 7, 10) (see figure \ref{fig:dumbbell}). The more peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed (see figure \ref{fig:dumbbell}).
+In order to further validate BayesQuant\textquotesingle s performance, it was tested on groups of 5 proteins, one group from each proteome. Each pair of groups was made by proteins with a different number of observed peptides (2, 3, 4, 6, 7, 10) (see figure \ref{fig:dumbbell}). The more observed peptides, the more accurate the estimation will be as more data will be available. Since the \ac{HPDI} reflects the uncertainty, a decrease on its width was expected to be observed (see figure \ref{fig:dumbbell}).
 
 \begin{figure}[!h]
 \centering
 \includegraphics[width=0.9\textwidth]{performance}
-\caption[HPDI inferred by BayesQuant]{Visualization of the 95\% \ac{HPDI} inferred from 5 bacterial and 5 human proteins with 2, 3, 4, 6, 7 and 10 peptides. The intervals are represented by horizontal lines. The dot represents the mean of the whole distribution, and it will be centered in the interval if the distribution is symmetrical. Vertical blue lines represent the ROPE defined as in figure \ref{fig:posteriors}, whereas the red line represents the expected estimate for bacterial proteins.}
+\caption[HPDI inferred by BayesQuant]{Visualization of the 95\% \ac{HPDI} inferred from 5 bacterial and 5 human proteins with 2, 3, 4, 6, 7 and 10 peptides. The intervals are represented by horizontal lines. The dot represents the mean of the whole distribution, and it will be centered in the interval if its probability is symmetrical. Vertical blue lines represent the ROPE defined as in figure \ref{fig:posteriors}, whereas the red line represents the expected estimate for bacterial proteins.}
 \label{fig:dumbbell}
 \end{figure}
 
@@ -579,7 +576,7 @@ A list of points to address to improve how BayesQuant works is discussed in this
 
 \subsection{Improving usability: parallelization}
 
-While BayesQuant performed well on the majority of proteins, it took around 30 seconds to approximate each protein\textquotesingle s posterior distributions using \ac{VI}, and more than two minutes with \ac{MCMC} methods. This translates to a dataset of 1k proteins taking 500 minutes (>8h) to be processed. However, the average modern computer comes with several processors that could support the parallelization of the program in several threads, decreasing the total computing time.
+While BayesQuant performed well on the majority of proteins, it takes around 30 seconds to approximate each protein\textquotesingle s posterior distributions using \ac{VI}, and more than two minutes with \ac{NUTS}. This translates to a dataset of 1k proteins taking 500 minutes (>8h) to be processed with the fastest method. Fortunately, the average modern computer comes with several processors that could support the parallelization of the program in several threads, decreasing the total computing time.
 
 \subsection{Further robustness and validation checks}
 
@@ -588,7 +585,7 @@ A solid way of checking the results are not flawed is the specification of alter
 
 \subsection{Advanced model comparison}
 
-Likewise, a formal way of establishing the \ac{ROPE} in the quantification context could be enacted depending on the data. On the other hand, a more advanced model comparison method could be built upon the Bayes factor. The Bayes factor is defined as the ratio of the posterior probability of two models given the data \cite{Kruschke}. It could be used to measure how much more likely a model taking into account a treatment effect is compared to another one where the treatment effect is considered null i.e the \ac{log2FC} is set to 0. The result would provide an alternative criterion for the declaration of a protein being differentially abundant.
+Likewise, a formal way of establishing the \ac{ROPE} in the quantification context could be enacted depending on the data. On the other hand, a more advanced model comparison method could be built upon the Bayes factor. The Bayes factor is defined as the ratio of the posterior probability of two models given the data \cite{Kruschke}. It could be used to measure how much more likely a model taking into account a treatment effect is compared to another one where the treatment effect is considered null i.e the \ac{log2FC} is set to 0 \cite{Goodman1999}. The result would provide an alternative criterion for the declaration of a protein being differentially abundant.
 
 \subsection{Sequence-based modelling of the peptide effect}
 
@@ -608,12 +605,12 @@ Unfortunately, during the development of the project, it was acknowledged that t
 
 \end{itemize}
 
-Modelling such a complex phenomenon will require accordingly complex predictive architectures and the introduction of proper neural networks, capable of deciphering the intricate pattern mapping sequence to noise in the spectrometer\textquotesingle s measurements. The development of very new RAW spectra-files parsing-tools like RawQuant \cite{Kovalchik2018} could be used in a future implementation to provide the required feature-rich data.
+Modelling such a complex phenomenon will require accordingly complex predictive architectures and the introduction of machine learning algorithms, capable of deciphering the intricate pattern mapping sequence to noise in the spectrometer\textquotesingle s measurements. The development of very new RAW spectra-files parsing-tools like RawQuant \cite{Kovalchik2018} could be used in a future implementation to provide the required feature-rich data.
 
 
 \subsection{Posterior assessment of the effects}
 
-The characterization of the uncertainty behind a \ac{log2FC} estimate can be used to better inform downstream analysis programs and eventually help interpret the biological results. For example, a functional analysis program could decide to drop proteins declared differentially abundant if the uncertainty is greater than a threshold. A Gene Set Enrichment Analysis (\ac{GSEA}) could make use of the probabilistic information to refine its results.
+The characterization of the uncertainty behind a \ac{log2FC} estimate can be used to better inform downstream analysis programs and eventually help interpret the biological results. For example, a functional analysis program could decide to drop proteins declared differentially abundant if the uncertainty is greater than a threshold or if the Bayes factor does not indicate a high preference for a treatment effect. A Gene Set Enrichment Analysis (\ac{GSEA}) could make use of the probabilistic information to refine its results.
 
 Moreover, the estimation of the different run effects could be used to help \ac{MS} technicians assess the presence of batch effects in their experiments, and correct them in future analyses.
 

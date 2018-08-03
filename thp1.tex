@@ -19,7 +19,7 @@ Moreover, a function inference step from the estimated protein \ac{log2FC} value
 
 %\item Compare its results with the commercial software currently in use.
 
-\item Propose a function inference analytical pipeline to complete the proteomics workflow.
+\item Propose a biological inference pipeline to complete the proteomics workflow.
 
 \end{enumerate}
 
@@ -28,15 +28,23 @@ Moreover, a function inference step from the estimated protein \ac{log2FC} value
 
 \subsection{Sample preparation}
 
-THP-1 cells were grown in RPMI1640 (Sigma) supplemented with 10\% FBS (SeraLab) and 1\% pen/strep (Gibco). Stimulation of THP-1 cells was done in 48-well plates (Gibco) with 2x106 cells/well. Cells were exposed to 500 ng/mL LPS (E. coli O111:B4) (+LPS) or nothing (-LPS) for 48 hours in 37 degrees, 5\% \ce{{CO}_2}. After stimulation supernatants were collected and cell pellets were washed in PBS (Gibco). Both supernatants and pellets were frozen (-20 degrees). This work was carried out by Esben G. W. Schmidt. Only the pellet samples were considered for the analysis. 
+THP-1 cells were grown in RPMI1640 (Sigma) supplemented with 10\% FBS (SeraLab) and 1\% pen/strep (Gibco). Stimulation of THP-1 cells was done in 48-well plates (Gibco) with $2 \times 10^6$ cells/well. Cells were exposed to 500 ng/mL LPS (E. coli O111:B4) (+LPS) or nothing (-LPS) for 48 hours in 37 degrees, 5\% \ce{{CO}_2}. After stimulation supernatants were collected and cell pellets were washed in PBS (Gibco). Both supernatants and pellets were frozen (-20 degrees). This work was carried out by Esben G. W. Schmidt. Only the pellet samples were considered for the analysis. 
  
-%\subsection{Mass Spectrometry analysis}
+\subsection{Mass Spectrometry analysis}
+
+Peptide digest of THP-1 samples were prepared using a filter assisted sample preparation protocol (FASP). Online desalting and nanoscale LC separation of tryptic peptides was performed with an Dionex Ultimate 3000 Dual –column nano-liquid chromatography system (Thermo Scientific) equipped with two Acclaim PepMap nano-trap columns, 20 mm, 75µ I.D., 3µ particles and two analytical Acclaim PepMap C18, 150 mm, 75µ capillary columns with 2µ particles (Thermo Scientific). Mobile phase A was 0.1\% formic acid (FA) in water and mobile phase B was 0.1\% FA in acetonitrile. Peptides were separated using a 60 min gradient from 5\% to 30\% mobile phase B at 350 nl/min and 35°C injecting samples on the two analytical columns in sequential randomized design. Eluting peptides were analyzed using data-dependent acquisition on an LTQ-Orbitrap Velos Pro mass spectrometer (Thermo Scientific). Each MS scan (400-1600 m/z) was acquired at a resolution of 30000 FWHM followed by 10 low resolution LTQ MS/MS scans triggered above an intensity of 10000 using collision induced dissociation CID (normalized collision energy 35). This work was carried out by David Gleerup and Anders M. B. Giessing.
+
+
+%In short the FASP method is a filter aided in-solution sample preparation technique comprising of protein extraction with strong chaotropic reagents such as urea or Guanidine-HCL, protein precipitation with TCA, and digestion using trypsin under denaturing conditions of reduced and alkylated protein.  Tryptic peptides are extracted from the filter and analyzed by LC/MS. 
+
+
+%Acquired MS data was processed and annotated using Genedata Expressionist. Acquired MS/MS spectra were searched against Homo sapiens reference proteome database taken using an in-house Mascot server ver. 2.5.1 (Matrix Science). Searches were conducted as follows: semi-tryptic specificity allowing up to two missed cleavages, 10 ppm peptide and 0.6 Da fragment ion tolerances, with carboiodimethyl of cysteine as fixed modification as well as variable modifications consisting of oxidation of methionine and deamidation (NQ). The final protein list was compiled when 2 or more unique peptides per protein were identified with a with a false Discovery Rate (FDR) cutoff of 1%, estimated using a target-decoy search strategy.  
 
 
 
 \subsection{Computational analysis}
 
- deveThe resulting .RAW files were processed with the two different pipelines introduced in the present work. (I) Compomics+MSqRob and (II) Compomics+BQ (Compomics and BayesQuant). The search settings were identical to those used in chapter \ref{chap:pipeline}, except for the proteome databases employed, which consisted of \textit{Homo sapiens} only. The validation filters, \ac{MBR}, MS1 Apex intensity, and MSqRob preprocessing parameters were also set to those used previously, for simplicity. The two pipelines used thus diverged only in the quantification engine, being identical in all previous steps.
+The resulting .RAW files were processed with the two different pipelines introduced in the present work. (I) Compomics+MSqRob and (II) Compomics+BQ (Compomics and BayesQuant). The search settings were identical to those used in chapter \ref{chap:pipeline}, except for the proteome databases employed, which consisted of \textit{Homo sapiens} only. The validation filters, \ac{MBR}, MS1 Apex intensity, and MSqRob preprocessing parameters were also set to those used previously, for simplicity. The two pipelines used thus diverged only in the quantification engine, being identical in all previous steps.
 
 In the Compomics+MSqRob pipeline, a protein was declared to be differentially abundant (\ac{DAP}) between the 2 conditions assayed if the result of the student\textquotesingle s-T test implemented in MSqRob returned a q-value less than 0.05. The criteria in the Compomics+BayesQuant pipeline was the absence of overlap between the \ac{ROPE} [-0.4, 0.4] and the 95\% \ac{HPDI}.
 

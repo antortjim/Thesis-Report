@@ -32,6 +32,9 @@
 \newcommand{\infdiv}{KL\infdivx}
 \DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
 
+% Link to the same footnote more than once
+\newcommand{\footnoteref}[1]{\textsuperscript{\ref{#1}}}
+
 \usepackage{subfiles}
 
 %\setsansfont{Calibri}
@@ -174,9 +177,9 @@
 \usepackage{setspace}
 \doublespacing 
 
-\usepackage{etoolbox}
-\newbool{firstbib}
-\booltrue{firstbib}
+%\usepackage{etoolbox}
+%\newbool{firstbib}
+%\booltrue{firstbib}
 %\preto{\bibitem}{\ifbool{firstbib}{\thispagestyle{fancy}\setbool{firstbib}{false}}{}}
 \makeatletter
 \patchcmd{\@makechapterhead}{50\p@}{0pt}{}{}
@@ -198,7 +201,6 @@
   
 %\graphicspath{}
     
-\pagestyle{empty}
 
 \usepackage{tgheros} 
 %\renewcommand*\familydefault{\sfdefault} 
