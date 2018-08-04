@@ -17,7 +17,7 @@ H_0: & \log_2(FC) = 0 \nonumber \\
 H_1: & \log_2(FC) \neq 0 \nonumber
 \end{align}
 
-The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a \textit{p-value}, which measures the probability of the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, \textit{p-values} do not say anything about the probability of hypotheses outside $H_0$ and $H_1$. Is there a framework that reports results for a particular hypothesis, based just on the seen data and our prior knowledge?
+The results of this analysis will depend not only of the observed data, but also the data generation process \cite{Kruschke}. This way, both tools return point estimates of the \ac{log2FC} between a pair of conditions, and a \textit{p-value}, which measures the probability of the data under the null hypothesis. The null hypothesis usually states that the true value of the parameter is 0. Thus, \textit{p-values} do not say anything about the probability of the hypotheses. Is there a framework that reports hypotheses probabilities, based just on the seen data and our prior knowledge?
 
 The Bayesian statistical framework provides an alternative point of view by revolving the role played by the model parameters and the observed data. While frequentist statistics treats data as random and parameters as fixed, a Bayesian framework swaps their roles and yields a probability distribution for any model parameter given the provided, fixed data. Bayesian analyses rely on the observed data and prior knowledge about the phenomenon only. Unlike \ac{NHST}, it does not depend of the data collection process. The equation that mathematically formalizes how to introduce the observed data and the prior in a valid way is the so called Bayes\textquotesingle s theorem.
 
@@ -42,13 +42,13 @@ The Bayes theorem is an extremely versatile tool taking a role analogous to that
 
 The Bayes\textquotesingle s theorem formulated above is thus read as \textit{the posterior probability of the parameter $\theta$ is equal to the \textbf{prior} probability distribution times the \textbf{likelihood} divided by a constant \textbf{(evidence)}}.
 
-It can be applied to the quantification problem, where $\theta$ turns into the \ac{log2FC} parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Even though, this is tractable analytically for simple models only, fortunately Markov Chain-Monte Carlo (\ac{MCMC}) and Variational Inference (\ac{VI}) methods can be used to approximate this posterior when the analytical derivation is not possible. Both \ac{MCMC} and \ac{VI} are now possible to run thanks to the advent of modern computing.
+It can be applied to the quantification problem, where $\theta$ turns into the \ac{log2FC} parameter we try to estimate. All is needed is the computation of the posterior probability distribution. Even though, this is tractable analytically for simple models only, fortunately Markov Chain-Monte Carlo (\ac{MCMC}) and Variational Inference (\ac{VI}) methods can be used to approximate this posterior when the analytical derivation is not possible.
 
 \subsection{Inference methods: \ac{MCMC} and \ac{VI}}
 
 The posterior distribution can be approximated (inferred) by means of \ac{MCMC} and \ac{VI} methods. On the one hand, \ac{MCMC} methods simulate sampling from the posterior distribution by constructing an ergodic \footnote{Explanation of ergodic processes \href{https://dsp.stackexchange.com/questions/34976/what-is-a-good-example-of-an-ergodic-process}{https://dsp.stackexchange.com/questions/34976/what-is-a-good-example-of-an-ergodic-process}} Markov chain on $\theta$ whose stationary distribution is the posterior p($\theta$ | y) \cite{Blei2017}. Monte Carlo sampling is performed on the Markov Chain, (hence the name of the technique) to randomly explore the parameter space with some heuristics. The heuristics guarantee convergence of the empirical estimate on the true posterior, provided a big enough sample size. Sampling convergence is defined as the status reached by the sampler when it estimates a distribution of probability that does not change anymore, regardless of how much longer the sampler runs \cite{Tran2018}. The first sampling algorithms, like Metropolis-Hastings \footnote{A very nice tutorial on the Metropolis-Hastings algorithm \href{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}{http://twiecki.github.io/blog/2015/11/10/mcmc-sampling/}} \cite{Chib1995} have given way to the much more efficient sampler \ac{NUTS} \footnote{Likewise, this resource provides very illustrative explanations of Hamiltonian-MC and NUTS \href{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}{http://elevanth.org/blog/2017/11/28/build-a-better-markov-chain/}} \cite{Hoffman2011}.
 
-On the other hand, \ac{VI} methods, very recently developed and introduced in PyMC3, provide a fast alternative to \ac{MCMC} methods, yet they are not guaranteed to asymptotically approximate the true posterior. In \ac{VI}, optimization, instead of sampling, is employed as the way to approximate the posterior \cite{Blei2017}. More concretely, a family of densities $Q$ over the parameters $\theta$ is defined. The goal of \ac{VI} is to find the single density $q$ within the family $Q$ that best approximates $p(\theta|y)$. This approximate density should be complex enough to reach a good approximation, and at the same time simple enough to be computationally easy to work with. The best candidate is defined as the one minimising the Kullback-Leibler (\ac{KL}) divergence (see equation \ref{eq:KL}).
+On the other hand, \ac{VI} methods, very recently developed and introduced in PyMC3, provide a fast alternative to \ac{MCMC}, yet they are not guaranteed to asymptotically approximate the true posterior. In \ac{VI}, optimization, instead of sampling, is employed as the way to approximate the posterior \cite{Blei2017}. More concretely, a family of densities $Q$ over the parameters $\theta$ is defined. The goal of \ac{VI} is to find the single density $q$ within the family $Q$ that best approximates $p(\theta|y)$. This approximate density should be complex enough to reach a good approximation, and at the same time simple enough to be computationally easy to work with. The best candidate is defined as the one minimising the Kullback-Leibler (\ac{KL}) divergence (see equation \ref{eq:KL}).
 
 \begin{gather}\label{eq:KL}
 q^*(\theta) = \argmin \infdiv*{q(\theta)}{p(\theta|x)}
@@ -68,7 +68,6 @@ q(\theta_1, ..., \theta_m) = \prod_{j=1}^{m}{q(\theta_j)}
 \end{equation} 
 
 The demanding computational cost of the \ac{MCMC} and \ac{VI} schemes has only been recently met by the power of modern computers, thus making the approach feasible.
-
 
 \subsection{Hierarchical modelling}
 \label{subsec:hierarchy}
@@ -205,7 +204,7 @@ Features to model the peptide effect based on sequence were extracted using the 
 
 \subsection{Prior probability distribution specification}
 
-Both because of the little knowledge on the value of the parameters governing the data generation process and to provide a prior that everyone can agree upon, non informative priors were provided to the model. This was condensed in the specification of Normal and Half Normal distributions for all the random stochastic variables in the model. The hyperparameters were selected to be non-informative.
+Both because of the little knowledge on the value of the parameters governing the data generation process and to provide a prior that everyone can agree upon, weakly informative priors were provided to the model. This was condensed in the specification of Normal and Half Normal distributions for all the random stochastic variables in the model. The hyperparameters were selected to be non-informative.
 
 \subsection{Posterior probability distribution computation}
 \label{subsec:posterior_compute}
@@ -389,7 +388,7 @@ A step by step exposition of the plots and results produced by the program when 
 %\end{figure}
 \begin{figure}[!h]
 \input{hierarch_diagram}
-\caption[BayesQuant Kruschke-like diagram]{\textbf{BayesQuant Kruschke-like diagram}. Extends figure \ref{fig:daft_model} to give more detail into the model. Prior probability distributions are indicated with "distrograms", and the dependencies between them via arrows. The hyperparameters are represented by latin capital letters. Each $\beta$ will consist of a vector of dimensions $1 \times n$ where $n$ is the number of different factors in the category (i.e 2 for treatment, 6 for run, etc). The corresponding $x$ variable is a matrix of dimensions equal to $n \times n_peptides$ where the $i,j$ cell indicates if the $jth$ peptide is affected by the $ith$ factor (1) or not (0).}
+\caption[BayesQuant Kruschke-like diagram]{\textbf{BayesQuant Kruschke-like diagram}. Extends figure \ref{fig:daft_model} to give more detail into the model. Prior probability distributions are indicated with "distrograms", and the dependencies between them via arrows. The hyperparameters are represented by latin capital letters. Each $\beta$ will consist of a vector of dimensions $1 \times n$ where $n$ is the number of different factors in the category (i.e 2 for treatment, 6 for run, etc). The corresponding $x$ variable is a matrix of dimensions equal to $n \times n_peptides$ where the $i,j$ cell indicates if the $jth$ peptide is affected by the $ith$ factor (1) or not (0). Style based on \cite{Kruschke}.}
 \label{fig:dbda}
 \end{figure}
 
@@ -416,7 +415,7 @@ A step by step exposition of the plots and results produced by the program when 
 A plot of the maximisation of the \ac{ELBO} is automatically produced when the \texttt{.fit()} method is run. Even though the ELBO took extremely low (negative) values at start (see figure \ref{fig:ELBO}), it was maximised fast to values around 0, indicating that the mean-field approximation was acceptably good.
 
 
-\subsection{Sampling from the approximation to the posterior}
+\subsection{Sampling from the approximated posterior}
 \label{subsec:basic_model}
 
 
@@ -550,7 +549,7 @@ which means that if the peptide effect is modelled as a function of the sequence
 
 where $\theta_k$ is the weight of the $k^{th}$ feature, and $x_k$ is the numerical value of the $k^{th}$ feature. $\sigma^{\theta}$ is the prior for the standard deviation of the distribution all feature weights are sampled from.
 
-The same workflow as in section \ref{subsec:basic_model} was ran with the extended model, and the result is shown in figure \ref{fig:traceplots_seq}. The analysis illustrates the null predictive power of the sequence properties extracted, as all converge extremely strongly to a value of 0. The result is equivalent to not having defined any weights at all, and instead having run the baseline model.
+The same workflow as in section \ref{subsec:basic_model} was ran with the extended model, and the result is shown in figure \ref{fig:traceplots_seq}. The analysis illustrates the null predictive power of the sequence properties extracted, as all converge extremely strongly to a value of 0. The result is equivalent to not having defined any weights at all, and instead having run the basic model.
 
 
 
