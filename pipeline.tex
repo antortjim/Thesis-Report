@@ -30,7 +30,7 @@ The development of a pipeline attempting to achieve the following goals will be 
 
 The proteome benchmark dataset \cite{Cox2014} was reanalyzed starting at the output RAW files available at the PRIDE repository \footnote{\href{https://www.ebi.ac.uk/pride/archive/projects/PXD000279}{Link to the PRIDE repository entry https://www.ebi.ac.uk/pride/archive/projects/PXD000279}}. Briefly, the \textit{Homo sapiens} and \textit{E. coli (strain K12)} proteomes were mixed in 1:1 (condition L) and 1:3 (condition H) proportions, with 3 replicates for each combination. Moreover, each of the 3 replicates of the 2 conditions was analyzed over 24 fractions. This experimental setting thus generated a total of $2 \times 3 \times 24=144$ RAW files. One file was missing in the repository. The ThermoRawFileParser \footnote{\href{https://github.com/compomics/ThermoRawFileParser}{ThermoRawFileParser repository https://github.com/compomics/ThermoRawFileParser}} program was used to convert RAW files to the MGF open format. These files were used as input for the Compomics+Rob pipeline.
 
-The MQ+LFQ pipeline results were obtained starting at the Supplemental table 1 from the MaxLFQ paper supplemental data \footnote{\href{http://www.mcponline.org/content/13/9/2513/suppl/DC1}{Link to the supplemental data http://www.mcponline.org/content/13/9/2513/suppl/DC1}} \cite{Cox2014}, which are available as an excel file. The results of the MQ+Rob pipeline employed the Levenberg-Marquardt-minimised peptide intensities stored in the peptides.txt file contained in the spectraHeLaEColi.zip in the supplemental data.
+The MQ+LFQ pipeline results were obtained starting at the supplemental table 1 from the MaxLFQ publication \footnote{\href{http://www.mcponline.org/content/13/9/2513/suppl/DC1}{Link to the data http://www.mcponline.org/content/13/9/2513/suppl/DC1}} \cite{Cox2014}, which are available as an excel file. The results of the MQ+Rob pipeline employed the Levenberg-Marquardt-minimised peptide intensities stored in the peptides.txt file contained in the spectraHeLaEColi.zip in the supplemental data.
 
 %\href{http://www.mcponline.org/content/suppl/2014/06/17/M113.031591.DC1/mcp.M113.031591-1.xlsx}{http://www.mcponline.org/content/suppl/2014/06/17/M113.031591.DC1/mcp.M113.031591-1.xlsx}.
 
@@ -53,11 +53,11 @@ The moFF command line utility \cite{Argentini2016} was applied to (I) perform ma
 
 \subsection{Quantification}
 
-Relative quantification i.e the computation of $\log_2$(ratios), or logarithm base 2 fold changes, $\log_2(FC)$ (\ac{log2FC}) was performed using the MSqRob package \cite{Goeminne2016} by passing the peptide summary file from moFF (Compomics+Rob) or the peptides.txt from MaxQuant (MQ+Rob). Prior to quantification, the data was preprocessed using the \texttt{preprocess\_MSnSet()} function. In a nutshell, (I) MS1 apex intensities were $log_2$ transformed, (II) quantile normalized, (III) peptides belonging to protein groups that contained one or more proteins that were also present in a smaller protein group were discarded \cite{Goeminne2016}, and (IV) protein groups with only 1 peptide were dropped.
+Relative quantification i.e. the computation of $\log_2$(ratios), or logarithm base 2 fold changes, $\log_2(FC)$ (\ac{log2FC}) was performed using the MSqRob package \cite{Goeminne2016} by passing the peptide summary file from moFF (Compomics+Rob) or the peptides.txt from MaxQuant (MQ+Rob). Prior to quantification, the data was preprocessed using the \texttt{preprocess\_MSnSet()} function. In a nutshell, (I) MS1 apex intensities were $log_2$ transformed, (II) quantile normalized, (III) peptides belonging to protein groups that contained one or more proteins that were also present in a smaller protein group were discarded \cite{Goeminne2016}, and (IV) protein groups with only 1 peptide were dropped.
 
 Once preprocessing is done, a ridge regression model with Huber weights and empirical Bayes estimation of protein variance, implemented in the \texttt{fit.model()} function, was fit to every protein individually. The peptide and fraction effects were considered random, while the condition was treated as a fixed effect. The significance of the treatment effect differences was assessed through a Student\textquotesingle s T test, implemented in the \texttt{test.contrast()} function. Only protein groups that could be unambiguously mapped to one of the organisms were considered for the analysis.
 
-Quantification in the MQ+LFQ pipeline was executed using the LFQ intensity columns stored in the supplemental data file. Intensities were $\log_2$ transformed and averaged. The difference between conditions H and L was taken as estimate of the log2FC. Significance was evaluated by means of the two-tailed Welch Two Sample t-test implemented in the \texttt{t.test()} function in R. P-values were corrected using the FDR method implemented in the \texttt{p.adjust()} function in R with the "fdr" method.
+Quantification in the MQ+LFQ pipeline was executed using the LFQ intensity columns stored in the data file. Intensities were $\log_2$ transformed and averaged. The difference between conditions H and L was taken as estimate of the log2FC. Significance was evaluated by means of the two-tailed Welch Two Sample t-test implemented in the \texttt{t.test()} function in R. P-values were corrected using the FDR method implemented in the \texttt{p.adjust()} function in R with the "fdr" method.
 
 
 \section{Results}
@@ -122,7 +122,7 @@ The preprocessing of the RAW files produced by the mass spectrometer into the MG
 \label{figure:qc_validation}
 \end{figure}
 
-The 1\% FDR cutoff selected PSMs with a score higher than 78, which translated to a confidence of at least 65\% (see figure \ref{figure:qc_validation} B).
+The 1\% FDR cutoff selected PSMs with a score higher than 78, which translated to a confidence (probability of the match being true) of at least 65\% (see figure \ref{figure:qc_validation} B).
 
 
 The combination of both programs enabled the identification and validation (matching) of thousands of spectra with high confidence in all samples. However, when compared to the total amount of spectra available, the percentage of matched spectra was on average 37.4\%, with a marked decrease starting at fraction 14 (see figure \ref{fig:match_percent}).
@@ -334,7 +334,7 @@ All the quantification approaches enunciated until now make use of different fre
 
 \subsection{Applicability for Novozymes data}
 
-The SearchGUI and PeptideShaker developers recommend using Uniprot-formatted databases for optimal performance of their tools \footnote{\href{https://github.com/compomics/searchgui/wiki/DatabaseHelp}{Database formatting guide https://github.com/compomics/searchgui/wiki/DatabaseHelp}}. This is due to the software making use of protein annotations to improve the protein inference step. In any case, a consistent formatting in the FASTA databases is required to use the tools. Thus, the development of sequence databases featuring consistent FASTA identifiers is highly advisable to make the best use of the data and improve the interplay with nost just these but many other tools too.
+The SearchGUI and PeptideShaker developers recommend using Uniprot-formatted databases for optimal performance of their tools \footnote{\href{https://github.com/compomics/searchgui/wiki/DatabaseHelp}{Database formatting guide https://github.com/compomics/searchgui/wiki/DatabaseHelp}}. This is due to the software making use of protein annotations to improve the protein inference step. In any case, a consistent formatting in the FASTA databases is required to use the tools. Thus, the development of sequence databases featuring consistent FASTA identifiers is highly advisable to make the best use of the data and improve the interplay with not just these but many other tools too.
 
 
 \section{Conclusion}

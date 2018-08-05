@@ -3,7 +3,7 @@
 
 \section*{Summary}
 
-A second benchmark dataset was run through the programmes presented in chapters \ref{chap:pipeline} and \ref{chap:model} to showcase their performance. The experimental design attempted to capture a protein profile change reflecting a known biological process. Thus, a successful computational analysis of the dataset should reflect the same phenomenon. The results confirmed that the computational analysis successfully captured this response. It was concluded that the software can be used in future experiments where the biological phenomena underlying the data are not known.
+A second benchmark dataset was run through the program	s presented in chapters \ref{chap:pipeline} and \ref{chap:model} to showcase their performance. The experimental design attempted to capture a protein profile change reflecting a known biological process. Thus, a successful computational analysis of the dataset should reflect the same phenomenon. The results confirmed that the computational analysis successfully captured this response. It was concluded that the software can be used in future experiments where the biological phenomena underlying the data are not known.
 
 \section{Introduction}
 
@@ -32,7 +32,7 @@ THP-1 cells were grown in RPMI1640 (Sigma) supplemented with 10\% FBS (SeraLab) 
  
 \subsection{Mass Spectrometry analysis}
 
-Peptide digest of THP-1 samples were prepared using a filter assisted sample preparation protocol (FASP). Online desalting and nanoscale LC separation of tryptic peptides was performed with an Dionex Ultimate 3000 Dual –column nano-liquid chromatography system (Thermo Scientific) equipped with two Acclaim PepMap nano-trap columns, 20 mm, 75µ I.D., 3µ particles and two analytical Acclaim PepMap C18, 150 mm, 75µ capillary columns with 2µ particles (Thermo Scientific). Mobile phase A was 0.1\% formic acid (FA) in water and mobile phase B was 0.1\% FA in acetonitrile. Peptides were separated using a 60 min gradient from 5\% to 30\% mobile phase B at 350 nl/min and 35°C injecting samples on the two analytical columns in sequential randomized design. Eluting peptides were analyzed using data-dependent acquisition on an LTQ-Orbitrap Velos Pro mass spectrometer (Thermo Scientific). Each MS scan (400-1600 m/z) was acquired at a resolution of 30000 FWHM followed by 10 low resolution LTQ MS/MS scans triggered above an intensity of 10000 using collision induced dissociation CID (normalized collision energy 35). This work was carried out by David Gleerup and Anders M. B. Giessing.
+Peptide digestions of THP-1 samples were prepared using a filter assisted sample preparation protocol (FASP). Online desalting and nanoscale LC separation of tryptic peptides was performed with an Dionex Ultimate 3000 Dual –column nano-liquid chromatography system (Thermo Scientific) equipped with two Acclaim PepMap nano-trap columns, 20 mm, 75µ I.D., 3µ particles and two analytical Acclaim PepMap C18, 150 mm, 75µ capillary columns with 2µ particles (Thermo Scientific). Mobile phase A was 0.1\% formic acid (FA) in water and mobile phase B was 0.1\% FA in acetonitrile. Peptides were separated using a 60 min gradient from 5\% to 30\% mobile phase B at 350 nl/min and 35°C injecting samples on the two analytical columns in sequential randomized design. Eluting peptides were analyzed using data-dependent acquisition on an LTQ-Orbitrap Velos Pro mass spectrometer (Thermo Scientific). Each MS scan (400-1600 m/z) was acquired at a resolution of 30000 FWHM followed by 10 low resolution LTQ MS/MS scans triggered above an intensity of 10000 using collision induced dissociation CID (normalized collision energy 35). This work was carried out by David Gleerup and Anders M. B. Giessing.
 
 
 %In short the FASP method is a filter aided in-solution sample preparation technique comprising of protein extraction with strong chaotropic reagents such as urea or Guanidine-HCL, protein precipitation with TCA, and digestion using trypsin under denaturing conditions of reduced and alkylated protein.  Tryptic peptides are extracted from the filter and analyzed by LC/MS. 
@@ -46,12 +46,12 @@ Peptide digest of THP-1 samples were prepared using a filter assisted sample pre
 
 The resulting .RAW files were processed with the two different pipelines introduced in the present work. (I) Compomics+MSqRob and (II) Compomics+BQ (Compomics and BayesQuant). The search settings were identical to those used in chapter \ref{chap:pipeline}, except for the proteome databases employed, which consisted of \textit{Homo sapiens} only. The validation filters, \ac{MBR}, MS1 Apex intensity, and MSqRob preprocessing parameters were also set to those used previously, for simplicity. The two pipelines used thus diverged only in the quantification engine, being identical in all previous steps.
 
-In the Compomics+MSqRob pipeline, a protein was declared to be differentially abundant (\ac{DAP}) between the 2 conditions assayed if the result of the student\textquotesingle s-T test implemented in MSqRob returned a q-value less than 0.05. The criteria in the Compomics+BayesQuant pipeline was the absence of overlap between the \ac{ROPE} [-0.4, 0.4] and the 95\% \ac{HPDI}.
+In the Compomics+MSqRob pipeline, a protein was declared to be differentially abundant (\ac{DAP}) between the 2 conditions assayed if the result of the student\textquotesingle s-T test implemented in MSqRob returned a q-value lower than 0.05. The criteria in the Compomics+BayesQuant pipeline was the absence of overlap between the \ac{ROPE} [-0.4, 0.4] and the 95\% \ac{HPDI}.
 
 
 \subsection{Biological inference}
 
-The gProfiler R package \cite{Boyd2010} was used to perform \ac{GSEA}, and its results were visualized with the REVIGO tool \cite{Supek2011}.
+The gProfiler R package \cite{gprofiler} was used to perform \ac{GSEA}, and its results were visualized with the REVIGO tool \cite{Supek2011}.
 
 Pathways analysis was executed with the ComPath Webserver \cite{Domingo2018}. UniprotKB IDs were transformed to "Gene name" IDs, as required by the tool, using the Retrieve/ID mapping tool from Uniprot. The KEGG \cite{Kanehisa2000} and Reactome \cite{Croft2014} databases were used as source.
 
@@ -61,7 +61,7 @@ Protein interactions were explored by querying the STRING database \cite{Szklarc
 
 \subsection{Compomics+MSqRob}
 
-Data on 6444 peptides, as collected in the peptide summary file from moFF, was passed to MSqRob, resulting in the quantification of 1433 proteins. A histogram of the \ac{log2FC} reveals that in most cases, not enough evidence was collected to declare the \ac{log2FC} different from 0 (see figure \ref{fig:compomics_rob} A). Remarkably, the distribution was shifted toward negative values, depicting that most of the proteins for which a non-null estimate was provided were more abundant in the +LPS condition. A volcano plot (see figure \ref{fig:compomics_rob} B), reveals that the majority of the 49 protein groups passing the significance criteria (\textit{q-value} $< 0.05$), displayed an absolute value of the \ac{log2FC} less than 1. However, all were considered differentially abundant. The 32 protein groups composed by a single protein (single protein \ac{DAP}s) are shown in table \ref{tab:thp1_rob_results}.
+Data on 6444 peptides, as collected in the peptide summary file from moFF, was passed to MSqRob, resulting in the quantification of 1433 proteins. A histogram of the \ac{log2FC} reveals that in most cases, not enough evidence was collected to declare the \ac{log2FC} different from 0 (see figure \ref{fig:compomics_rob} A). Remarkably, the distribution was shifted toward negative values, depicting that most of the proteins for which a non-null estimate was provided were more abundant in the +LPS condition. A volcano plot (see figure \ref{fig:compomics_rob} B), reveals that the majority of the 49 protein groups passing the significance criteria (\textit{q-value} $< 0.05$), displayed an absolute value of the \ac{log2FC} lower than 1. However, all were considered differentially abundant. The 32 protein groups composed by a single protein (single protein \ac{DAP}s) are shown in table \ref{tab:thp1_rob_results}.
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
 % Sat Jul 21 16:02:33 2018
@@ -105,7 +105,7 @@ Data on 6444 peptides, as collected in the peptide summary file from moFF, was p
   32 & P62857 & 40S ribosomal protein S28 & -5.50E-01 & 4.98E-02 \\ 
    \hline
 \end{tabular}
-\caption{THP-1 MSqRob results. 32 single-protein groups were found to be differentially abundant under significance criteria of q-value less than 0.05. The protein id, the gene name, the point estimate of its \ac{log2FC} and its significance is shown}
+\caption{THP-1 MSqRob results. 32 single-protein groups were found to be differentially abundant under significance criteria of q-value lower than 0.05. The protein id, the gene name, the point estimate of its \ac{log2FC} and its significance is shown}
 \label{tab:thp1_rob_results}
 \end{table}
 
@@ -162,7 +162,7 @@ Given the scarcity of the results, it was decided to continue the analyses with 
 
 \subsection{Functional analysis}
 
-A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSqRob (see table \ref{tab:thp1_rob_results}) with the gProfileR \cite{gprofiler} illustrates the most over-represented biological processes, cellular compartments and molecular functions, compared to the human background. The 20 most significant terms found in the dataset are displayed in table \ref{tab:gsea}.
+A \ac{GSEA} performed on the list of 32 single-protein \ac{DAP}s produced by MSqRob (see table \ref{tab:thp1_rob_results}) with gProfileR \cite{gprofiler} illustrates the most over-represented biological processes, cellular compartments and molecular functions, compared to the human background. The 20 most significant terms found in the dataset are displayed in table \ref{tab:gsea}.
 
 
 % latex table generated in R 3.4.4 by xtable 1.8-2 package
@@ -272,7 +272,7 @@ A discussion over the major issues and strengths detected while obtaining these 
 
 \subsection{Increasing the experiment data-throughput}
 
-Six samples organized in two different treatments of three biological replicates without sample prefractionation each were analyzed. The resulting data throughput allowed for the performance of biological inference, as it successfully captured the undergoing biological processes. Nevertheless, more in-depth results would have been possible with (I) sample prefractionation, which improves peptide separation and allows for the collection and identification of more spectra \cite{Righetti2005}, and (II) the inclusion of technical replicates to differentiate the biological variability from experimental noise.
+Six samples organized in two different treatments of three biological replicates without sample prefractionation each, were analyzed. The resulting data throughput allowed for the performance of biological inference, as it successfully captured the undergoing biological processes. Nevertheless, more in-depth results would have been possible with (I) sample prefractionation, which improves peptide separation and allows for the collection and identification of more spectra \cite{Righetti2005}, and (II) the inclusion of technical replicates to differentiate the biological variability from experimental noise.
 
 \subsection{Missing data handling}
 
